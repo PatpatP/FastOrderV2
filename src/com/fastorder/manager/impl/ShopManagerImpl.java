@@ -118,6 +118,12 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public void deleteShop(int id) {
+		//Get shop address id
+		
+		//Delete shop address
+		
+		
+		//Delete shop
 		String query = "DELETE FROM shop where id='"+id+"';";
 		Utils.deleteQuery(statement, query);
 	}

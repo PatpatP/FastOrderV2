@@ -330,6 +330,9 @@ public class ShopServlet extends HttpServlet{
 	
 	private void deleteShop(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		final String idShop = request.getParameter("idShop");
+		Shop shop = shopManager.getShop(Integer.parseInt(idShop));
+		int addressId = shop.getAddressId();
+		addressManager.deleteAddress(addressId);
 		shopManager.deleteShop(Integer.parseInt(idShop));
 		response.sendRedirect("myspace");
 	}

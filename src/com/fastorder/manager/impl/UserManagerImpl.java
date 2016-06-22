@@ -175,8 +175,13 @@ public class UserManagerImpl implements IUserManager{
 
 	@Override
 	public boolean deleteUser(String mail) {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "Delete FROM user where mail='"+mail+"';";
+		int res = Utils.deleteQuery(statement, query);
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

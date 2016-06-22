@@ -80,13 +80,15 @@ public class Utils {
 		}
 	}
 	
-	public static void deleteQuery(Statement statement, String query){
+	public static int deleteQuery(Statement statement, String query){
 		try {
-			statement.executeUpdate(query);
+			int res = statement.executeUpdate(query);
+			return res;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return 0;
 	}
 	
 	public static String convertJavaToJson(Object object){

@@ -12,7 +12,7 @@ import com.mysql.jdbc.Statement;
 public class AddressManagerImpl implements IAddressManager{
 
 	private Statement statement;
-	
+
 	public AddressManagerImpl(Statement statement) {
 		this.statement = statement;
 	}
@@ -22,7 +22,7 @@ public class AddressManagerImpl implements IAddressManager{
 		String query = "Insert into address (street,number,zipCode,city,country) VALUES('"+street+"','"+number+"','"+zipCode+"','"+city+"','"+country+"');";
 		int res = Utils.insertQuery(statement, query);
 		Utils.selectQuery(statement, "Select * from address");
-		
+
 		if(res==1){
 			return true;
 		} else {
@@ -36,15 +36,15 @@ public class AddressManagerImpl implements IAddressManager{
 		ResultSet resultat;
 		String query = "Select * from address WHERE street='"+street+"' AND number='"+number+"' AND zipCode='"+zipCode+"' AND city='"+city+"' AND country='"+country+"'";
 		resultat = Utils.selectQuery(statement, query);
-		
-			try {
-				while(resultat.next()){
-					addressId = resultat.getInt("id");
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+
+		try {
+			while(resultat.next()){
+				addressId = resultat.getInt("id");
 			}
-		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return addressId;
 	}
 
@@ -53,7 +53,7 @@ public class AddressManagerImpl implements IAddressManager{
 		String query = "Select * from address where id='"+id+"';";
 		ResultSet resultat;
 		resultat = Utils.selectQuery(statement, query);
-		
+
 		try {
 			while(resultat.next()){
 				String street =  resultat.getString("street");
@@ -61,15 +61,32 @@ public class AddressManagerImpl implements IAddressManager{
 				String zipCode =  resultat.getString("zipCode");
 				String city =  resultat.getString("city");
 				String country =  resultat.getString("country");
-				
+
 				return new Address(street, number, zipCode, city, country);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
+	}
+
+	@Override
+	public void updateAddress(int id, String street, String number, String zipCode, String city, String country) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean deleteAddress(int id) {
+		String query = "DELETE FROM ADDRESS where id='"+id+"';";
+		int res = Utils.deleteQuery(statement, query);
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

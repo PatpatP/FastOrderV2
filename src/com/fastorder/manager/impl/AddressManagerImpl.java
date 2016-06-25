@@ -73,9 +73,15 @@ public class AddressManagerImpl implements IAddressManager{
 	}
 
 	@Override
-	public void updateAddress(int id, String street, String number, String zipCode, String city, String country) {
-		// TODO Auto-generated method stub
-
+	public boolean updateAddress(int id, String street, String number, String zipCode, String city, String country) {
+		String query = "UPDATE address SET street='"+street+"', number='"+number+"', zipCode='"+zipCode+"', city='"+city+"', country='"+country+"' WHERE id='"+id+"';";
+		int res = Utils.updateQuery(statement, query);
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	@Override

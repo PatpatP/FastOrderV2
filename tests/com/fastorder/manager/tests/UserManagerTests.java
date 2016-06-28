@@ -2,6 +2,8 @@ package com.fastorder.manager.tests;
 
 import static org.junit.Assert.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.junit.Before;
@@ -59,16 +61,36 @@ public class UserManagerTests {
 	}
 	
 	@Test
-	public void createUserTest(){
+	public void createUserTest() throws SQLException{
+		
+		String queryBefore = "Select * from User";
+		ResultSet resultBefore = Utils.selectQuery(statement, queryBefore);
+		int cptBefore = 0;
+		while(resultBefore.next()){
+			cptBefore = cptBefore+1;
+		}
 		
 		String mail = "testUnit@gmail.com";
 		String phoneNumber = "0102030405";
 		String firstName = "test";
 		String lastName = "unit";
 		UserTypeEnum userType = UserTypeEnum.CLIENT;
-		int address = 20;
+		int address = 0;
 		String password = "test1234";
 		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, address, password);
+		
+		String queryAfter = "Select * from user";
+		ResultSet resultAfter = Utils.selectQuery(statement, queryAfter);
+		int cptAfter = 0;
+		while(resultAfter.next()){
+			cptAfter = cptAfter+1;
+		}
+		
+		System.out.println(cptBefore + "    "+cptAfter);
+		
+//		String queryDelete = "DELETE FROM USER WHERE mail='"+mail+"';";
+//		Utils.deleteQuery(statement, queryDelete);
+		
 	}
 	
 	@Test

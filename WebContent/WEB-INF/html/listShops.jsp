@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
+	
 <body ng-controller="mainCtrl" ng-init='setShops(${shopList })' style="background: #eee" >
 	<div id="globalDiv2">
 		<div class="container contenu">

@@ -48,7 +48,7 @@ public class Mailing {
 		email.setHostName("smtp.googlemail.com");
 		email.setSmtpPort(587);
 		email.setAuthenticator(new DefaultAuthenticator(username, password));
-		email.setSSLOnConnect(true);
+		email.setSSL(true);
 		email.setFrom(username);
 		email.setSubject(obj);
 		email.setMsg(msg);

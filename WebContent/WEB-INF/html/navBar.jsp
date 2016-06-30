@@ -9,14 +9,17 @@
          <li><a href="shops">Shops</a></li>
       <%  if(request.getSession().getAttribute("userName")!=null && request.getSession().getAttribute("userType").equals(UserTypeEnum.CLIENT.toString())){
       %>
+      	 <li><a href="myspace" style="style:color:#6AE62D;">${userName }</a></li>
          <li><a href="signOut">Logout</a></li>
-         <li><a href="myspace" style="style:color:#6AE62D;">${userName }</a></li>
+         
       <%
       }else if(request.getSession().getAttribute("userName")!=null && request.getSession().getAttribute("userType").equals(UserTypeEnum.MERCHANT.toString())){
       %>  
+        <li><a href="myshops" >Mes Shops</a></li>
+        <li><a href="myspace" style="color:green;">${userName }</a></li>
       	<li><a href="signOut">Logout</a></li>
 <!--       	<li><span class="glyphicon glyphicon-user" style="color:green; font-size:1.8em; margin-top:25%;"></span></li> -->
-        <li><a href="myspace" style="color:green;">${userName }</a></li>
+        
       
       <%  
       } else {

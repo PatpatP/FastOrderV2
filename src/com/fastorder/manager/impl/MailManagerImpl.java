@@ -1,6 +1,5 @@
 package com.fastorder.manager.impl;
 
-import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
 
@@ -17,7 +16,7 @@ public class MailManagerImpl implements IMailManager{
 
 	@Override
 	public void confirmSignUp(String mailDest)  throws EmailException{
-		String object = "ALLORESTO.FR - Confirmation d'inscription";
+		String object = "FASTORDER - Confirmation d'inscription";
 		String message = "Votre inscription a été confirmé";
 		
 		MultiPartEmail email = null;
@@ -47,7 +46,7 @@ public class MailManagerImpl implements IMailManager{
 
 	@Override
 	public void confirmCreateProduct(String mailDest)  throws EmailException{
-		String object = "ALLORESTO.FR - Confirmation d'ajout d'un produit";
+		String object = "FASTORDER - Confirmation d'ajout d'un produit";
 		String message = "Le produit a bien été ajouté";
 		
 		MultiPartEmail email = null;
@@ -57,7 +56,7 @@ public class MailManagerImpl implements IMailManager{
 	
 	@Override
 	public void confirmUpdateProduct(String mailDest) throws EmailException{
-		String object = "ALLORESTO.FR - Mise à jour du produit";
+		String object = "FASTORDER - Mise à jour du produit";
 		String message = "Le produit a bien été mis à jour";
 		
 		MultiPartEmail email = null;
@@ -73,7 +72,7 @@ public class MailManagerImpl implements IMailManager{
 
 	@Override
 	public void confirmCreateOrder(String mailDest, float totalPrice) throws EmailException {
-		String object = "ALLORESTO.FR - Confirmation de commande";
+		String object = "FASTORDER - Confirmation de commande";
 		String message = "Votre commande de "+totalPrice+" a été confirmé";
 
 		MultiPartEmail email = null;
@@ -83,7 +82,7 @@ public class MailManagerImpl implements IMailManager{
 	
 	@Override
 	public void sendReceivedOrder(String mailDest) throws EmailException {
-		String object = "ALLORESTO.FR - Commande reçue";
+		String object = "FASTORDER - Commande reçue";
 		String message = "Vous avez reçu une nouvelle commande";
 
 		MultiPartEmail email = null;
@@ -93,7 +92,7 @@ public class MailManagerImpl implements IMailManager{
 
 	@Override
 	public void confirmFinishOrder(String mailDest) throws EmailException{
-		String object = "ALLORESTO.FR - Rappel de votre commande";
+		String object = "FASTORDER - Rappel de votre commande";
 		String message = "Votre commande est prête, vous pouvez venir le récupérer";
 
 		MultiPartEmail email = null;

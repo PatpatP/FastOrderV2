@@ -18,7 +18,7 @@ public interface IUserManager {
 	
 	public boolean createUser(String mail, String phoneNumber, String firstName, String lastName, UserTypeEnum userType,
 			int addressId, String password);
-	public boolean updateUserData(String mail, String phoneNumber, String firstName, String lastName, UserTypeEnum userType,
+	public boolean updateUserData(int id, String mail, String phoneNumber, String firstName, String lastName, UserTypeEnum userType,
 			int addressId, String password);
 	public boolean deleteUser(String mail);
 	

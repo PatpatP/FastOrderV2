@@ -242,5 +242,38 @@ public class ShopManagerImpl implements IShopManager{
 		return orders;
 	}
 
+	@Override
+	public int getShop(String name, String description, String shopType, int userId, int addressId) {
+		String query = "Select * from shop WHERE name='"+name+"' AND description='"+description+"' AND user='"+userId+"' AND address='"+addressId+"';";
+		ResultSet result = Utils.selectQuery(statement, query);
+		int idShop = -1;
+		try {
+			while(result.next()){
+				idShop = result.getInt("id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return idShop;
+	}
+
+	@Override
+	public int getProduct(String producType, String name, String description, Float price, int idShop) {
+		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND shopId='"+idShop+"';";
+		System.out.println(query);
+		ResultSet result = Utils.selectQuery(statement, query);
+		int idProduct = -1;
+		try {
+			while(result.next()){
+				idProduct = result.getInt("id");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return idProduct;
+	}
+
 
 }

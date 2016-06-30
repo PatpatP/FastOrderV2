@@ -1,6 +1,7 @@
 package com.fastorder.manager.tests;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import com.fastorder.manager.impl.ShopManagerImpl;
 import com.fastorder.utils.Utils;
@@ -17,4 +18,28 @@ public class ShopManagerTests {
 		shopManager = new ShopManagerImpl(statement);
 	}
 
+	@Test
+	public void createShopTest(){
+		
+	}
+	
+	@Test
+	public void updateShopTest(){
+		
+	}
+	
+	@Test
+	public void deleteShopTest(){
+		
+	}
+	
+	@Test
+	public void getShopWithIdTest(){
+		
+	}
+	
+	@Test
+	public void getShopWithIdUserTest(){
+		
+	}
 }

@@ -55,12 +55,13 @@ public class UserManagerImpl implements IUserManager{
 	public User getUser(String mail) {
 		User user = null;
 		String query = "Select * from user where mail='"+mail+"';";
+		//TODO Mettre en place la méthode avec la Map<clé, valeur>
 		ResultSet resultat = Utils.selectQuery(statement, query);
 		try {
 			while(resultat.next()){
 				int id = resultat.getInt("id");
 				String phoneNumber = resultat.getString("phoneNumber");
-				String firstName = resultat.getString("firstName");
+				String firstName = resultat.getString("firstName");  
 				String lastName = resultat.getString("lastName");
 				String userType = resultat.getString("userType");
 				int addressId = resultat.getInt("address");
@@ -167,10 +168,16 @@ public class UserManagerImpl implements IUserManager{
 	}
 
 	@Override
-	public boolean updateUserData(String mail, String phoneNumber, String firstName, String lastName,
+	public boolean updateUserData(int userId, String mail, String phoneNumber, String firstName, String lastName,
 			UserTypeEnum userType, int address, String password) {
-		// TODO Auto-generated method stub
-		return false;
+
+		String query = "UPDATE user SET mail='"+mail+"' AND phoneNumber='"+phoneNumber+"' AND firstName='"+firstName+"' AND lastName='"+lastName+"' AND password='"+password+"' WHERE id='"+userId+"';";
+		int res = Utils.updateQuery(statement, query);
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

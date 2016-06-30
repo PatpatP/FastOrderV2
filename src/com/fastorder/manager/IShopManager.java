@@ -14,6 +14,7 @@ public interface IShopManager {
 	
 	public List<Shop> getShops();
 	public Shop getShop(Integer id);
+	public int getShop(String name, String description, String shopType, int userId, int addressId);
 	public User getOwner(int idShop);
 	
 	public boolean createShop(String name, String description, String shopType, int userId, int addressId);
@@ -23,6 +24,7 @@ public interface IShopManager {
 	//Concerne la gestion des produits
 	public List<Product> getProducts(int shopId);
 	public Product getProduct(int id);
+	public int getProduct(String producType, String name, String description, Float price, int idShop);
 	public boolean createProduct(String productType, String name, String description, Float price, int idShop);
 	public void updateProduct(int idProduct, String productType, String name, String description, String price, int idShop);
 	public void deleteProduct(int id);

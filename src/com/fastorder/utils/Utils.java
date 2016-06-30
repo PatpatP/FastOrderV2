@@ -10,7 +10,10 @@ import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.enumeration.ProductTypeEnum;
 import com.fastorder.enumeration.ShopTypeEnum;
+import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.manager.impl.ShopManagerImpl;
+import com.fastorder.model.Address;
+import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.google.gson.Gson;
 import com.mysql.jdbc.Connection;
@@ -190,10 +193,7 @@ public class Utils {
 	}
 	
 	public static void main(String[] args) throws SQLException {
-		ShopManagerImpl sm = new ShopManagerImpl(connectBDD());
 		
-		User user = sm.getOwner(0);
-		System.out.println(user.getFirstName()+" "+user.getLastName());
 	}
 
 }

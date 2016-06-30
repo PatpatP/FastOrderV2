@@ -19,6 +19,7 @@ import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.manager.impl.MailManagerImpl;
 import com.fastorder.manager.impl.ShopManagerImpl;
 import com.fastorder.manager.impl.UserManagerImpl;
+import com.fastorder.model.Address;
 import com.fastorder.model.Order;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
@@ -29,7 +30,7 @@ import com.mysql.jdbc.Statement;
 @WebServlet(
 		name = "user-servlet",
 		description = "Servlet handling user login",
-		urlPatterns={"/login", "/createAccount", "/home", "/signOut", "/myspace"}
+		urlPatterns={"/login", "/createAccount", "/home", "/signOut", "/myspace", "/myshops"}
 		)
 
 public class UserServlet extends HttpServlet{
@@ -75,7 +76,9 @@ public class UserServlet extends HttpServlet{
 			this.signOut(request, response);
 		} else if(uri.contains("/myspace")){
 			this.myspace(request, response);
-		} 
+		} else if(uri.contains("/myshops")){
+			this.myshops(request, response);
+		}
 	}
 
 	/**
@@ -283,7 +286,23 @@ public class UserServlet extends HttpServlet{
 	private void homePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		request.setAttribute("action", "home");
 		
+		List<Shop> shops = shopManager.getShops();
 		
+		List<Address> shopsAddress = new ArrayList<Address>();
+		List<String> tabAddress = new ArrayList<String>();
+		
+		for(Shop shop : shops){
+			int addressId = shop.getAddressId();
+			Address address = addressManager.getAddresssById(addressId);
+			shopsAddress.add(address);
+			
+			String adressString = "[\""+shop.getName()+"\" ,"+"\""+address.getNumber()+" "+address.getStreet()+", "+address.getZipCode()+" "+address.getCity()+"\" ,"+"\"/FastOrderV2/order?idShop="+shop.getId()+"\"]";
+			tabAddress.add(adressString);
+		}
+		
+		String shopAddressAsJson = Utils.convertJavaToJson(tabAddress);
+		
+		request.setAttribute("listShopAddress", tabAddress);
 		request.getRequestDispatcher("/WEB-INF/html/home.jsp").forward(request, response);
 	}
 
@@ -300,11 +319,7 @@ public class UserServlet extends HttpServlet{
 
 		if(mail!=null){
 			User user = userManager.getUser(mail);
-
 			String userAsJson = Utils.convertJavaToJson(user);
-
-			List<Shop> userShops = userManager.getUserShops(mail);
-			String userShopsString = Utils.convertJavaToJson(userShops);
 
 			//Commande effectuée par l'utilisateur
 			List<Order> myOrders = userManager.getUserOrders(user.getId());
@@ -325,6 +340,23 @@ public class UserServlet extends HttpServlet{
 
 			String userOrdersAsJson = Utils.convertJavaToJson(userOrders);
 			System.out.println(userOrdersAsJson);
+
+			request.setAttribute("action", "myspace");
+			request.setAttribute("user", userAsJson);
+			request.setAttribute("myOrders", userOrdersAsJson);
+			
+			request.getRequestDispatcher("/WEB-INF/html/myspace.jsp").forward(request, response);
+		}
+	}
+	
+	private void myshops(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		final String mail = (String) request.getSession().getAttribute("mail");
+		
+		if(mail!=null){
+			User user = userManager.getUser(mail);
+
+			List<Shop> userShops = userManager.getUserShops(mail);
+			String userShopsString = Utils.convertJavaToJson(userShops);
 
 			//Commande reçu par le magasin
 			List<List<String>> shopOrders = new ArrayList<List<String>>();
@@ -349,12 +381,11 @@ public class UserServlet extends HttpServlet{
 
 			request.setAttribute("action", "myspace");
 			request.setAttribute("userShop", userShopsString);
-			request.setAttribute("user", userAsJson);
-			request.setAttribute("myOrders", userOrdersAsJson);
 			if(user.getUserType().equals(UserTypeEnum.MERCHANT)){
 				request.setAttribute("shopOrders", shopOrdersAsJson);
 			}
-			request.getRequestDispatcher("/WEB-INF/html/myspace.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/html/myShops.jsp").forward(request, response);
 		}
+		
 	}
 }

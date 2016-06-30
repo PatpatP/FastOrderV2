@@ -21,8 +21,7 @@ public class AddressManagerImpl implements IAddressManager{
 	public boolean createAddress(String street, String number, String zipCode, String city, String country) {
 		String query = "Insert into address (street,number,zipCode,city,country) VALUES('"+street+"','"+number+"','"+zipCode+"','"+city+"','"+country+"');";
 		int res = Utils.insertQuery(statement, query);
-		Utils.selectQuery(statement, "Select * from address");
-
+		System.out.println(query);
 		if(res==1){
 			return true;
 		} else {
@@ -34,7 +33,7 @@ public class AddressManagerImpl implements IAddressManager{
 	public int getAddressId(String street, String number, String zipCode, String city, String country) {
 		int addressId = 0;
 		ResultSet resultat;
-		String query = "Select * from address WHERE street='"+street+"' AND number='"+number+"' AND zipCode='"+zipCode+"' AND city='"+city+"' AND country='"+country+"'";
+		String query = "Select * from address WHERE street='"+street+"' AND number='"+number+"' AND zipCode='"+zipCode+"' AND city='"+city+"' AND country='"+country+"';";
 		resultat = Utils.selectQuery(statement, query);
 
 		try {

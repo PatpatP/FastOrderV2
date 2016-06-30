@@ -73,11 +73,21 @@ public class ProductTest {
 	@Test
 	public void updateProductTest(){
 		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		Product product = shopManager.getProduct(idProduct);
+		
+		//TODO Mettre la partie mettre à jour
+		
+		shopManager.deleteProduct(idProduct);
 	}
 	
 	@Test
 	public void deleteProductTest(){
 		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		Product product = shopManager.getProduct(idProduct);
+		
+		shopManager.deleteProduct(idProduct);
 	}
 	
 	@Test

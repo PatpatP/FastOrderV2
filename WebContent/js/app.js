@@ -1,6 +1,6 @@
 var app = angular.module('fastOrder', []);
 
-app.controller('mainCtrl', function ($scope, $http) {
+app.controller('mainCtrl', function ($scope, $http, $window) {
 	$scope.filtre;
 	$scope.prixTotal=0;
 	$scope.shopsLists = [];
@@ -8,7 +8,20 @@ app.controller('mainCtrl', function ($scope, $http) {
 	$scope.bracket = [];
 	$scope.bracketId = [];
 	$scope.listErrors = [];
+	$scope.lisAdress = [];
+	
+	if($window.sessionStorage != null){
+		$scope.bracketStorage = $window.sessionStorage.bracket;
+	}else{
+		$scope.bracketStorage = [];
+	}
+	
 	var i=0;
+	
+	$scope.getAdress = function(listadress){
+		$scope.lisAdress = listadress;
+		console.log("Liste Adress : ", listadress);
+	}
 	
 	$scope.setShops = function(listShop){
 		$scope.shopsList = listShop;
@@ -50,6 +63,11 @@ app.controller('mainCtrl', function ($scope, $http) {
 				quantity:1
 			});			
 		}
+	
+		$window.sessionStorage.setItem('bracket', JSON.stringify($scope.bracket));
+		$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
+		console.log("bracketStorage : ",$scope.bracketStorage);
+		
 	}
 	
 	$scope.removeProduct = function(id){
@@ -71,6 +89,10 @@ app.controller('mainCtrl', function ($scope, $http) {
 				$scope.bracket.splice(index,1);
 				$scope.bracketId[index]=-1;
 			}
+			
+			$window.sessionStorage.setItem('bracket', JSON.stringify($scope.bracket));
+			$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
+			console.log("bracketStorage : ",$scope.bracketStorage);
 		}
 		
 	}

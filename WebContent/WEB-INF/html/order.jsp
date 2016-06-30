@@ -50,7 +50,7 @@
 						<p><span class="glyphicon glyphicon-shopping-cart col-lg-4 col-md-4 col-sm-4 iconShop"> </span> <span class="titleBrckt"> Mon Panier </span></p>
 					</div>
 				 	<div class="containerBracket">
-				 		<div ng-repeat="brck in bracket"> <p class="col-lg-8 col-md-8 col-sm-8">{{brck.name}}</p> <div class="col-lg-4 col-md-4 col-sm-4"><button ng-click="removeProduct(brck.id)" class="btnBrkt">-</button> [ {{brck.quantity}} ] <button ng-click="addToBracket(brck.id, brck.name, brck.price)" class="btnBrkt">+</button></div></div>   
+				 		<div ng-repeat="brck in bracketStorage"> <p class="col-lg-8 col-md-8 col-sm-8">{{brck.name}}</p> <div class="col-lg-4 col-md-4 col-sm-4"><button ng-click="removeProduct(brck.id)" class="btnBrkt">-</button> [ {{brck.quantity}} ] <button ng-click="addToBracket(brck.id, brck.name, brck.price)" class="btnBrkt">+</button></div></div>   
 				 	</div>
 				 	<div class="footBracket">
 				 		<p class="col-lg-5 col-md-5 col-sm-5"> Prix total : </p> <p class="col-lg-5 col-md-5 col-sm-5" align="right">{{prixTotal}} &#128;</p>

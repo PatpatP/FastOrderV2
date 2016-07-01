@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.manager.IOrderManager;
@@ -19,6 +21,8 @@ import com.mysql.jdbc.Statement;
 public class OrderManagerImpl implements IOrderManager{
 
 	private Statement statement;
+
+	final static Logger logger = Logger.getLogger(OrderManagerImpl.class);
 	
 	public OrderManagerImpl(Statement statement) {
 		this.statement = statement;
@@ -58,9 +62,11 @@ public class OrderManagerImpl implements IOrderManager{
 				OrderStatusEnum orderStatusEnum = Utils.getOrderStatus(status);
 				
 				order = new Order(id,  estimatedTimeEnum, orderStatusEnum, created, totalPrice, idUser, shop);
+
 			}
+			logger.info("Commande récupérée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la commande : " + e.getMessage());
 		}
 		
 		return order;
@@ -85,9 +91,10 @@ public class OrderManagerImpl implements IOrderManager{
 			while(resultIdOrder.next()){
 				idOrder = resultIdOrder.getInt("id");
 			}
+			logger.info("Création de la commande effectuée");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la création de la commande : " + e.getMessage());
 		}
 		
 		//On créer autant des tables de jointure pour chaque produit

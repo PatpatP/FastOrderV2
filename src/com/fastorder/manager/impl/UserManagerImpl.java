@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.enumeration.ShopTypeEnum;
@@ -23,6 +25,8 @@ import com.mysql.jdbc.Statement;
 public class UserManagerImpl implements IUserManager{
 
 	private Statement statement;
+
+	final static Logger logger = Logger.getLogger(UserManagerImpl.class);
 
 	public UserManagerImpl(Statement statement) {
 		this.statement = statement;
@@ -44,8 +48,10 @@ public class UserManagerImpl implements IUserManager{
 				String password = resultat.getString("password");
 				Date created = resultat.getDate("created");
 			}
+			
+			logger.info("Liste des utilisateurs récupérée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la liste des utilisateurs : " + e.getMessage());
 		}
 
 		return null;
@@ -74,13 +80,15 @@ public class UserManagerImpl implements IUserManager{
 					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, password, created);
 				}
 			}
+			
+			logger.info("Utilisateur récupéré grâce au mail");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de l'utilisateur : " + e.getMessage());
 		} finally {
 			try {
 				resultat.close();
 			} catch (SQLException e) {
-				e.printStackTrace();
+				logger.error("Echec fermeture resultset : " + e.getMessage());
 			}
 		}
 
@@ -109,8 +117,9 @@ public class UserManagerImpl implements IUserManager{
 					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, password, created);
 				}
 			}
+			logger.info("Utilisateur récupéré grâce à l'ID");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de l'utilisateur grâce à l'ID : " + e.getMessage());
 		}
 
 		return user;
@@ -141,9 +150,11 @@ public class UserManagerImpl implements IUserManager{
 				
 				shops.add(shop);
 			}
+			
+			logger.info("Liste des utilisateurs par magasin récupérée grâce au mail");
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la liste des utilisateurs par magasin récupérée grâce au mail : " + e.getMessage());
 		}
 
 		return shops;
@@ -201,8 +212,9 @@ public class UserManagerImpl implements IUserManager{
 			while (resultat.next()){
 				passwordExpected = resultat.getString("password");
 			}
+			logger.info("Verification du login effectuée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la vérification du login : " + e.getMessage());
 		}
 		if(password.equals(passwordExpected)){
 			return true;
@@ -233,8 +245,10 @@ public class UserManagerImpl implements IUserManager{
 					return true;
 				}
 			}
+			
+			logger.info("Vérification de l'existance du mail effectuée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la vérification de l'existance du mail : " + e.getMessage());
 		}
 		return false;
 	}
@@ -261,8 +275,9 @@ public class UserManagerImpl implements IUserManager{
 				Order order = new Order(idOrder, estimatedTimeEnum, orderStatusEnum, created, priceTotal, idUser, idShop);
 				userOrders.add(order);
 			}
+			logger.info("Liste des commandes d'un utilisateur grâce à son ID récupérée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la liste des commandes d'un utilisateur grâce à son ID : " + e.getMessage());
 		}
 		
 		return userOrders;

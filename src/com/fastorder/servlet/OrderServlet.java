@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.log4j.Logger;
 
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
@@ -36,6 +37,8 @@ public class OrderServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -8774038084589808656L;
+
+	final static Logger logger = Logger.getLogger(OrderServlet.class);
 	
 	private UserManagerImpl userManager;
 	private ShopManagerImpl shopManager;
@@ -118,8 +121,10 @@ public class OrderServlet extends HttpServlet{
 				try {
 					mailManager.confirmCreateOrder(mail, totalPrice);
 					mailManager.sendReceivedOrder(shopOwnerMail);
+					logger.info("Mail pour la création de la commande envoyé");
+					logger.info("Mail pour la réception de la commande envoyé");
 				} catch (EmailException e) {
-					e.printStackTrace();
+					logger.error("Une erreur est survenue lors de l'envoi du mail pour la création et la réception par le magasin de la commande : " + e.getMessage());
 				}
 				orderManager.create(brackProducts, EstimatedTimeEnum.FIFTY ,OrderStatusEnum.INPROGRESS, totalPrice, idUser, shopId);
 				request.setAttribute("action", "validateBracket");
@@ -139,8 +144,9 @@ public class OrderServlet extends HttpServlet{
 				int userId = order.getUserId();
 				User user = userManager.getUser(userId);
 				mailManager.confirmFinishOrder(user.getMail());
+				logger.info("Mail pour la mise à jour de la commande envoyé");
 			} catch (EmailException e) {
-				e.printStackTrace();
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise à jour de la commande : " + e.getMessage());
 			}
 
 			orderManager.updateOrderToInProgress(Integer.parseInt(idOrder));

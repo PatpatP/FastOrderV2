@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.enumeration.ProductTypeEnum;
@@ -22,6 +24,8 @@ public class ShopManagerImpl implements IShopManager{
 
 	private Statement statement;
 
+	final static Logger logger = Logger.getLogger(ShopManagerImpl.class);
+	
 	public ShopManagerImpl(Statement statement) {
 		this.statement = statement;
 	}
@@ -49,9 +53,10 @@ public class ShopManagerImpl implements IShopManager{
 
 				shops.add(shop);
 			}
+			logger.info("Liste des magasins récupérée");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la liste des magasins : " + e.getMessage());
 		}
 
 		return shops;
@@ -76,9 +81,10 @@ public class ShopManagerImpl implements IShopManager{
 				ShopTypeEnum shopType = Utils.getShopType(shopTypeString);
 				shop = new Shop(idShop, name, description, shopType, idUser, idAddress);
 			}
+			logger.info("Magasin récupéré grâce à l'ID");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération du magasin grâce à l'ID : " + e.getMessage());
 		}
 
 		return shop;
@@ -150,8 +156,9 @@ public class ShopManagerImpl implements IShopManager{
 				
 				products.add(product);
 			}
+			logger.info("Liste des produits récupérée");
 		} catch (SQLException e) {
-
+			logger.error("Une erreur est survenue lors de la récupération de la liste des produits : " + e.getMessage());
 		}
 
 		return products;
@@ -175,10 +182,10 @@ public class ShopManagerImpl implements IShopManager{
 
 				ProductTypeEnum productTypeEnum = Utils.getProductType(productType);
 				product = new Product(id, productTypeEnum, name, description, price, shopId);
-
 			}
+			logger.info("Produit récupéré grâce à l'ID");
 		} catch (SQLException e) {
-
+			logger.error("Une erreur est survenue lors de la récupération du produit grâce à l'ID : " + e.getMessage());
 		}
 
 		return product; 
@@ -241,8 +248,9 @@ public class ShopManagerImpl implements IShopManager{
 				Order order = new Order(idOrder, estimatedTimeEnum, orderStatusEnum,date, priceTotal, idUser, idShop);
 				orders.add(order);
 			}
+			logger.info("Liste des commandes reçues récupérée");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de la liste des commandes reçues : " + e.getMessage());
 		}
 		
 		return orders;
@@ -257,8 +265,9 @@ public class ShopManagerImpl implements IShopManager{
 			while(result.next()){
 				idShop = result.getInt("id");
 			}
+			logger.info("Magasin récupéré");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération du magasin : " + e.getMessage());
 		}
 
 		return idShop;
@@ -276,8 +285,9 @@ public class ShopManagerImpl implements IShopManager{
 			while(result.next()){
 				idProduct = result.getInt("id");
 			}
+			logger.info("Produit récupéré");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération du produit : " + e.getMessage());
 		}
 
 		return idProduct;

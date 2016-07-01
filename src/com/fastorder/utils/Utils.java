@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.enumeration.ProductTypeEnum;
@@ -15,11 +17,14 @@ import com.fastorder.manager.impl.ShopManagerImpl;
 import com.fastorder.model.Address;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
+import com.fastorder.servlet.ShopServlet;
 import com.google.gson.Gson;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 public class Utils {
+
+	final static Logger logger = Logger.getLogger(Utils.class);
 	
 	public static Statement connectBDD(){
 		try {
@@ -42,10 +47,11 @@ public class Utils {
 		try {
 			connexion = (Connection) DriverManager.getConnection( url, user, password );
 			statement = (Statement) connexion.createStatement();
+			logger.info("Connexion effectuée");
 			return statement;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la connexion : " + e.getMessage());
 		}
 		return null;
 	}
@@ -54,9 +60,10 @@ public class Utils {
 		try {
 			int res = statement.executeUpdate(query);
 			System.out.println("Résultat insert "+res);
+			logger.info("Résultat insert "+res);
 			return res;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de l'insert : " + e.getMessage());
 		}
 		return 0;
 	}
@@ -65,8 +72,9 @@ public class Utils {
 		ResultSet resultat = null;
 		try {
 			resultat = statement.executeQuery(query);
+			logger.info("Résultat select "+resultat);
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors du select : " + e.getMessage());
 		}
 		
 		return resultat;
@@ -75,10 +83,10 @@ public class Utils {
 	public static int updateQuery(Statement statement, String query){
 		try {
 			int res = statement.executeUpdate(query);
+			logger.info("Résultat update "+res);
 			return res;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de l'update : " + e.getMessage());
 		}
 		return 0;
 	}
@@ -86,10 +94,10 @@ public class Utils {
 	public static int deleteQuery(Statement statement, String query){
 		try {
 			int res = statement.executeUpdate(query);
+			logger.info("Résultat delete "+res);
 			return res;
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors du delete : " + e.getMessage());
 		}
 		return 0;
 	}

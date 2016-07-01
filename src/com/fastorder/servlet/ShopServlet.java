@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.log4j.Logger;
 
 import com.fastorder.enumeration.ShopTypeEnum;
 import com.fastorder.manager.impl.AddressManagerImpl;
@@ -39,6 +40,8 @@ public class ShopServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -3798116206381293087L;
+
+	final static Logger logger = Logger.getLogger(ShopServlet.class);
 	
 	private UserManagerImpl userManager;
 	private AddressManagerImpl addressManager;
@@ -171,8 +174,9 @@ public class ShopServlet extends HttpServlet{
 				shopManager.createShop(name, description, shopType, userId, addressId);
 				try {
 					mailManager.confirmCreateShop(mail);
+					logger.info("Mail pour la création d'un magasin envoyé");
 				} catch (EmailException e) {
-					e.printStackTrace();
+					logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un magasin : " + e.getMessage());
 				}
 				response.sendRedirect("myspace");
 			} else {
@@ -262,8 +266,9 @@ public class ShopServlet extends HttpServlet{
 
 			try {
 				mailManager.confirmCreateProduct(mail);
+				logger.info("Mail pour la création d'un produit envoyé");
 			} catch (EmailException e) {
-				e.printStackTrace();
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un produit : " + e.getMessage());
 			}
 
 			request.setAttribute("action", "createProduct");
@@ -285,8 +290,9 @@ public class ShopServlet extends HttpServlet{
 
 			try {
 				mailManager.confirmUpdateProduct(mail);
+				logger.info("Mail pour la mise à jour d'un produit envoyé");
 			} catch (EmailException e) {
-				e.printStackTrace();
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise à jour d'un produit : " + e.getMessage());
 			}
 
 			request.setAttribute("action", "createProduct");

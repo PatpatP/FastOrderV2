@@ -4,6 +4,8 @@ package com.fastorder.manager.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 import com.fastorder.manager.IAddressManager;
 import com.fastorder.model.Address;
 import com.fastorder.utils.Utils;
@@ -12,6 +14,8 @@ import com.mysql.jdbc.Statement;
 public class AddressManagerImpl implements IAddressManager{
 
 	private Statement statement;
+	
+	final static Logger logger = Logger.getLogger(AddressManagerImpl.class);
 
 	public AddressManagerImpl(Statement statement) {
 		this.statement = statement;
@@ -40,8 +44,9 @@ public class AddressManagerImpl implements IAddressManager{
 			while(resultat.next()){
 				addressId = resultat.getInt("id");
 			}
+			logger.info("ID de l'adresse récupéré");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de l'ID de l'adresse : " + e.getMessage());
 		}
 
 		return addressId;
@@ -61,11 +66,12 @@ public class AddressManagerImpl implements IAddressManager{
 				String city =  resultat.getString("city");
 				String country =  resultat.getString("country");
 
+				logger.info("Adresse récupérée");
 				return new Address(street, number, zipCode, city, country);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Une erreur est survenue lors de la récupération de l'adresse : " + e.getMessage());
 		}
 
 		return null;

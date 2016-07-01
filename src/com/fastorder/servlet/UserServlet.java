@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.mail.EmailException;
+import org.apache.log4j.Logger;
 
 import com.fastorder.enumeration.UserTypeEnum;
 import com.fastorder.manager.impl.AddressManagerImpl;
@@ -39,6 +40,8 @@ public class UserServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = 4993147831768532172L;
+
+	final static Logger logger = Logger.getLogger(UserServlet.class);
 
 	private UserManagerImpl userManager;
 	private AddressManagerImpl addressManager;
@@ -208,8 +211,9 @@ public class UserServlet extends HttpServlet{
 					}
 					try {
 						mailManager.confirmSignUp(mail);
+						logger.info("Mail pour la création d'un compte utilisateur envoyé");
 					} catch (EmailException e) {
-						e.printStackTrace();
+						logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un compte utilisateur : " + e.getMessage());
 					}
 					userManager.createUser(mail, phoneNumber, firstName, lastName, userTypeEnum, addressId, password);
 					request.setAttribute("msgcreated", "Your account was created, you can sign in");

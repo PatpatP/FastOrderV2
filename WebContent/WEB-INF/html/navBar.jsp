@@ -9,7 +9,7 @@
          <li><a href="shops">Shops</a></li>
       <%  if(request.getSession().getAttribute("userName")!=null && request.getSession().getAttribute("userType").equals(UserTypeEnum.CLIENT.toString())){
       %>
-      	 <li><a href="myspace" style="style:color:#6AE62D;">${userName }</a></li>
+      	 <li><a href="myspace" style="color:green;">${userName }</a></li>
          <li><a href="signOut">Logout</a></li>
          
       <%

@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="js/app.js"></script>
 	</head>
 	
-<body ng-controller="mainCtrl" ng-init='setProducts(${shopsProducts })' style="background: #eee">
+<body ng-controller="mainCtrl" ng-init='setProducts(${shopsProducts }); getBracket();' style="background: #eee">
 	<div id="globalDiv2">
 		<div class="container contenu">
 			<jsp:directive.include file="navBar.jsp" />

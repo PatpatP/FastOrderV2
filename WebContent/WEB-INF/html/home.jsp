@@ -1,12 +1,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:directive.page import="com.fastorder.model.User" />
-<html>
+<html ng-app="fastOrder">
 <head>
 <script type="text/javascript" src="js/angular.min.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
 </head>
 <jsp:directive.include file="header.jsp" />
-<body onload="load()">
+<body ng-controller="mainCtrl" ng-init="getBracket()">
 	<div id="globalDiv">
 		<video muted="" loop="" data-src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" poster="http://a.tfstatic.com/v-979/images/homepage/subheader_poster_0.jpg" 
 		src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" autoplay="autoplay"></video>

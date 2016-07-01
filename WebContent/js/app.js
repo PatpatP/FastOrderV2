@@ -10,11 +10,15 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 	$scope.listErrors = [];
 	$scope.lisAdress = [];
 	
-	if($window.sessionStorage != null){
-		$scope.bracketStorage = $window.sessionStorage.bracket;
-	}else{
-		$scope.bracketStorage = [];
+	$scope.getBracket = function(){
+		if($window.sessionStorage != null){
+			$scope.bracketStorage = $window.sessionStorage.bracket;
+		}else{
+			$scope.bracketStorage = [];
+		}
 	}
+	
+	
 	
 	var i=0;
 	

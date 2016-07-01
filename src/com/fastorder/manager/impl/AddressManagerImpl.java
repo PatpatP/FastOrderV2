@@ -70,7 +70,6 @@ public class AddressManagerImpl implements IAddressManager{
 				return new Address(street, number, zipCode, city, country);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			logger.error("Une erreur est survenue lors de la récupération de l'adresse : " + e.getMessage());
 		}
 

@@ -17,9 +17,11 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
+import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.utils.Mailing;
 
 public class MailingTests {
@@ -80,10 +82,9 @@ public class MailingTests {
 	}
 
 	@Test
-	public void checkInboxMail(){
+	public void checkInboxMail() throws MessagingException{
 		Properties props = System.getProperties();
 		props.setProperty("mail.store.protocol", "imaps");
-		try {
 			Session session = Session.getDefaultInstance(props, null);
 			Store store = session.getStore("imaps");
 			store.connect("imap.gmail.com",username, password);
@@ -95,20 +96,6 @@ public class MailingTests {
 				}
 			}
 			
-//			Folder sendMail = store.getFolder("[Gmail]/Messages envoyés");
-//			sendMail.open(Folder.READ_ONLY);
-//			Message messages[] = sendMail.getMessages();
-//			for (Message message : messages) {
-//				//System.out.println(message.get());
-//			}
-			
-		} catch (NoSuchProviderException e) {
-			e.printStackTrace();
-			System.exit(1);
-		} catch (MessagingException e) {
-			e.printStackTrace();
-			System.exit(2);
-		}
 	}
 
 }

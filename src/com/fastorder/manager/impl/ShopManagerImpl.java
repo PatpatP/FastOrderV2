@@ -208,8 +208,8 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public void updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop) {
-		String query = "Update shop SET productType='"+productType.toString()+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND idShop='"+idShop+" WHERE id='"+idProduct+"';";
-
+		String query = "Update product SET productType='"+productType.toString()+"' , name='"+name+"' , description='"+description+"' , price='"+price+"' , shopId='"+idShop+"' WHERE id='"+idProduct+"';";
+		System.out.println(query);
 		Utils.updateQuery(statement, query);
 	}
 

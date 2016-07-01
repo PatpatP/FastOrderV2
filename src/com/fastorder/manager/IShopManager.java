@@ -26,8 +26,8 @@ public interface IShopManager {
 	public Product getProduct(int id);
 	public int getProduct(String producType, String name, String description, Float price, int idShop);
 	public boolean createProduct(String productType, String name, String description, Float price, int idShop);
-	public void updateProduct(int idProduct, String productType, String name, String description, String price, int idShop);
-	public void deleteProduct(int id);
+	public void updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop);
+	public boolean deleteProduct(int id);
 	
 	//Méthode pour qu'un magasin récupère les commandes qu'il a recu
 	public List<Order> getReceivedOrder(int shop);

@@ -281,7 +281,7 @@ public class ShopServlet extends HttpServlet{
 		final String price = request.getParameter("price");
 
 		if(productType!=null && name!=null && description!=null && price!=null){
-			shopManager.updateProduct(Integer.parseInt(idProduct), productType, name, description, price, Integer.parseInt(idShop));
+			shopManager.updateProduct(Integer.parseInt(idProduct), productType, name, description, Float.parseFloat(price), Integer.parseInt(idShop));
 
 			try {
 				mailManager.confirmUpdateProduct(mail);

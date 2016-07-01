@@ -14,7 +14,7 @@ public interface IMailManager {
 	public void confirmUpdateProduct(String mailDest) throws EmailException;
 	public void confirmDeleteProduct(String mailDest) throws EmailException;
 	
-	public void confirmCreateOrder(String mailDest, float totalPrice)  throws EmailException;
+	public void confirmCreateOrder(String mailDest, double totalPrice)  throws EmailException;
 	public void sendReceivedOrder(String mailDest) throws EmailException;
 	public void confirmFinishOrder(String mailDest) throws EmailException;
 }

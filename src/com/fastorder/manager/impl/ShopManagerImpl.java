@@ -200,17 +200,23 @@ public class ShopManagerImpl implements IShopManager{
 	}
 
 	@Override
-	public void updateProduct(int idProduct, String productType, String name, String description, String price, int idShop) {
+	public void updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop) {
 		String query = "Update shop SET productType='"+productType.toString()+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND idShop='"+idShop+" WHERE id='"+idProduct+"';";
 
 		Utils.updateQuery(statement, query);
 	}
 
 	@Override
-	public void deleteProduct(int id) {
+	public boolean deleteProduct(int id) {
 		String query = "DELETE FROM product where id='"+id+"';";
-
-		Utils.deleteQuery(statement, query);
+		System.out.println(query);
+		int res = Utils.deleteQuery(statement, query);
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	@Override
@@ -260,7 +266,9 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public int getProduct(String producType, String name, String description, Float price, int idShop) {
+//		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND CAST(price AS DECIMAL)= CAST('"+price+"' AS DECIMAL) AND shopId='"+idShop+"';";
 		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND shopId='"+idShop+"';";
+		
 		System.out.println(query);
 		ResultSet result = Utils.selectQuery(statement, query);
 		int idProduct = -1;

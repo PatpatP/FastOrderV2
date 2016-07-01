@@ -67,7 +67,7 @@ public class OrderManagerImpl implements IOrderManager{
 	}
 
 	@Override
-	public void create(List<Product> products, EstimatedTimeEnum estimatedTime, OrderStatusEnum status, float totalPrice, int userId, int shopId) {
+	public void create(List<Product> products, EstimatedTimeEnum estimatedTime, OrderStatusEnum status, double totalPrice, int userId, int shopId) {
 		
 		int nbProduct = 0;
 		if(products!=null){

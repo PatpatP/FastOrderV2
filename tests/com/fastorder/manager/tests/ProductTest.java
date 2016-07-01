@@ -56,38 +56,49 @@ public class ProductTest {
 	}
 	
 	@Test
-	@Ignore
 	public void createProductTest(){
-		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
-		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
 		Product product = shopManager.getProduct(idProduct);
 		
 		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
 		assertEquals("coca", product.getName());
 		assertEquals("soda", product.getDescription());
-		assertTrue(Float.parseFloat("3.05")==product.getPrice());
+		assertTrue(((float) 3.5)==product.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}
 	
 	@Test
 	public void updateProductTest(){
-		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
-		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
 		Product product = shopManager.getProduct(idProduct);
 		
-		//TODO Mettre la partie mettre à jour
+		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
+		assertEquals("coca", product.getName());
+		assertEquals("soda", product.getDescription());
+		assertTrue(((float) 3.5)==product.getPrice());
+		
+		shopManager.updateProduct(idProduct, ProductTypeEnum.DRINK.toString(), "Coca Cola", "Boisson sans alcool", (float) 4.0, shopId);
+		
+		Product productAfterUpdate = shopManager.getProduct(idProduct);
+		
+		assertEquals(ProductTypeEnum.DRINK, productAfterUpdate.getProductType());
+		assertEquals("Coca Cola", productAfterUpdate.getName());
+		assertEquals("Boisson sans alcool", productAfterUpdate.getDescription());
+		assertTrue(((float) 4.0)==productAfterUpdate.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}
 	
 	@Test
 	public void deleteProductTest(){
-		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
-		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.05, shopId);
-		Product product = shopManager.getProduct(idProduct);
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
 		
-		shopManager.deleteProduct(idProduct);
+		boolean isDeleted = shopManager.deleteProduct(idProduct);
+		assertTrue("Suppression du produit", isDeleted);
 	}
 	
 	@Test

@@ -8,10 +8,10 @@ public class Product {
 	private ProductTypeEnum productType;
 	private String name;
 	private String description;
-	private Float price;
+	private double price;
 	private int shopId;
 	
-	public Product(int id, ProductTypeEnum productType, String name, String description, Float price, int shopId) {
+	public Product(int id, ProductTypeEnum productType, String name, String description, double price, int shopId) {
 		super();
 		this.id = id;
 		this.productType = productType;
@@ -53,11 +53,11 @@ public class Product {
 		this.description = description;
 	}
 
-	public Float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(Float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

@@ -111,7 +111,7 @@ public class OrderServlet extends HttpServlet{
 				User shopOwner = shopManager.getOwner(shopId);
 				String shopOwnerMail = shopOwner.getMail();
 
-				float totalPrice = 0;
+				double totalPrice = 0;
 				for(Product product : brackProducts){
 					totalPrice = totalPrice+product.getPrice();
 				}

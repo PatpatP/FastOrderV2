@@ -71,7 +71,7 @@ public class MailManagerImpl implements IMailManager{
 	}
 
 	@Override
-	public void confirmCreateOrder(String mailDest, float totalPrice) throws EmailException {
+	public void confirmCreateOrder(String mailDest, double totalPrice) throws EmailException {
 		String object = "FASTORDER - Confirmation de commande";
 		String message = "Votre commande de "+totalPrice+" a été confirmé";
 

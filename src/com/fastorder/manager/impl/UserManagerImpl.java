@@ -13,12 +13,11 @@ import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.enumeration.ShopTypeEnum;
 import com.fastorder.enumeration.UserTypeEnum;
 import com.fastorder.manager.IUserManager;
-import com.fastorder.model.Address;
 import com.fastorder.model.Order;
-import com.fastorder.model.Product;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 
@@ -35,7 +34,7 @@ public class UserManagerImpl implements IUserManager{
 	@Override
 	public List<User> getUsers() {
 		String query = "Select * from user";
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		List<User> users = new ArrayList<User>();
 		try {
 			while(resultat.next()){
@@ -62,7 +61,7 @@ public class UserManagerImpl implements IUserManager{
 		User user = null;
 		String query = "Select * from user where mail='"+mail+"';";
 		//TODO Mettre en place la méthode avec la Map<clé, valeur>
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		try {
 			while(resultat.next()){
 				int id = resultat.getInt("id");
@@ -99,7 +98,7 @@ public class UserManagerImpl implements IUserManager{
 	public User getUser(int id) {
 		User user = null;
 		String query = "Select * from user where id='"+id+"';";
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		try {
 			while(resultat.next()){
 				String mail = resultat.getString("mail");
@@ -135,7 +134,7 @@ public class UserManagerImpl implements IUserManager{
 
 			String queryShop = "Select * from shop where user="+idUser;
 			
-			ResultSet resultShop = Utils.selectQuery(statement, queryShop);
+			ResultSet resultShop = UtilsBdd.selectQuery(statement, queryShop);
 
 			while (resultShop.next()) {
 				int shopId = resultShop.getInt("id");
@@ -168,8 +167,8 @@ public class UserManagerImpl implements IUserManager{
 		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) "
 				+ "VALUES('"+mail+"','"+phoneNumber+"','"+firstName+"','"+lastName+"','"+userTypeString+"','"+address+"','"+password+"');";
 		System.out.println(query);
-		int res = Utils.insertQuery(statement, query);
-		Utils.selectQuery(statement, "Select * from user");
+		int res = UtilsBdd.insertQuery(statement, query);
+		UtilsBdd.selectQuery(statement, "Select * from user");
 
 		if(res==1){
 			return true;
@@ -183,7 +182,7 @@ public class UserManagerImpl implements IUserManager{
 			UserTypeEnum userType, int address, String password) {
 
 		String query = "UPDATE user SET mail='"+mail+"' AND phoneNumber='"+phoneNumber+"' AND firstName='"+firstName+"' AND lastName='"+lastName+"' AND password='"+password+"' WHERE id='"+userId+"';";
-		int res = Utils.updateQuery(statement, query);
+		int res = UtilsBdd.updateQuery(statement, query);
 		if(res==1){
 			return true;
 		} else {
@@ -194,7 +193,7 @@ public class UserManagerImpl implements IUserManager{
 	@Override
 	public boolean deleteUser(String mail) {
 		String query = "Delete FROM user where mail='"+mail+"';";
-		int res = Utils.deleteQuery(statement, query);
+		int res = UtilsBdd.deleteQuery(statement, query);
 		if(res==1){
 			return true;
 		} else {
@@ -206,7 +205,7 @@ public class UserManagerImpl implements IUserManager{
 	public boolean checkLogin(String mail, String password) {
 
 		String query = "Select * from user where mail='"+mail+"';";
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		String passwordExpected = "";
 		try {
 			while (resultat.next()){
@@ -237,7 +236,7 @@ public class UserManagerImpl implements IUserManager{
 	public boolean checkMailExist(String mail) {
 		String query = "Select * from user";
 		String userMail;
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		try {
 			while(resultat.next()){
 				userMail = resultat.getString("mail");
@@ -258,7 +257,7 @@ public class UserManagerImpl implements IUserManager{
 		List<Order> userOrders = new ArrayList<Order>();
 		
 		String query = "Select * from ordering where user="+idUser;
-		ResultSet result = Utils.selectQuery(statement, query);   // COntient l'ensemble des commandes de l'utilisateur
+		ResultSet result = UtilsBdd.selectQuery(statement, query);   // COntient l'ensemble des commandes de l'utilisateur
 		
 		try {
 			while(result.next()){

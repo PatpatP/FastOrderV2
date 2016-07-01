@@ -24,6 +24,7 @@ import com.fastorder.model.Order;
 import com.fastorder.model.Product;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 @WebServlet(
@@ -49,7 +50,7 @@ public class OrderServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		Statement statement = Utils.connectBDD();
+		Statement statement = UtilsBdd.connectBDD();
 		userManager = new UserManagerImpl(statement);
 		shopManager = new ShopManagerImpl(statement);
 		orderManager = new OrderManagerImpl(statement);

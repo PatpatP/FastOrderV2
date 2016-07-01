@@ -13,9 +13,8 @@ import com.fastorder.enumeration.OrderStatusEnum;
 import com.fastorder.manager.IOrderManager;
 import com.fastorder.model.Order;
 import com.fastorder.model.Product;
-import com.fastorder.model.Shop;
-import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class OrderManagerImpl implements IOrderManager{
@@ -47,7 +46,7 @@ public class OrderManagerImpl implements IOrderManager{
 	@Override
 	public Order getOrder(int id){
 		String query = "SELECT * from ordering WHERE id='"+id+"';";
-		ResultSet result = Utils.selectQuery(statement, query);
+		ResultSet result = UtilsBdd.selectQuery(statement, query);
 		Order order = null;
 		try {
 			while(result.next()){
@@ -81,12 +80,12 @@ public class OrderManagerImpl implements IOrderManager{
 		}
 		// On créer la commande
 		String queryOrder = "Insert into ordering (estimatedTime, status, totalPrice, user, shop) VALUES('"+estimatedTime+"','"+status+"','"+totalPrice+"','"+userId+"','"+shopId+"');";
-		Utils.insertQuery(statement, queryOrder);
+		UtilsBdd.insertQuery(statement, queryOrder);
 		
 		//On récupère l'id de la commande
 		String queryIdOrder = "Select * from ordering WHERE user='"+userId+"' AND shop='"+shopId+"' AND status='"+status+"';";
 		int idOrder = 0;
-		ResultSet resultIdOrder = Utils.selectQuery(statement, queryIdOrder);
+		ResultSet resultIdOrder = UtilsBdd.selectQuery(statement, queryIdOrder);
 		try {
 			while(resultIdOrder.next()){
 				idOrder = resultIdOrder.getInt("id");
@@ -101,7 +100,7 @@ public class OrderManagerImpl implements IOrderManager{
 		for(int i = 0; i<nbProduct; i++){
 			int idProduct = products.get(i).getId();
 			String queryOrderHasProduct = "Insert into orderhasproduct(idOrder, idProduct) VALUES('"+idOrder+"','"+idProduct+"');";
-			Utils.insertQuery(statement, queryOrderHasProduct);
+			UtilsBdd.insertQuery(statement, queryOrderHasProduct);
 		}
 	}
 
@@ -114,7 +113,7 @@ public class OrderManagerImpl implements IOrderManager{
 	@Override
 	public void updateOrderToInProgress(int idOrder) {
 		String query = "Update ordering SET status='"+OrderStatusEnum.READY+"' WHERE id='"+idOrder+"';";
-		Utils.updateQuery(statement, query);
+		UtilsBdd.updateQuery(statement, query);
 	}
 
 }

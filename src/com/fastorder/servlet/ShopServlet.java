@@ -26,6 +26,7 @@ import com.fastorder.model.Product;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
 import com.mysql.jdbc.Statement;
 
@@ -52,7 +53,7 @@ public class ShopServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		Statement statement = Utils.connectBDD();
+		Statement statement = UtilsBdd.connectBDD();
 		userManager = new UserManagerImpl(statement);
 		addressManager= new AddressManagerImpl(statement);
 		shopManager = new ShopManagerImpl(statement);

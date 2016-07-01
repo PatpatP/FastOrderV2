@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fastorder.manager.impl.AddressManagerImpl;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class AddressManagerTests {
@@ -14,7 +14,7 @@ public class AddressManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement = Utils.connectBDD();
+		statement = UtilsBdd.connectBDD();
 		addressManager = new AddressManagerImpl(statement);
 	}
 

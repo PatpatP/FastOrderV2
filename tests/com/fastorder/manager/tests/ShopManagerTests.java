@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fastorder.manager.impl.ShopManagerImpl;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class ShopManagerTests {
@@ -14,7 +14,7 @@ public class ShopManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement = Utils.connectBDD();
+		statement = UtilsBdd.connectBDD();
 		shopManager = new ShopManagerImpl(statement);
 	}
 

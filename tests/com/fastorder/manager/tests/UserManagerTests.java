@@ -19,7 +19,7 @@ import com.fastorder.manager.impl.UserManagerImpl;
 import com.fastorder.model.Order;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class UserManagerTests {
@@ -37,7 +37,7 @@ public class UserManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement =  Utils.connectBDD();
+		statement =  UtilsBdd.connectBDD();
 		userManager = new UserManagerImpl(statement);
 		
 		mail = "testUnit@gmail.com";
@@ -153,7 +153,7 @@ public class UserManagerTests {
 	
 	private int countNbUsersInBase() throws SQLException{
 		String query = "Select * from User";
-		ResultSet result = Utils.selectQuery(statement, query);
+		ResultSet result = UtilsBdd.selectQuery(statement, query);
 		int cpt = 0;
 		while(result.next()){
 			cpt = cpt+1;

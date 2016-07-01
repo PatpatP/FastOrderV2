@@ -3,7 +3,7 @@ package com.fastorder.manager.tests;
 import org.junit.Before;
 
 import com.fastorder.manager.impl.OrderManagerImpl;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class OrderManagerTests {
@@ -13,7 +13,7 @@ public class OrderManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement =  Utils.connectBDD();
+		statement =  UtilsBdd.connectBDD();
 		orderManager = new OrderManagerImpl(statement);
 	}
 	

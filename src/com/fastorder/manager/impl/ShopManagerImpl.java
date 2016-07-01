@@ -18,6 +18,7 @@ import com.fastorder.model.Product;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class ShopManagerImpl implements IShopManager{
@@ -35,7 +36,7 @@ public class ShopManagerImpl implements IShopManager{
 		List<Shop> shops = new ArrayList<Shop>();
 
 		String query = "Select * from shop";
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -67,7 +68,7 @@ public class ShopManagerImpl implements IShopManager{
 		Shop shop = null;
 
 		String query = "Select * from shop where id='"+id+"';";
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -105,7 +106,7 @@ public class ShopManagerImpl implements IShopManager{
 		String query = "Insert into shop (name, description, shopType, user, address) "
 				+ "VALUES('"+name+"','"+description+"','"+shopType+"','"+userId+"','"+addressId+"');";
 
-		int res = Utils.insertQuery(statement, query);
+		int res = UtilsBdd.insertQuery(statement, query);
 
 		if(res==1){
 			return true;
@@ -119,7 +120,7 @@ public class ShopManagerImpl implements IShopManager{
 	public void updateShop(int idShop, String name, String description, String shopType, int userId, int addressId) {
 		String query = "Update shop SET name='"+name+"' AND description='"+description+"' AND shopType='"+shopType+"' AND user='"+userId+"' AND address='"+addressId+" WHERE id='"+idShop+"';";
 
-		Utils.updateQuery(statement, query);
+		UtilsBdd.updateQuery(statement, query);
 	}
 
 	@Override
@@ -131,7 +132,7 @@ public class ShopManagerImpl implements IShopManager{
 		
 		//Delete shop
 		String query = "DELETE FROM shop where id='"+id+"';";
-		Utils.deleteQuery(statement, query);
+		UtilsBdd.deleteQuery(statement, query);
 	}
 
 	@Override
@@ -140,7 +141,7 @@ public class ShopManagerImpl implements IShopManager{
 
 		String query = "Select * from product where shopId='"+shopId+"';";
 
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -170,7 +171,7 @@ public class ShopManagerImpl implements IShopManager{
 
 		String query = "Select * from product where id='"+id+"';";
 
-		ResultSet resultat = Utils.selectQuery(statement, query);
+		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -196,7 +197,7 @@ public class ShopManagerImpl implements IShopManager{
 		String query = "Insert into product (productType, name, description, price, shopId) "
 				+ "VALUES('"+productType.toString()+"','"+name+"','"+description+"','"+price+"','"+idShop+"');";
 
-		int res = Utils.insertQuery(statement, query);
+		int res = UtilsBdd.insertQuery(statement, query);
 
 		if(res==1){
 			return true;
@@ -210,14 +211,14 @@ public class ShopManagerImpl implements IShopManager{
 	public void updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop) {
 		String query = "Update product SET productType='"+productType.toString()+"' , name='"+name+"' , description='"+description+"' , price='"+price+"' , shopId='"+idShop+"' WHERE id='"+idProduct+"';";
 		System.out.println(query);
-		Utils.updateQuery(statement, query);
+		UtilsBdd.updateQuery(statement, query);
 	}
 
 	@Override
 	public boolean deleteProduct(int id) {
 		String query = "DELETE FROM product where id='"+id+"';";
 		System.out.println(query);
-		int res = Utils.deleteQuery(statement, query);
+		int res = UtilsBdd.deleteQuery(statement, query);
 		if(res==1){
 			return true;
 		} else {
@@ -229,7 +230,7 @@ public class ShopManagerImpl implements IShopManager{
 	@Override
 	public List<Order> getReceivedOrder(int shop) {
 		String query = "Select * from ordering where shop='"+shop+"' AND status='"+OrderStatusEnum.INPROGRESS+"';";
-		ResultSet resultOrder = Utils.selectQuery(statement, query);
+		ResultSet resultOrder = UtilsBdd.selectQuery(statement, query);
 
 		List<Order> orders = new ArrayList<Order>();
 		try {
@@ -259,7 +260,7 @@ public class ShopManagerImpl implements IShopManager{
 	@Override
 	public int getShop(String name, String description, String shopType, int userId, int addressId) {
 		String query = "Select * from shop WHERE name='"+name+"' AND description='"+description+"' AND user='"+userId+"' AND address='"+addressId+"';";
-		ResultSet result = Utils.selectQuery(statement, query);
+		ResultSet result = UtilsBdd.selectQuery(statement, query);
 		int idShop = -1;
 		try {
 			while(result.next()){
@@ -279,7 +280,7 @@ public class ShopManagerImpl implements IShopManager{
 		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND shopId='"+idShop+"';";
 		
 		System.out.println(query);
-		ResultSet result = Utils.selectQuery(statement, query);
+		ResultSet result = UtilsBdd.selectQuery(statement, query);
 		int idProduct = -1;
 		try {
 			while(result.next()){

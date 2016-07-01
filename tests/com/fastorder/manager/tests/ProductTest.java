@@ -1,10 +1,10 @@
 package com.fastorder.manager.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.fastorder.enumeration.ProductTypeEnum;
@@ -15,7 +15,7 @@ import com.fastorder.manager.impl.ShopManagerImpl;
 import com.fastorder.manager.impl.UserManagerImpl;
 import com.fastorder.model.Product;
 import com.fastorder.model.User;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class ProductTest {
@@ -31,7 +31,7 @@ public class ProductTest {
 	
 	@Before
 	public void setUp(){
-		statement = Utils.connectBDD();
+		statement = UtilsBdd.connectBDD();
 		shopManager = new ShopManagerImpl(statement);
 		addressManager = new AddressManagerImpl(statement);
 		addressManager.createAddress("tests unit product", "42", "75000", "TestCity", "TestLand");

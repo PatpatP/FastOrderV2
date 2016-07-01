@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 
 import com.fastorder.manager.IAddressManager;
 import com.fastorder.model.Address;
-import com.fastorder.utils.Utils;
+import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Statement;
 
 public class AddressManagerImpl implements IAddressManager{
@@ -24,7 +24,7 @@ public class AddressManagerImpl implements IAddressManager{
 	@Override
 	public boolean createAddress(String street, String number, String zipCode, String city, String country) {
 		String query = "Insert into address (street,number,zipCode,city,country) VALUES('"+street+"','"+number+"','"+zipCode+"','"+city+"','"+country+"');";
-		int res = Utils.insertQuery(statement, query);
+		int res = UtilsBdd.insertQuery(statement, query);
 		System.out.println(query);
 		if(res==1){
 			return true;
@@ -38,7 +38,7 @@ public class AddressManagerImpl implements IAddressManager{
 		int addressId = 0;
 		ResultSet resultat;
 		String query = "Select * from address WHERE street='"+street+"' AND number='"+number+"' AND zipCode='"+zipCode+"' AND city='"+city+"' AND country='"+country+"';";
-		resultat = Utils.selectQuery(statement, query);
+		resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -56,7 +56,7 @@ public class AddressManagerImpl implements IAddressManager{
 	public Address getAddresssById(int id) {
 		String query = "Select * from address where id='"+id+"';";
 		ResultSet resultat;
-		resultat = Utils.selectQuery(statement, query);
+		resultat = UtilsBdd.selectQuery(statement, query);
 
 		try {
 			while(resultat.next()){
@@ -79,7 +79,7 @@ public class AddressManagerImpl implements IAddressManager{
 	@Override
 	public boolean updateAddress(int id, String street, String number, String zipCode, String city, String country) {
 		String query = "UPDATE address SET street='"+street+"', number='"+number+"', zipCode='"+zipCode+"', city='"+city+"', country='"+country+"' WHERE id='"+id+"';";
-		int res = Utils.updateQuery(statement, query);
+		int res = UtilsBdd.updateQuery(statement, query);
 		if(res==1){
 			return true;
 		} else {
@@ -91,7 +91,7 @@ public class AddressManagerImpl implements IAddressManager{
 	@Override
 	public boolean deleteAddress(int id) {
 		String query = "DELETE FROM ADDRESS where id='"+id+"';";
-		int res = Utils.deleteQuery(statement, query);
+		int res = UtilsBdd.deleteQuery(statement, query);
 		if(res==1){
 			return true;
 		} else {

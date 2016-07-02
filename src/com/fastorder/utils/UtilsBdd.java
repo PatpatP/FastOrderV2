@@ -14,12 +14,12 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		try {
 			System.out.println( "Chargement du driver..." );
 			Class.forName( "com.mysql.jdbc.Driver" );
-			System.out.println( "Driver chargé !" );
+			System.out.println( "Driver chargï¿½ !" );
 		} catch ( ClassNotFoundException e ) {
-			System.out.println( "Erreur lors du chargement : le driver n'a pas été trouvé dans le classpath ! <br/>"
+			System.out.println( "Erreur lors du chargement : le driver n'a pas ï¿½tï¿½ trouvï¿½ dans le classpath ! <br/>"
 					+ e.getMessage() );
 		}
-		/* Connexion à la base de données */
+		/* Connexion ï¿½ la base de donnï¿½es */
 		String url = "jdbc:mysql://localhost:3306/fastorder";
 		String user = "root";
 		String password = "";
@@ -29,7 +29,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		try {
 			connexion = (Connection) DriverManager.getConnection( url, user, password );
 			statement = (Statement) connexion.createStatement();
-			logger.info("Connexion effectuée");
+			logger.info("Connexion effectuï¿½e");
 			return statement;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -41,8 +41,8 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 	public static int insertQuery(Statement statement, String query){
 		try {
 			int res = statement.executeUpdate(query);
-			System.out.println("Résultat insert "+res);
-			logger.info("Résultat insert "+res);
+			System.out.println("Rï¿½sultat insert "+res);
+			logger.info("Rï¿½sultat insert "+res);
 			return res;
 		} catch (SQLException e) {
 			logger.error("Une erreur est survenue lors de l'insert : " + e.getMessage());
@@ -54,7 +54,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		ResultSet resultat = null;
 		try {
 			resultat = statement.executeQuery(query);
-			logger.info("Résultat select "+resultat);
+			logger.info("Rï¿½sultat select "+resultat);
 		} catch (SQLException e) {
 			logger.error("Une erreur est survenue lors du select : " + e.getMessage());
 		}
@@ -65,7 +65,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 	public static int updateQuery(Statement statement, String query){
 		try {
 			int res = statement.executeUpdate(query);
-			logger.info("Résultat update "+res);
+			logger.info("Rï¿½sultat update "+res);
 			return res;
 		} catch (SQLException e) {
 			logger.error("Une erreur est survenue lors de l'update : " + e.getMessage());
@@ -76,7 +76,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 	public static int deleteQuery(Statement statement, String query){
 		try {
 			int res = statement.executeUpdate(query);
-			logger.info("Résultat delete "+res);
+			logger.info("Rï¿½sultat delete "+res);
 			return res;
 		} catch (SQLException e) {
 			logger.error("Une erreur est survenue lors du delete : " + e.getMessage());

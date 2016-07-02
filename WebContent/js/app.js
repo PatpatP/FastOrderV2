@@ -9,15 +9,29 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 	$scope.bracketId = [];
 	$scope.listErrors = [];
 	$scope.lisAdress = [];
+	$scope.size = 0;
+	
+	$scope.resetBracket = function(){
+		$scope.bracket = [];
+		$scope.bracketId = [];
+		$scope.size = 0;
+		$window.sessionStorage.removeItem('price');
+		$window.sessionStorage.removeItem('bracket');
+		$window.sessionStorage.removeItem('bracketId');
+		$window.sessionStorage.removeItem('size');
+	}
 	
 	$scope.getBracket = function(){
 		if($window.sessionStorage != null){
-			$scope.bracketStorage = $window.sessionStorage.bracket;
+			$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
+			$scope.bracket = JSON.parse($window.sessionStorage.bracket);
+			$scope.prixTotal = JSON.parse($window.sessionStorage.price);
+			$scope.size = JSON.parse($window.sessionStorage.size);
+			console.log("bracketStorage taille : ", $scope.size);
 		}else{
 			$scope.bracketStorage = [];
 		}
 	}
-	
 	
 	
 	var i=0;
@@ -59,17 +73,23 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 		
 		if(indice != -1){
 			$scope.bracket[indice].quantity += 1;
+			$scope.size = $scope.size + 1;
 		}else{
 			$scope.bracket.push({
 				name:name,
 				id:id,
 				price:price,
 				quantity:1
-			});			
+			});	
+			$scope.size = $scope.size + 1;
 		}
 	
 		$window.sessionStorage.setItem('bracket', JSON.stringify($scope.bracket));
+		$window.sessionStorage.setItem('bracketId', JSON.stringify($scope.bracketId));
+		$window.sessionStorage.setItem('price', JSON.stringify($scope.prixTotal));
+		$window.sessionStorage.setItem('size', JSON.stringify($scope.size));
 		$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
+		$scope.size = JSON.parse($window.sessionStorage.size);
 		console.log("bracketStorage : ",$scope.bracketStorage);
 		
 	}
@@ -88,14 +108,20 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 				$scope.bracket[index].quantity -= 1; 
 				$scope.prixTotal = $scope.prixTotal - $scope.bracket[index].price;
 				$scope.bracketId[index]=-1;
+				$scope.size = $scope.size - 1;
 			}else{
 				$scope.prixTotal = $scope.prixTotal - $scope.bracket[index].price;
 				$scope.bracket.splice(index,1);
 				$scope.bracketId[index]=-1;
+				$scope.size = $scope.size - 1;
 			}
 			
 			$window.sessionStorage.setItem('bracket', JSON.stringify($scope.bracket));
+			$window.sessionStorage.setItem('bracketId', JSON.stringify($scope.bracketId));
+			$window.sessionStorage.setItem('price', JSON.stringify($scope.prixTotal));
+			$window.sessionStorage.setItem('size', JSON.stringify($scope.size));
 			$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
+			$scope.size = JSON.parse($window.sessionStorage.size);
 			console.log("bracketStorage : ",$scope.bracketStorage);
 		}
 		

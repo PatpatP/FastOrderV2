@@ -52,6 +52,10 @@
 							type="text" class="form-control" name="description"
 							placeholder="Description">
 					</div>
+					<div class="form-group">
+						<label>Image</label> <input
+							type="file" class="form-control" name="image">
+					</div>
 				</div>
 				<div class="col-lg-5 col-md-5 col-lg-offset-1 col-md-offset-1">
 					<div class="textInscription">Votre adresse</div>

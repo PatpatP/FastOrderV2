@@ -44,10 +44,9 @@
 							placeholder="Description">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Street</label> <input type="text"
-							class="form-control" name="street" placeholder="Street">
+						<label>Image</label> <input
+							type="file" class="form-control" name="image">
 					</div>
-					
 				</div>
 				<div class="col-lg-5 col-md-5 col-lg-offset-1 col-md-offset-1">
 					<div class="textInscription"></div>
@@ -55,6 +54,10 @@
 					<div class="form-group">
 						<label for="exampleInputEmail1">Number</label> <input type="text"
 							class="form-control" name="number" placeholder="Number">
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">Street</label> <input type="text"
+							class="form-control" name="street" placeholder="Street">
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Zip Code</label> <input

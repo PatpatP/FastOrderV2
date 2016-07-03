@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.fastorder.enumeration.UserTypeEnum;
 import com.fastorder.manager.impl.AddressManagerImpl;
@@ -62,9 +63,9 @@ public class UserManagerTests {
 	public void getUserByMailTest(){
 		User user = userManager.getUser("pol.patrick1411@gmail.com");
 		assertEquals("test le mail", "pol.patrick1411@gmail.com", user.getMail());
-		assertEquals("test le prÈnom", "POL", user.getFirstName());
+		assertEquals("test le pr√©nom", "POL", user.getFirstName());
 		assertEquals("test le nom", "Patrick", user.getLastName());
-		assertEquals("test le numÈro de tel", "0102030405", user.getPhoneNumber());
+		assertEquals("test le num√©ro de tel", "0102030405", user.getPhoneNumber());
 		assertEquals("test le type d'utilisateur", "Merchant", user.getUserType().toString());
 	}
 	
@@ -72,9 +73,9 @@ public class UserManagerTests {
 	public void getUserByIdTest(){
 		User user = userManager.getUser("pol.patrick1411@gmail.com");
 		assertEquals("test le mail", "pol.patrick1411@gmail.com", user.getMail());
-		assertEquals("test le prÈnom", "POL", user.getFirstName());
+		assertEquals("test le pr√©nom", "POL", user.getFirstName());
 		assertEquals("test le nom", "Patrick", user.getLastName());
-		assertEquals("test le numÈro de tel", "0102030405", user.getPhoneNumber());
+		assertEquals("test le num√©ro de tel", "0102030405", user.getPhoneNumber());
 		assertEquals("test le type d'utilisateur", "Merchant", user.getUserType().toString());
 	}
 	
@@ -82,14 +83,14 @@ public class UserManagerTests {
 	@Ignore
 	public void getUserShopsTest(){
 		List<Shop> shops = userManager.getUserShops("pol.patrick1411@gmail.com");
-		assertTrue("VÈrifie que l'utilisateur a bien deux magasins", shops.size()==2);
+		assertTrue("V√©rifie que l'utilisateur a bien deux magasins", shops.size()==2);
 	}
 	
 	@Test
 	@Ignore
 	public void getUsersOrderTest(){
 		List<Order> orders = userManager.getUserOrders(1);
-		assertTrue("VÈrifie que l'utilisateur a bien effectuÈ 8 commandes", orders.size()==8);
+		assertTrue("V√©rifie que l'utilisateur a bien effectu√© 8 commandes", orders.size()==8);
 	}
 	
 	@Test
@@ -100,23 +101,34 @@ public class UserManagerTests {
 		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, password);
 		
 		int cptUsersAfterInsert = countNbUsersInBase();
-		assertTrue("Compare le nombre d'utilisateur avant et aprËs", cptUsersAfterInsert==userBeforeInsert+1);
+		assertTrue("Compare le nombre d'utilisateur avant et apr√®s", cptUsersAfterInsert==userBeforeInsert+1);
 		
 		User user = userManager.getUser(mail);
 		assertEquals("test le mail", mail, user.getMail());
-		assertEquals("test le prÈnom", firstName, user.getFirstName());
+		assertEquals("test le pr√©nom", firstName, user.getFirstName());
 		assertEquals("test le nom", lastName, user.getLastName());
-		assertEquals("test le numÈro de tel", phoneNumber, user.getPhoneNumber());
+		assertEquals("test le num√©ro de tel", phoneNumber, user.getPhoneNumber());
 		assertEquals("test le type d'utilisateur", userType, user.getUserType());
-		
+		assertTrue("Le mot de passe a bien √©t√© crypt√©", BCrypt.checkpw(password, BCrypt.hashpw(password, BCrypt.gensalt())));
 	}
 	
 	@Test
 	public void updateUserTest(){
 		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, password);
-		
+		User user = userManager.getUser(mail);
 		String newFirstName = "Change FirstName test";
 		String newLastName= "Change LastName test";
+		
+		userManager.updateUserData(user.getId(), mail, phoneNumber, newFirstName, newLastName, userType, addressId, password);
+		
+		User userAfterUpdate = userManager.getUser(mail);
+		assertEquals("test le mail", mail, userAfterUpdate.getMail());
+		assertEquals("test le pr√©nom", newFirstName, userAfterUpdate.getFirstName());
+		assertEquals("test le nom", newLastName, userAfterUpdate.getLastName());
+		assertEquals("test le num√©ro de tel", phoneNumber, userAfterUpdate.getPhoneNumber());
+		assertEquals("test le type d'utilisateur", userType, userAfterUpdate.getUserType());
+		assertTrue("Le mot de passe a bien √©t√© crypt√©", BCrypt.checkpw(password, BCrypt.hashpw(password, BCrypt.gensalt())));
+		
 	}
 	
 	@Test

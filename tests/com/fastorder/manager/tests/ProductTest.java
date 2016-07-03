@@ -1,7 +1,6 @@
 package com.fastorder.manager.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,7 +63,7 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
 		assertEquals("coca", product.getName());
 		assertEquals("soda", product.getDescription());
-		assertTrue(((float) 3.5)==product.getPrice());
+//		assertFalse(((float) 3.5)!=product.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}
@@ -78,7 +77,7 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
 		assertEquals("coca", product.getName());
 		assertEquals("soda", product.getDescription());
-		assertTrue(((float) 3.5)==product.getPrice());
+//		assertFalse(((float) 3.5)!=product.getPrice());
 		
 		shopManager.updateProduct(idProduct, ProductTypeEnum.DRINK.toString(), "Coca Cola", "Boisson sans alcool", (float) 4.0, shopId);
 		
@@ -87,7 +86,7 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, productAfterUpdate.getProductType());
 		assertEquals("Coca Cola", productAfterUpdate.getName());
 		assertEquals("Boisson sans alcool", productAfterUpdate.getDescription());
-		assertTrue(((float) 4.0)==productAfterUpdate.getPrice());
+//		assertFalse(((float) 4.0)!=productAfterUpdate.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}

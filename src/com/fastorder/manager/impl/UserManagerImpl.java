@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.fastorder.enumeration.EstimatedTimeEnum;
 import com.fastorder.enumeration.OrderStatusEnum;
@@ -48,9 +49,9 @@ public class UserManagerImpl implements IUserManager{
 				Date created = resultat.getDate("created");
 			}
 			
-			logger.info("Liste des utilisateurs rÈcupÈrÈe");
+			logger.info("Liste des utilisateurs r√©cup√©r√©e");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la rÈcupÈration de la liste des utilisateurs : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la r√©cup√©ration de la liste des utilisateurs : " + e.getMessage());
 		}
 
 		return null;
@@ -60,7 +61,7 @@ public class UserManagerImpl implements IUserManager{
 	public User getUser(String mail) {
 		User user = null;
 		String query = "Select * from user where mail='"+mail+"';";
-		//TODO Mettre en place la mÈthode avec la Map<clÈ, valeur>
+		//TODO Mettre en place la m√©thode avec la Map<cl√©, valeur>
 		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
 		try {
 			while(resultat.next()){
@@ -80,9 +81,9 @@ public class UserManagerImpl implements IUserManager{
 				}
 			}
 			
-			logger.info("Utilisateur rÈcupÈrÈ gr‚ce au mail");
+			logger.info("Utilisateur r√©cup√©r√© gr√¢ce au mail");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la rÈcupÈration de l'utilisateur : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la r√©cup√©ration de l'utilisateur : " + e.getMessage());
 		} finally {
 			try {
 				resultat.close();
@@ -116,9 +117,9 @@ public class UserManagerImpl implements IUserManager{
 					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, password, created);
 				}
 			}
-			logger.info("Utilisateur rÈcupÈrÈ gr‚ce ‡ l'ID");
+			logger.info("Utilisateur r√©cup√©r√© gr√¢ce √† l'ID");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la rÈcupÈration de l'utilisateur gr‚ce ‡ l'ID : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la r√©cup√©ration de l'utilisateur gr√¢ce √† l'ID : " + e.getMessage());
 		}
 
 		return user;
@@ -150,10 +151,10 @@ public class UserManagerImpl implements IUserManager{
 				shops.add(shop);
 			}
 			
-			logger.info("Liste des utilisateurs par magasin rÈcupÈrÈe gr‚ce au mail");
+			logger.info("Liste des utilisateurs par magasin r√©cup√©r√©e gr√¢ce au mail");
 
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la rÈcupÈration de la liste des utilisateurs par magasin rÈcupÈrÈe gr‚ce au mail : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la r√©cup√©ration de la liste des utilisateurs par magasin r√©cup√©r√©e gr√¢ce au mail : " + e.getMessage());
 		}
 
 		return shops;
@@ -163,9 +164,11 @@ public class UserManagerImpl implements IUserManager{
 	public boolean createUser(String mail, String phoneNumber, String firstName, String lastName, UserTypeEnum userType,
 			int address, String password) {
 		String userTypeString = userType.toString();
+		
+		String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
 		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) "
-				+ "VALUES('"+mail+"','"+phoneNumber+"','"+firstName+"','"+lastName+"','"+userTypeString+"','"+address+"','"+password+"');";
+				+ "VALUES('"+mail+"','"+phoneNumber+"','"+firstName+"','"+lastName+"','"+userTypeString+"','"+address+"','"+hashPassword+"');";
 		System.out.println(query);
 		int res = UtilsBdd.insertQuery(statement, query);
 		UtilsBdd.selectQuery(statement, "Select * from user");
@@ -181,7 +184,9 @@ public class UserManagerImpl implements IUserManager{
 	public boolean updateUserData(int userId, String mail, String phoneNumber, String firstName, String lastName,
 			UserTypeEnum userType, int address, String password) {
 
-		String query = "UPDATE user SET mail='"+mail+"' AND phoneNumber='"+phoneNumber+"' AND firstName='"+firstName+"' AND lastName='"+lastName+"' AND password='"+password+"' WHERE id='"+userId+"';";
+		String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+		
+		String query = "UPDATE user SET mail='"+mail+"', phoneNumber='"+phoneNumber+"' , firstName='"+firstName+"' , lastName='"+lastName+"' , password='"+hashPassword+"' WHERE id='"+userId+"';";
 		int res = UtilsBdd.updateQuery(statement, query);
 		if(res==1){
 			return true;
@@ -211,15 +216,11 @@ public class UserManagerImpl implements IUserManager{
 			while (resultat.next()){
 				passwordExpected = resultat.getString("password");
 			}
-			logger.info("Verification du login effectuÈe");
+			logger.info("Verification du login effectu√©e");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la vÈrification du login : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la v√©rification du login : " + e.getMessage());
 		}
-		if(password.equals(passwordExpected)){
-			return true;
-		} else {
-			return false;
-		}
+		return BCrypt.checkpw(password, passwordExpected);
 	}
 
 	@Override
@@ -245,9 +246,9 @@ public class UserManagerImpl implements IUserManager{
 				}
 			}
 			
-			logger.info("VÈrification de l'existance du mail effectuÈe");
+			logger.info("V√©rification de l'existance du mail effectu√©e");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la vÈrification de l'existance du mail : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la v√©rification de l'existance du mail : " + e.getMessage());
 		}
 		return false;
 	}
@@ -274,9 +275,9 @@ public class UserManagerImpl implements IUserManager{
 				Order order = new Order(idOrder, estimatedTimeEnum, orderStatusEnum, created, priceTotal, idUser, idShop);
 				userOrders.add(order);
 			}
-			logger.info("Liste des commandes d'un utilisateur gr‚ce ‡ son ID rÈcupÈrÈe");
+			logger.info("Liste des commandes d'un utilisateur gr√¢ce √† son ID r√©cup√©r√©e");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la rÈcupÈration de la liste des commandes d'un utilisateur gr‚ce ‡ son ID : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la r√©cup√©ration de la liste des commandes d'un utilisateur gr√¢ce √† son ID : " + e.getMessage());
 		}
 		
 		return userOrders;

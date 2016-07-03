@@ -22,7 +22,7 @@ public class OrderManagerImpl implements IOrderManager{
 	private Statement statement;
 
 	final static Logger logger = Logger.getLogger(OrderManagerImpl.class);
-	
+
 	public OrderManagerImpl(Statement statement) {
 		this.statement = statement;
 	}
@@ -31,7 +31,7 @@ public class OrderManagerImpl implements IOrderManager{
 	public List<Product> getProducts(String[] productsId) {
 		ShopManagerImpl shopManager = new ShopManagerImpl(statement);
 		List<Product> products = new ArrayList<Product>();
-		
+
 		for(String id : productsId){
 			int idProduct = Integer.parseInt(id);
 			if(idProduct>=0){
@@ -39,10 +39,10 @@ public class OrderManagerImpl implements IOrderManager{
 				products.add(product);
 			}
 		}
-		
+
 		return products;
 	}
-	
+
 	@Override
 	public Order getOrder(int id){
 		String query = "SELECT * from ordering WHERE id='"+id+"';";
@@ -56,33 +56,33 @@ public class OrderManagerImpl implements IOrderManager{
 				float totalPrice = result.getFloat("totalPrice");
 				int idUser = result.getInt("user");
 				int shop = result.getInt("shop");
-				
+
 				EstimatedTimeEnum estimatedTimeEnum = Utils.getEstimatedTime(estimatedTime);
 				OrderStatusEnum orderStatusEnum = Utils.getOrderStatus(status);
-				
+
 				order = new Order(id,  estimatedTimeEnum, orderStatusEnum, created, totalPrice, idUser, shop);
 
 			}
-			logger.info("Commande récupérée");
+			logger.info("Commande rÃ©cupÃ©rÃ©e");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération de la commande : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la rÃ©cupÃ©ration de la commande : " + e.getMessage());
 		}
-		
+
 		return order;
 	}
 
 	@Override
 	public void create(List<Product> products, EstimatedTimeEnum estimatedTime, OrderStatusEnum status, double totalPrice, int userId, int shopId) {
-		
+
 		int nbProduct = 0;
 		if(products!=null){
 			nbProduct = products.size();
 		}
-		// On créer la commande
+		// On crÃ©er la commande
 		String queryOrder = "Insert into ordering (estimatedTime, status, totalPrice, user, shop) VALUES('"+estimatedTime+"','"+status+"','"+totalPrice+"','"+userId+"','"+shopId+"');";
 		UtilsBdd.insertQuery(statement, queryOrder);
-		
-		//On récupère l'id de la commande
+
+		//On rÃ©cupÃ¨re l'id de la commande
 		String queryIdOrder = "Select * from ordering WHERE user='"+userId+"' AND shop='"+shopId+"' AND status='"+status+"';";
 		int idOrder = 0;
 		ResultSet resultIdOrder = UtilsBdd.selectQuery(statement, queryIdOrder);
@@ -90,24 +90,25 @@ public class OrderManagerImpl implements IOrderManager{
 			while(resultIdOrder.next()){
 				idOrder = resultIdOrder.getInt("id");
 			}
-			logger.info("Création de la commande effectuée");
+			logger.info("CrÃ©ation de la commande effectuÃ©e");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			logger.error("Une erreur est survenue lors de la création de la commande : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la crÃ©ation de la commande : " + e.getMessage());
 		}
-		
-		//On créer autant des tables de jointure pour chaque produit
-		for(int i = 0; i<nbProduct; i++){
-			int idProduct = products.get(i).getId();
-			String queryOrderHasProduct = "Insert into orderhasproduct(idOrder, idProduct) VALUES('"+idOrder+"','"+idProduct+"');";
-			UtilsBdd.insertQuery(statement, queryOrderHasProduct);
+		if(products!=null){
+			//On crÃ©er autant des tables de jointure pour chaque produit
+			for(int i = 0; i<nbProduct; i++){
+				int idProduct = products.get(i).getId();
+				String queryOrderHasProduct = "Insert into orderhasproduct(idOrder, idProduct) VALUES('"+idOrder+"','"+idProduct+"');";
+				UtilsBdd.insertQuery(statement, queryOrderHasProduct);
+			}
 		}
 	}
 
 	@Override
 	public void delete(int id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

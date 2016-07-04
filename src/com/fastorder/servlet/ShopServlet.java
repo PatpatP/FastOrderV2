@@ -1,8 +1,10 @@
 package com.fastorder.servlet;
 
 import java.awt.Desktop;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.servlet.MultipartConfigElement;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
@@ -32,7 +35,11 @@ import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
+import com.oreilly.servlet.multipart.FilePart;
+import com.oreilly.servlet.multipart.MultipartParser;
+import com.oreilly.servlet.multipart.ParamPart;
 
 @WebServlet(
 		name = "shop-servlet",
@@ -112,10 +119,41 @@ public class ShopServlet extends HttpServlet{
 		final String zipCode = request.getParameter("zipCode");
 		final String city = request.getParameter("city");
 		final String country = request.getParameter("country");
+		
+		InputStream inputStream = null; // input stream of the upload file
+		String[] supportedContentTypes = {"image/jpeg", "image/png"};
 
+		if(name != null){
+			for (Part part : request.getParts()) {
+				String fileName = extractFileName(part);
+				String contentType = part.getContentType();
+				if(!fileName.isEmpty() && Arrays.asList(supportedContentTypes).contains(contentType)){
+					inputStream = part.getInputStream();
+					System.out.println("Name image : "+fileName);
+					System.out.println("Type image : "+contentType);
+					request.setAttribute("inputStream", inputStream);
+				}
+				
+			}
+		}
+		
+		// Exemple de code Ã  mettre dans : shopManager.createShop() 
+      /*  
+        String sql = "INSERT INTO shop (name, type, photo) values (?, ?, ?)";
+        PreparedStatement statement = connexion.prepareStatement(sql); // Dans Utils il faudra retourner la variable 'connexion' et non pas 'statement'
+        statement.setString(1, name);
+        statement.setString(2, type);
+         
+        if (inputStream != null) {
+            // fetches input stream of the upload file for the blob column
+            statement.setBlob(3, inputStream);
+        }
+        
+		*/
+		
 		if(name!=null && description!=null && shopType!=null && street!=null && number!=null && zipCode!=null && city!=null && country!=null){
 
-			treatmentImage(request);
+			//treatmentImage(request);
 
 			boolean isInputValide = false;
 			List<String> errors = new ArrayList<String>();
@@ -184,12 +222,12 @@ public class ShopServlet extends HttpServlet{
 				User user = userManager.getUser(mail);
 				int userId = user.getId();
 
-				shopManager.createShop(name, description, shopType, userId, addressId);
+				// shopManager.createShop(name, description, shopType, userId, addressId);
 				try {
 					mailManager.confirmCreateShop(mail);
-					logger.info("Mail pour la création d'un magasin envoyé");
+					logger.info("Mail pour la crï¿½ation d'un magasin envoyï¿½");
 				} catch (EmailException e) {
-					logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un magasin : " + e.getMessage());
+					logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation d'un magasin : " + e.getMessage());
 				}
 				response.sendRedirect("myspace");
 			} else {
@@ -245,7 +283,7 @@ public class ShopServlet extends HttpServlet{
 			Shop shop = shopManager.getShop(Integer.parseInt(idShop));
 			String shopAsJson = Utils.convertJavaToJson(shop);
 
-			//TODO A modifie avec une méthode Utils
+			//TODO A modifie avec une mï¿½thode Utils
 			List<String> shopType = new ArrayList<String>();
 			shopType.add(ShopTypeEnum.CHINOIS.toString());
 			shopType.add(ShopTypeEnum.JAPONAIS.toString());
@@ -279,9 +317,9 @@ public class ShopServlet extends HttpServlet{
 
 			try {
 				mailManager.confirmCreateProduct(mail);
-				logger.info("Mail pour la création d'un produit envoyé");
+				logger.info("Mail pour la crï¿½ation d'un produit envoyï¿½");
 			} catch (EmailException e) {
-				logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un produit : " + e.getMessage());
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation d'un produit : " + e.getMessage());
 			}
 
 			request.setAttribute("action", "createProduct");
@@ -303,9 +341,9 @@ public class ShopServlet extends HttpServlet{
 
 			try {
 				mailManager.confirmUpdateProduct(mail);
-				logger.info("Mail pour la mise à jour d'un produit envoyé");
+				logger.info("Mail pour la mise ï¿½ jour d'un produit envoyï¿½");
 			} catch (EmailException e) {
-				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise à jour d'un produit : " + e.getMessage());
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise ï¿½ jour d'un produit : " + e.getMessage());
 			}
 
 			request.setAttribute("action", "createProduct");
@@ -355,7 +393,19 @@ public class ShopServlet extends HttpServlet{
 		shopManager.deleteShop(Integer.parseInt(idShop));
 		response.sendRedirect("myspace");
 	}
-
+	
+	private String extractFileName(Part part) {
+		String contentDisp = part.getHeader("content-disposition");
+		String[] items = contentDisp.split(";");
+		for (String s : items) {
+			if (s.trim().startsWith("filename")) {
+				return s.substring(s.indexOf("=") + 2, s.length()-1);
+			}
+		}
+		return "";
+	}
+	
+	/*
 	private void treatmentImage(HttpServletRequest request) throws IOException, ServletException{
 		String[] supportedContentTypes = {"image/jpeg", "image/png"};
 
@@ -379,15 +429,5 @@ public class ShopServlet extends HttpServlet{
 		}
 	}
 
-
-	private String extractFileName(Part part) {
-		String contentDisp = part.getHeader("content-disposition");
-		String[] items = contentDisp.split(";");
-		for (String s : items) {
-			if (s.trim().startsWith("filename")) {
-				return s.substring(s.indexOf("=") + 2, s.length()-1);
-			}
-		}
-		return "";
-	}
+	*/
 }

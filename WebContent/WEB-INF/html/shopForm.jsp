@@ -32,7 +32,7 @@
 	<% } %>
 	<div class="row">
 		<div class="blocInfoInscription">
-			<form method="post" action="${action} enctype="multipart/form-data">
+			<form method="post" action="${action}" enctype="multipart/form-data">
 				<div class="col-lg-5 col-md-5">
 				<div class="textInscription">Votre Restaurant</div>
 				<hr><br>
@@ -54,7 +54,7 @@
 					</div>
 					<div class="form-group">
 				       <label>Image</label> <input
-							type="file" class="form-control" name="image">
+							type="file" class="form-control" name="image" size="50">
 					</div>
 				</div>
 				<div class="col-lg-5 col-md-5 col-lg-offset-1 col-md-offset-1">

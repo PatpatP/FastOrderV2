@@ -90,7 +90,7 @@ public class AddressManagerImpl implements IAddressManager{
 
 	@Override
 	public boolean deleteAddress(int id) {
-		String query = "DELETE FROM ADDRESS where id='"+id+"';";
+		String query = "DELETE FROM address where id='"+id+"';";
 		int res = UtilsBdd.deleteQuery(statement, query);
 		if(res==1){
 			return true;

@@ -14,12 +14,12 @@ public interface IShopManager {
 	
 	public List<Shop> getShops();
 	public Shop getShop(Integer id);
-	public int getShop(String name, String description, String shopType, int userId, int addressId);
+	public int getShopId(String name, String description, String shopType, int userId, int addressId);
 	public User getOwner(int idShop);
 	
 	public boolean createShop(String name, String description, String shopType, int userId, int addressId);
-	public void updateShop(int idShop, String name, String description, String shopType, int userId, int addressId);
-	public void deleteShop(int id);
+	public boolean updateShop(int idShop, String name, String description, String shopType, int userId, int addressId);
+	public boolean deleteShop(int id);
 	
 	//Concerne la gestion des produits
 	public List<Product> getProducts(int shopId);

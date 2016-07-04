@@ -117,22 +117,27 @@ public class ShopManagerImpl implements IShopManager{
 	}
 
 	@Override
-	public void updateShop(int idShop, String name, String description, String shopType, int userId, int addressId) {
-		String query = "Update shop SET name='"+name+"' AND description='"+description+"' AND shopType='"+shopType+"' AND user='"+userId+"' AND address='"+addressId+" WHERE id='"+idShop+"';";
+	public boolean updateShop(int idShop, String name, String description, String shopType, int userId, int addressId) {
+		String query = "Update shop SET name='"+name+"', description='"+description+"', shopType='"+shopType+"', user='"+userId+"', address='"+addressId+" WHERE id='"+idShop+"';";
 
-		UtilsBdd.updateQuery(statement, query);
+		int res = UtilsBdd.updateQuery(statement, query);
+		if(res == 1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
-	public void deleteShop(int id) {
-		//Get shop address id
-		
-		//Delete shop address
-		
-		
-		//Delete shop
+	public boolean deleteShop(int id) {
 		String query = "DELETE FROM shop where id='"+id+"';";
-		UtilsBdd.deleteQuery(statement, query);
+		int res = UtilsBdd.deleteQuery(statement, query);
+		
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	@Override
@@ -258,7 +263,7 @@ public class ShopManagerImpl implements IShopManager{
 	}
 
 	@Override
-	public int getShop(String name, String description, String shopType, int userId, int addressId) {
+	public int getShopId(String name, String description, String shopType, int userId, int addressId) {
 		String query = "Select * from shop WHERE name='"+name+"' AND description='"+description+"' AND user='"+userId+"' AND address='"+addressId+"';";
 		ResultSet result = UtilsBdd.selectQuery(statement, query);
 		int idShop = -1;

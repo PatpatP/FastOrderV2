@@ -41,7 +41,7 @@ public class ProductTest {
 		userManager.createUser("testunit@gmail.com", "0102030405", "test", "unit", UserTypeEnum.CLIENT, addressIdUser, "test1234");
 		user = userManager.getUser("testunit@gmail.com");
 		shopManager.createShop("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop);
-		shopId = shopManager.getShop("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop);
+		shopId = shopManager.getShopId("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop);
 		
 	}
 	

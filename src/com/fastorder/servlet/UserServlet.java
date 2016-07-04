@@ -110,7 +110,7 @@ public class UserServlet extends HttpServlet{
 		if(street!=null && number!=null && zipCode!=null && city!=null && country!=null && mail!=null && phoneNumber!=null && firstName!=null && lastName!=null && password!=null){
 			List<String> errors = new ArrayList<String>();
 			boolean isInputValide = false;
-			
+
 			try {
 				validateInputField.validateLastName(lastName);
 				isInputValide = true;
@@ -118,7 +118,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateFirstName(firstName);
 				isInputValide = true;
@@ -126,7 +126,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateMail(mail);
 				isInputValide = true;
@@ -134,7 +134,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validatePhoneNumber(phoneNumber);
 				isInputValide = true;
@@ -142,7 +142,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateStreetName(street);
 				isInputValide = true;
@@ -150,7 +150,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateStreetNumber(number);
 				isInputValide = true;
@@ -158,7 +158,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateZipCode(zipCode);
 				isInputValide = true;
@@ -166,7 +166,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateCountry(country);
 				isInputValide = true;
@@ -174,7 +174,7 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			try {
 				validateInputField.validateCity(city);
 				isInputValide = true;
@@ -182,12 +182,12 @@ public class UserServlet extends HttpServlet{
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
-			
+
 			if(isInputValide){
 				boolean mailAlreadyExist = userManager.checkMailExist(mail);
 				if(mailAlreadyExist){
 					errors.add("L'adresse mail est déjà utilisée.");
-					
+
 					String errorsAsJson = Utils.convertJavaToJson(errors);
 					System.out.println(errorsAsJson);
 					request.setAttribute("errors", errors);
@@ -290,28 +290,28 @@ public class UserServlet extends HttpServlet{
 
 	private void homePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		request.setAttribute("action", "home");
-		
+
 		List<Shop> shops = shopManager.getShops();
-		
+
 		List<Address> shopsAddress = new ArrayList<Address>();
 		List<String> tabAddress = new ArrayList<String>();
-		
-		for(Shop shop : shops){
-			int addressId = shop.getAddressId();
-			Address address = addressManager.getAddresssById(addressId);
-			shopsAddress.add(address);
-			
-			String adressString = "[\""+shop.getName()+"\" ,"+"\""+address.getNumber()+" "+address.getStreet()+", "+address.getZipCode()+" "+address.getCity()+"\" ,"+"\"/FastOrderV2/order?idShop="+shop.getId()+"\"]";
-			tabAddress.add(adressString);
+		if(shops!=null){
+			for(Shop shop : shops){
+				int addressId = shop.getAddressId();
+				Address address = addressManager.getAddresssById(addressId);
+				shopsAddress.add(address);
+
+				String adressString = "[\""+shop.getName()+"\" ,"+"\""+address.getNumber()+" "+address.getStreet()+", "+address.getZipCode()+" "+address.getCity()+"\" ,"+"\"/FastOrderV2/order?idShop="+shop.getId()+"\"]";
+				tabAddress.add(adressString);
+			}
+
 		}
-		
-		String shopAddressAsJson = Utils.convertJavaToJson(tabAddress);
-		
 		request.setAttribute("listShopAddress", tabAddress);
+		
 		request.getRequestDispatcher("/WEB-INF/html/home.jsp").forward(request, response);
 	}
 
-	
+
 
 
 	private void signOut(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -349,14 +349,14 @@ public class UserServlet extends HttpServlet{
 			request.setAttribute("action", "myspace");
 			request.setAttribute("user", userAsJson);
 			request.setAttribute("myOrders", userOrdersAsJson);
-			
+
 			request.getRequestDispatcher("/WEB-INF/html/myspace.jsp").forward(request, response);
 		}
 	}
-	
+
 	private void myshops(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String mail = (String) request.getSession().getAttribute("mail");
-		
+
 		if(mail!=null){
 			User user = userManager.getUser(mail);
 
@@ -391,6 +391,6 @@ public class UserServlet extends HttpServlet{
 			}
 			request.getRequestDispatcher("/WEB-INF/html/myShops.jsp").forward(request, response);
 		}
-		
+
 	}
 }

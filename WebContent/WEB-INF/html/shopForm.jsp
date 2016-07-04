@@ -32,7 +32,7 @@
 	<% } %>
 	<div class="row">
 		<div class="blocInfoInscription">
-			<form method="get" action="${action}">
+			<form method="post" action="${action} enctype="multipart/form-data">
 				<div class="col-lg-5 col-md-5">
 				<div class="textInscription">Votre Restaurant</div>
 				<hr><br>
@@ -53,7 +53,7 @@
 							placeholder="Description">
 					</div>
 					<div class="form-group">
-						<label>Image</label> <input
+				       <label>Image</label> <input
 							type="file" class="form-control" name="image">
 					</div>
 				</div>
@@ -77,10 +77,7 @@
 						<label for="exampleInputEmail1">City</label> <input type="text"
 							class="form-control" name="city" placeholder="City">
 					</div>
-					<div class="form-group">
-						<label for="exampleInputEmail1">Country</label> <input type="text"
-							class="form-control" name="country" placeholder="Country">
-					</div>
+					
 				</div>
 				<div class="col-lg-11 col-md-11 col-sm-11">
 					<br>

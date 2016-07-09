@@ -1,31 +1,45 @@
 package com.fastorder.manager.impl;
 
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.apache.log4j.Logger;
 
 import com.fastorder.manager.IAddressManager;
 import com.fastorder.model.Address;
 import com.fastorder.utils.UtilsBdd;
-import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.PreparedStatement;
 
 public class AddressManagerImpl implements IAddressManager{
 
-	private Statement statement;
+	private Connection connection;
 	
 	final static Logger logger = Logger.getLogger(AddressManagerImpl.class);
 
-	public AddressManagerImpl(Statement statement) {
-		this.statement = statement;
+	public AddressManagerImpl(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override
 	public boolean createAddress(String street, String number, String zipCode, String city, String country) {
-		String query = "Insert into address (street,number,zipCode,city,country) VALUES('"+street+"','"+number+"','"+zipCode+"','"+city+"','"+country+"');";
-		int res = UtilsBdd.insertQuery(statement, query);
-		System.out.println(query);
+		String query = "Insert into address (street,number,zipCode,city,country) VALUES(?,?,?,?,?);";
+		
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, street, Types.VARCHAR); 
+			preparedStatement.setObject(2, number, Types.VARCHAR); 
+			preparedStatement.setObject(3, zipCode, Types.VARCHAR); 
+			preparedStatement.setObject(4, city, Types.VARCHAR); 
+			preparedStatement.setObject(5, country, Types.VARCHAR); 
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		if(res==1){
 			return true;
 		} else {
@@ -35,64 +49,100 @@ public class AddressManagerImpl implements IAddressManager{
 
 	@Override
 	public int getAddressId(String street, String number, String zipCode, String city, String country) {
+		String query = "Select * from address WHERE street=? AND number=? AND zipCode=? AND city=? AND country=?;";
+		PreparedStatement preparedStatement;
 		int addressId = 0;
 		ResultSet resultat;
-		String query = "Select * from address WHERE street='"+street+"' AND number='"+number+"' AND zipCode='"+zipCode+"' AND city='"+city+"' AND country='"+country+"';";
-		resultat = UtilsBdd.selectQuery(statement, query);
-
+		
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, street, Types.VARCHAR); 
+			preparedStatement.setObject(2, number, Types.VARCHAR); 
+			preparedStatement.setObject(3, zipCode, Types.VARCHAR); 
+			preparedStatement.setObject(4, city, Types.VARCHAR); 
+			preparedStatement.setObject(5, country, Types.VARCHAR); 
+			resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
+			
 			while(resultat.next()){
 				addressId = resultat.getInt("id");
 			}
-			logger.info("ID de l'adresse récupéré");
+			
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération de l'ID de l'adresse : " + e.getMessage());
+			e.printStackTrace();
 		}
-
 		return addressId;
+		
 	}
 
 	@Override
 	public Address getAddresssById(int id) {
-		String query = "Select * from address where id='"+id+"';";
+		String query = "Select * from address WHERE id=?;";
+		PreparedStatement preparedStatement;
 		ResultSet resultat;
-		resultat = UtilsBdd.selectQuery(statement, query);
-
+		
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER); 
+			resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
+			
 			while(resultat.next()){
 				String street =  resultat.getString("street");
 				String number =  resultat.getString("number");
 				String zipCode =  resultat.getString("zipCode");
 				String city =  resultat.getString("city");
 				String country =  resultat.getString("country");
-
-				logger.info("Adresse récupérée");
-				return new Address(street, number, zipCode, city, country);
+				
+				return new Address(id, street, number, zipCode, city, country);
 			}
+			
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération de l'adresse : " + e.getMessage());
+			e.printStackTrace();
 		}
-
 		return null;
-	}
-
-	@Override
-	public boolean updateAddress(int id, String street, String number, String zipCode, String city, String country) {
-		String query = "UPDATE address SET street='"+street+"', number='"+number+"', zipCode='"+zipCode+"', city='"+city+"', country='"+country+"' WHERE id='"+id+"';";
-		int res = UtilsBdd.updateQuery(statement, query);
-		if(res==1){
-			return true;
-		} else {
-			return false;
-		}
 		
 	}
 
 	@Override
+	public boolean updateAddress(int id, String street, String number, String zipCode, String city, String country) {
+		String query = "UPDATE address SET street=?, number=?, zipCode=?, city=?, country=? WHERE id=?;";
+		PreparedStatement preparedStatement;
+		int resultat = 0;
+		
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, street, Types.VARCHAR); 
+			preparedStatement.setObject(2, number, Types.VARCHAR); 
+			preparedStatement.setObject(3, zipCode, Types.VARCHAR); 
+			preparedStatement.setObject(4, city, Types.VARCHAR);
+			preparedStatement.setObject(5, country, Types.VARCHAR); 
+			preparedStatement.setObject(6, id, Types.INTEGER); 
+			resultat = UtilsBdd.executePreapredStatement(preparedStatement);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(resultat==1){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
 	public boolean deleteAddress(int id) {
-		String query = "DELETE FROM address where id='"+id+"';";
-		int res = UtilsBdd.deleteQuery(statement, query);
-		if(res==1){
+		String query = "DELETE from address WHERE id=?;";
+		PreparedStatement preparedStatement;
+		int resultat = 0;
+		
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER); 
+			resultat = UtilsBdd.executePreapredStatement(preparedStatement);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(resultat==1){
 			return true;
 		} else {
 			return false;

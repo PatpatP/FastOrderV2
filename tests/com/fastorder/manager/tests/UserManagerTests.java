@@ -21,13 +21,14 @@ import com.fastorder.model.Order;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.UtilsBdd;
-import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 
 public class UserManagerTests {
 	
 	private UserManagerImpl userManager;
 	private AddressManagerImpl addressManagerImpl;
-	private Statement statement;
+	private Connection connection;
 	private int addressId;
 	private String mail = "testUnit@gmail.com";
 	private String phoneNumber = "0102030405";
@@ -38,8 +39,8 @@ public class UserManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement =  UtilsBdd.connectBDD();
-		userManager = new UserManagerImpl(statement);
+		connection =  UtilsBdd.connectBDD();
+		userManager = new UserManagerImpl(connection);
 		
 		mail = "testUnit@gmail.com";
 		phoneNumber = "0102030405";
@@ -48,7 +49,7 @@ public class UserManagerTests {
 		userType = UserTypeEnum.CLIENT;
 		password = "test1234";
 		
-		addressManagerImpl = new AddressManagerImpl(statement);
+		addressManagerImpl = new AddressManagerImpl(connection);
 		
 		addressManagerImpl.createAddress("rue du test", "42", "75000", "Paris", "France");
 		addressId = addressManagerImpl.getAddressId("rue du test", "42", "75000", "Paris", "France");
@@ -164,8 +165,9 @@ public class UserManagerTests {
 	}
 	
 	private int countNbUsersInBase() throws SQLException{
-		String query = "Select * from User";
-		ResultSet result = UtilsBdd.selectQuery(statement, query);
+		String query = "Select * from user";
+		PreparedStatement preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+		ResultSet result = UtilsBdd.selectPreapredStatement(preparedStatement);
 		int cpt = 0;
 		while(result.next()){
 			cpt = cpt+1;

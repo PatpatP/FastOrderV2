@@ -1,8 +1,6 @@
 package com.fastorder.servlet;
 
 import java.awt.Desktop;
-
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.servlet.MultipartConfigElement;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
@@ -35,11 +32,7 @@ import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
-import com.oreilly.servlet.multipart.FilePart;
-import com.oreilly.servlet.multipart.MultipartParser;
-import com.oreilly.servlet.multipart.ParamPart;
+import com.mysql.jdbc.Connection;
 
 @WebServlet(
 		name = "shop-servlet",
@@ -70,10 +63,10 @@ public class ShopServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		Statement statement = UtilsBdd.connectBDD();
-		userManager = new UserManagerImpl(statement);
-		addressManager= new AddressManagerImpl(statement);
-		shopManager = new ShopManagerImpl(statement);
+		Connection connection = UtilsBdd.connectBDD();
+		userManager = new UserManagerImpl(connection);
+		addressManager= new AddressManagerImpl(connection);
+		shopManager = new ShopManagerImpl(connection);
 		mailManager = new MailManagerImpl();
 		validateInputField = new ValidateInputField();
 	}
@@ -119,23 +112,6 @@ public class ShopServlet extends HttpServlet{
 		final String zipCode = request.getParameter("zipCode");
 		final String city = request.getParameter("city");
 		final String country = request.getParameter("country");
-		
-		InputStream inputStream = null; // input stream of the upload file
-		String[] supportedContentTypes = {"image/jpeg", "image/png"};
-
-		if(name != null){
-			for (Part part : request.getParts()) {
-				String fileName = extractFileName(part);
-				String contentType = part.getContentType();
-				if(!fileName.isEmpty() && Arrays.asList(supportedContentTypes).contains(contentType)){
-					inputStream = part.getInputStream();
-					System.out.println("Name image : "+fileName);
-					System.out.println("Type image : "+contentType);
-					request.setAttribute("inputStream", inputStream);
-				}
-				
-			}
-		}
 		
 		// Exemple de code à mettre dans : shopManager.createShop() 
       /*  
@@ -221,8 +197,24 @@ public class ShopServlet extends HttpServlet{
 
 				User user = userManager.getUser(mail);
 				int userId = user.getId();
+				
+				InputStream inputStream = null; // input stream of the upload file
+				String[] supportedContentTypes = {"image/jpeg", "image/png"};
 
-				// shopManager.createShop(name, description, shopType, userId, addressId);
+				if(name != null){
+					for (Part part : request.getParts()) {
+						String fileName = extractFileName(part);
+						String contentType = part.getContentType();
+						if(!fileName.isEmpty() && Arrays.asList(supportedContentTypes).contains(contentType)){
+							inputStream = part.getInputStream();
+							System.out.println("Name image : "+fileName);
+							System.out.println("Type image : "+contentType);
+						}
+						
+					}
+				}
+
+				 shopManager.createShop(name, description, shopType, userId, addressId, inputStream);
 				try {
 					mailManager.confirmCreateShop(mail);
 					logger.info("Mail pour la cr�ation d'un magasin envoy�");

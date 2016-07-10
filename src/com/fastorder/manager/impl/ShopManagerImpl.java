@@ -1,8 +1,10 @@
 package com.fastorder.manager.impl;
 
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +21,17 @@ import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
-import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 
 public class ShopManagerImpl implements IShopManager{
 
-	private Statement statement;
+	private Connection connection;
 
 	final static Logger logger = Logger.getLogger(ShopManagerImpl.class);
 	
-	public ShopManagerImpl(Statement statement) {
-		this.statement = statement;
+	public ShopManagerImpl(Connection connection) {
+		this.connection = connection;
 	}
 
 	@Override
@@ -36,9 +39,10 @@ public class ShopManagerImpl implements IShopManager{
 		List<Shop> shops = new ArrayList<Shop>();
 
 		String query = "Select * from shop";
-		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
-
+		PreparedStatement preparedStatement;
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(resultat.next()){
 				Shop shop = null;
 				int id = resultat.getInt("id");
@@ -54,10 +58,9 @@ public class ShopManagerImpl implements IShopManager{
 
 				shops.add(shop);
 			}
-			logger.info("Liste des magasins récupérée");
+			logger.info("Liste des magasins rÃ©cupÃ©rÃ©e");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error("Une erreur est survenue lors de la récupération de la liste des magasins : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la rÃ©cupÃ©ration de la liste des magasins : " + e.getMessage());
 		}
 
 		return shops;
@@ -67,10 +70,12 @@ public class ShopManagerImpl implements IShopManager{
 	public Shop getShop(Integer id) {
 		Shop shop = null;
 
-		String query = "Select * from shop where id='"+id+"';";
-		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
-
+		String query = "Select * from shop where id=?;";
+		PreparedStatement preparedStatement;
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER);
+			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(resultat.next()){
 				int idShop = resultat.getInt("id");
 				String name = resultat.getString("name");
@@ -82,10 +87,9 @@ public class ShopManagerImpl implements IShopManager{
 				ShopTypeEnum shopType = Utils.getShopType(shopTypeString);
 				shop = new Shop(idShop, name, description, shopType, idUser, idAddress);
 			}
-			logger.info("Magasin récupéré grâce à l'ID");
+			logger.info("La magasin "+id+" a bien Ã©tÃ© rÃ©cupÃ©rÃ©");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			logger.error("Une erreur est survenue lors de la récupération du magasin grâce à l'ID : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la tentative de rÃ©cupÃ©ration d'un magasin Ã  l'aide de l'ID : " + e.getMessage());
 		}
 
 		return shop;
@@ -96,17 +100,30 @@ public class ShopManagerImpl implements IShopManager{
 		Shop shop = getShop(idShop);
 		int userId = shop.getUserId();
 		
-		UserManagerImpl userManager = new UserManagerImpl(statement);
+		UserManagerImpl userManager = new UserManagerImpl(connection);
 		User user = userManager.getUser(userId);
 		return user;
 	}
 
 	@Override
-	public boolean createShop(String name, String description, String shopType, int userId, int addressId) {
-		String query = "Insert into shop (name, description, shopType, user, address) "
-				+ "VALUES('"+name+"','"+description+"','"+shopType+"','"+userId+"','"+addressId+"');";
-
-		int res = UtilsBdd.insertQuery(statement, query);
+	public boolean createShop(String name, String description, String shopType, int userId, int addressId, InputStream image) {
+		String query = "Insert into shop (name, description, shopType, user, address, image) VALUES(?,?,?,?,?,?);";
+		System.out.println(query);
+		
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(5, addressId, Types.INTEGER);
+			preparedStatement.setObject(1, name, Types.VARCHAR); 
+			preparedStatement.setObject(2, description, Types.VARCHAR);
+			preparedStatement.setObject(3, shopType, Types.VARCHAR); 
+			preparedStatement.setObject(4, userId, Types.INTEGER);
+			preparedStatement.setObject(6, image, Types.BLOB); 
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
 
 		if(res==1){
 			return true;
@@ -118,9 +135,23 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public boolean updateShop(int idShop, String name, String description, String shopType, int userId, int addressId) {
-		String query = "Update shop SET name='"+name+"', description='"+description+"', shopType='"+shopType+"', user='"+userId+"', address='"+addressId+" WHERE id='"+idShop+"';";
-
-		int res = UtilsBdd.updateQuery(statement, query);
+		String query = "Update shop SET name=?, description=?, shopType=?, user=?, address=? WHERE id=?;";
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, name, Types.VARCHAR);
+			preparedStatement.setObject(2, description, Types.VARCHAR);
+			preparedStatement.setObject(3, shopType, Types.VARCHAR);
+			preparedStatement.setObject(4, userId, Types.INTEGER);
+			preparedStatement.setObject(5, addressId, Types.INTEGER);
+			preparedStatement.setObject(6, idShop, Types.INTEGER);
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("SuccÃ¨s de la mise Ã  jour du magasin "+idShop);
+		} catch (SQLException e) {
+			logger.error("Erreur lors de la mise Ã  jour du magasin "+idShop+" "+e.getMessage());
+		}
+		
 		if(res == 1){
 			return true;
 		} else {
@@ -130,8 +161,18 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public boolean deleteShop(int id) {
-		String query = "DELETE FROM shop where id='"+id+"';";
-		int res = UtilsBdd.deleteQuery(statement, query);
+		String query = "DELETE FROM shop where id=?;";
+		
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id);
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("SuccÃ¨s de la suppression du magasin "+id);
+		} catch (SQLException e) {
+			logger.error("Erreur lors de suppression du magasin "+id+" "+e.getMessage());
+		}
 		
 		if(res==1){
 			return true;
@@ -144,11 +185,12 @@ public class ShopManagerImpl implements IShopManager{
 	public List<Product> getProducts(int shopId) {
 		List<Product> products = new ArrayList<Product>();
 
-		String query = "Select * from product where shopId='"+shopId+"';";
-
-		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
-
+		String query = "Select * from product where shopId=?;";
+		
+		PreparedStatement preparedStatement;
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(resultat.next()){
 				Product product = null;
 				int id = resultat.getInt("id");
@@ -159,14 +201,15 @@ public class ShopManagerImpl implements IShopManager{
 
 				ProductTypeEnum productTypeEnum = Utils.getProductType(productType);
 				product = new Product(id, productTypeEnum, name, description, price, shopId);
-				
 				products.add(product);
+				
+				logger.info("SuccÃ¨s - RÃ©cupÃ©ration puis insertion du produit portant l'id : "+id); 
 			}
-			logger.info("Liste des produits récupérée");
-		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération de la liste des produits : " + e.getMessage());
+			logger.info("SuccÃ¨s - RÃ©cupÃ©ration des produits du magasin portant l'id :"+ shopId); 
+		} catch (SQLException e1) {
+			logger.error("Echec - RÃ©cupÃ©ration des produits du magasin portant l'id :"+ shopId); 
 		}
-
+		
 		return products;
 	}
 
@@ -174,11 +217,13 @@ public class ShopManagerImpl implements IShopManager{
 	public Product getProduct(int id) {
 		Product product = null;
 
-		String query = "Select * from product where id='"+id+"';";
-
-		ResultSet resultat = UtilsBdd.selectQuery(statement, query);
-
+		String query = "Select * from product where id=?;";
+		PreparedStatement preparedStatement;
+		
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER);
+			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(resultat.next()){
 				String productType = resultat.getString("productType");
 				String name = resultat.getString("name");
@@ -189,9 +234,9 @@ public class ShopManagerImpl implements IShopManager{
 				ProductTypeEnum productTypeEnum = Utils.getProductType(productType);
 				product = new Product(id, productTypeEnum, name, description, price, shopId);
 			}
-			logger.info("Produit récupéré grâce à l'ID");
-		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération du produit grâce à l'ID : " + e.getMessage());
+			logger.info("SuccÃ¨s - RÃ©cupÃ©ration du produit portant l'id : "+id);
+		} catch (SQLException e1) {
+			logger.error("Echec - RÃ©cupÃ©ration du produit portant l'id : "+id);
 		}
 
 		return product; 
@@ -199,10 +244,22 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public boolean createProduct(String productType, String name, String description, Float price, int idShop) {
-		String query = "Insert into product (productType, name, description, price, shopId) "
-				+ "VALUES('"+productType.toString()+"','"+name+"','"+description+"','"+price+"','"+idShop+"');";
+		String query = "Insert into product (productType, name, description, price, shopId) VALUES(?,?,?,?,?);";
 
-		int res = UtilsBdd.insertQuery(statement, query);
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, productType, Types.VARCHAR);
+			preparedStatement.setObject(2, name, Types.VARCHAR);
+			preparedStatement.setObject(3, description, Types.VARCHAR);
+			preparedStatement.setObject(4, price, Types.FLOAT);
+			preparedStatement.setObject(5, idShop, Types.INTEGER);
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("SuccÃ¨s - CrÃ©ation du produit pour le magasin portant l'id : "+idShop);
+		} catch (SQLException e) {
+			logger.error("Echec - CrÃ©ation du produit pour le magasin portant l'id : "+idShop);
+		}
 
 		if(res==1){
 			return true;
@@ -213,17 +270,48 @@ public class ShopManagerImpl implements IShopManager{
 	}
 
 	@Override
-	public void updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop) {
-		String query = "Update product SET productType='"+productType.toString()+"' , name='"+name+"' , description='"+description+"' , price='"+price+"' , shopId='"+idShop+"' WHERE id='"+idProduct+"';";
-		System.out.println(query);
-		UtilsBdd.updateQuery(statement, query);
+	public boolean updateProduct(int idProduct, String productType, String name, String description, Float price, int idShop) {
+		String query = "Update product SET productType=? , name=? , description=? , price=? , shopId=? WHERE id=?;";
+		
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, productType, Types.VARCHAR);
+			preparedStatement.setObject(2, name, Types.VARCHAR);
+			preparedStatement.setObject(3, description, Types.VARCHAR);
+			preparedStatement.setObject(4, price, Types.FLOAT);
+			preparedStatement.setObject(5, idShop, Types.INTEGER);
+			preparedStatement.setObject(6, idProduct, Types.INTEGER);
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			
+			logger.info("SuccÃ¨s - Mise Ã  jour du produit portant l'id : "+idProduct);
+		} catch (SQLException e) {
+			logger.error("Echec - Mise Ã  jour du produit portant l'id : "+idProduct);
+		}
+		
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 	@Override
 	public boolean deleteProduct(int id) {
-		String query = "DELETE FROM product where id='"+id+"';";
-		System.out.println(query);
-		int res = UtilsBdd.deleteQuery(statement, query);
+		String query = "DELETE FROM product where id=?;";
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER);
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("SuccÃ¨s - Suppresion du produit avec l'id : "+id);
+		} catch (SQLException e) {
+			logger.error("Echec - Suppresion du produit avec l'id : "+id);
+		}
+		
 		if(res==1){
 			return true;
 		} else {
@@ -234,11 +322,16 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public List<Order> getReceivedOrder(int shop) {
-		String query = "Select * from ordering where shop='"+shop+"' AND status='"+OrderStatusEnum.INPROGRESS+"';";
-		ResultSet resultOrder = UtilsBdd.selectQuery(statement, query);
-
+		String query = "Select * from ordering where shop=? AND status=?;";
+		
+		PreparedStatement preparedStatement;
 		List<Order> orders = new ArrayList<Order>();
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, shop, Types.INTEGER);
+			preparedStatement.setObject(2, OrderStatusEnum.INPROGRESS, Types.VARCHAR);
+			
+			ResultSet resultOrder = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while (resultOrder.next()) {
 				int idOrder = resultOrder.getInt("id");
 				String estimatedTime = resultOrder.getString("estimatedTime");
@@ -254,9 +347,9 @@ public class ShopManagerImpl implements IShopManager{
 				Order order = new Order(idOrder, estimatedTimeEnum, orderStatusEnum,date, priceTotal, idUser, idShop);
 				orders.add(order);
 			}
-			logger.info("Liste des commandes reçues récupérée");
-		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération de la liste des commandes reçues : " + e.getMessage());
+			logger.info("SuccÃ¨s - RÃ©cupÃ©ration des commandes du magasin portant l'id : "+shop);
+		} catch (SQLException e1) {
+			logger.error("Echec - RÃ©cupÃ©ration des commandes du magasin portant l'id : "+shop);
 		}
 		
 		return orders;
@@ -264,36 +357,47 @@ public class ShopManagerImpl implements IShopManager{
 
 	@Override
 	public int getShopId(String name, String description, String shopType, int userId, int addressId) {
-		String query = "Select * from shop WHERE name='"+name+"' AND description='"+description+"' AND user='"+userId+"' AND address='"+addressId+"';";
-		ResultSet result = UtilsBdd.selectQuery(statement, query);
+		String query = "Select * from shop WHERE name=? AND description=?  AND shopType=? AND user=? AND address=?;";
+		PreparedStatement preparedStatement;
 		int idShop = -1;
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, name, Types.VARCHAR);
+			preparedStatement.setObject(2, description, Types.VARCHAR);
+			preparedStatement.setObject(3, shopType, Types.VARCHAR);
+			preparedStatement.setObject(4, userId, Types.INTEGER);
+			preparedStatement.setObject(5, addressId, Types.INTEGER);
+			ResultSet result = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(result.next()){
 				idShop = result.getInt("id");
 			}
-			logger.info("Magasin récupéré");
+			logger.info("RÃ©cupÃ©ration du magasin via son id : "+idShop);
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération du magasin : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la rÃ©cupÃ©ration du magasin : " + e.getMessage());
 		}
-
 		return idShop;
 	}
 
 	@Override
 	public int getProduct(String producType, String name, String description, Float price, int idShop) {
-//		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND CAST(price AS DECIMAL)= CAST('"+price+"' AS DECIMAL) AND shopId='"+idShop+"';";
-		String query = "Select * FROM product WHERE productType='"+producType+"' AND name='"+name+"' AND description='"+description+"' AND price='"+price+"' AND shopId='"+idShop+"';";
+		String query = "Select * FROM product WHERE productType=? AND name=? AND description=? AND price=? AND shopId=?;";
 		
-		System.out.println(query);
-		ResultSet result = UtilsBdd.selectQuery(statement, query);
+		PreparedStatement preparedStatement;
 		int idProduct = -1;
 		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, producType, Types.VARCHAR);
+			preparedStatement.setObject(2, name, Types.VARCHAR);
+			preparedStatement.setObject(3, description, Types.VARCHAR);
+			preparedStatement.setObject(4, price, Types.FLOAT);
+			preparedStatement.setObject(5, idShop, Types.INTEGER);
+			ResultSet result = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(result.next()){
 				idProduct = result.getInt("id");
 			}
-			logger.info("Produit récupéré");
+			logger.info("RÃ©cupÃ©ration de l'id du produit rÃ©ussi");
 		} catch (SQLException e) {
-			logger.error("Une erreur est survenue lors de la récupération du produit : " + e.getMessage());
+			logger.error("Une erreur est survenue lors de la rÃ©cupÃ©ration du produit : " + e.getMessage());
 		}
 
 		return idProduct;

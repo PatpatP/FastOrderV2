@@ -27,6 +27,7 @@ import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
+import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 @WebServlet(
@@ -53,10 +54,10 @@ public class UserServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		Statement statement = UtilsBdd.connectBDD();
-		userManager = new UserManagerImpl(statement);
-		addressManager= new AddressManagerImpl(statement);
-		shopManager = new ShopManagerImpl(statement);
+		Connection connection = UtilsBdd.connectBDD();
+		userManager = new UserManagerImpl(connection);
+		addressManager= new AddressManagerImpl(connection);
+		shopManager = new ShopManagerImpl(connection);
 		mailManager = new MailManagerImpl();
 		validateInputField = new ValidateInputField();
 	}

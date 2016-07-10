@@ -1,6 +1,7 @@
 package com.fastorder.manager.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,14 +15,14 @@ import com.fastorder.manager.impl.UserManagerImpl;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 import com.fastorder.utils.UtilsBdd;
-import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.Connection;
 
 public class ShopManagerTests {
 	
 	private ShopManagerImpl shopManager;
 	private UserManagerImpl userManager;
 	private AddressManagerImpl addressManager;
-	private Statement statement;
+	private Connection connection;
 	private int addressId;
 	private int userId;
 	private int addressShopId;
@@ -32,10 +33,10 @@ public class ShopManagerTests {
 	
 	@Before
 	public void setUp(){
-		statement = UtilsBdd.connectBDD();
-		shopManager = new ShopManagerImpl(statement);
-		userManager = new UserManagerImpl(statement);
-		addressManager = new AddressManagerImpl(statement);
+		connection = UtilsBdd.connectBDD();
+		shopManager = new ShopManagerImpl(connection);
+		userManager = new UserManagerImpl(connection);
+		addressManager = new AddressManagerImpl(connection);
 		
 		addressManager.createAddress("Test Unit Street", "42", "35000", "TestUnitCity", "TestUnitCountry");
 		addressId = addressManager.getAddressId("Test Unit Street", "42", "35000", "TestUnitCity", "TestUnitCountry");
@@ -62,52 +63,52 @@ public class ShopManagerTests {
 
 	@Test
 	public void createShopTest(){
-		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId);
+		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId, null);
 		int idShop = shopManager.getShopId(shopName, shopDescription, shopType, userId, addressId);
 		Shop shop = shopManager.getShop(idShop);
 		
-		assertEquals("Vérification Shop Name", shopName, shop.getName());
-		assertEquals("Vérification shop Description", shopDescription, shop.getDescription());
-		assertEquals("Vérification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
+		assertEquals("VÃ©rification Shop Name", shopName, shop.getName());
+		assertEquals("VÃ©rification shop Description", shopDescription, shop.getDescription());
+		assertEquals("VÃ©rification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
 		
 		boolean isDeleted = shopManager.deleteShop(idShop);
-		assertTrue("Vérication de la suppression d'un magasin", isDeleted);
+		assertTrue("VÃ©rication de la suppression d'un magasin", isDeleted);
 	}
 	
 	@Test
 	public void updateShopTest(){
-		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId);
+		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId, null);
 		int idShop = shopManager.getShopId(shopName, shopDescription, shopType, userId, addressId);
 		Shop shop = shopManager.getShop(idShop);
 		
-		assertEquals("Vérification Shop Name", shopName, shop.getName());
-		assertEquals("Vérification shop Description", shopDescription, shop.getDescription());
-		assertEquals("Vérification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
+		assertEquals("VÃ©rification Shop Name", shopName, shop.getName());
+		assertEquals("VÃ©rification shop Description", shopDescription, shop.getDescription());
+		assertEquals("VÃ©rification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
 		
 		String newShopName = "New Shop Name Test";
 		String newShopDescription = "New Shop Description Test";
 		
 		shopManager.updateShop(idShop, newShopName, newShopDescription, shopType, userId, addressId);
-		//TODO revoir la méthode de MAJ d'un shop
+		//TODO revoir la mÃ©thode de MAJ d'un shop
 		
 		
 		Shop updatedShop = shopManager.getShop(idShop);
 
-		assertEquals("Vérification Shop Name", newShopName, updatedShop.getName());
-		assertEquals("Vérification shop Description", newShopDescription, updatedShop.getDescription());
-		assertEquals("Vérification shop type", ShopTypeEnum.CHINOIS, updatedShop.getShopType());
+		assertEquals("VÃ©rification Shop Name", newShopName, updatedShop.getName());
+		assertEquals("VÃ©rification shop Description", newShopDescription, updatedShop.getDescription());
+		assertEquals("VÃ©rification shop type", ShopTypeEnum.CHINOIS, updatedShop.getShopType());
 		
 		boolean isDeleted = shopManager.deleteShop(idShop);
-		assertTrue("Vérication de la suppression d'un magasin", isDeleted);
+		assertTrue("VÃ©rication de la suppression d'un magasin", isDeleted);
 	}
 	
 	@Test
 	public void deleteShopTest(){
-		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId);
+		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId, null);
 		int idShop = shopManager.getShopId(shopName, shopDescription, shopType, userId, addressId);
 		
 		boolean isDeleted = shopManager.deleteShop(idShop);
-		assertTrue("Vérication de la suppression d'un magasin", isDeleted);
+		assertTrue("VÃ©rication de la suppression d'un magasin", isDeleted);
 	}
 	
 	@Test

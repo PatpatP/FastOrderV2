@@ -9,8 +9,9 @@ public class Address {
 	private String city;
 	private String country;
 	
-	public Address(String street, String number, String zipCode, String city, String country) {
+	public Address(int id, String street, String number, String zipCode, String city, String country) {
 		super();
+		this.id = id;
 		this.street = street;
 		this.number = number;
 		this.zipCode = zipCode;

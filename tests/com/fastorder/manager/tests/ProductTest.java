@@ -1,6 +1,7 @@
 package com.fastorder.manager.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,14 +16,14 @@ import com.fastorder.manager.impl.UserManagerImpl;
 import com.fastorder.model.Product;
 import com.fastorder.model.User;
 import com.fastorder.utils.UtilsBdd;
-import com.mysql.jdbc.Statement;
+import com.mysql.jdbc.Connection;
 
 public class ProductTest {
 	
 	private ShopManagerImpl shopManager;
 	private AddressManagerImpl addressManager;
 	private UserManagerImpl userManager;
-	private Statement statement;
+	private Connection connection;
 	private int shopId;
 	private int addressIdShop;
 	private int addressIdUser;
@@ -30,17 +31,17 @@ public class ProductTest {
 	
 	@Before
 	public void setUp(){
-		statement = UtilsBdd.connectBDD();
-		shopManager = new ShopManagerImpl(statement);
-		addressManager = new AddressManagerImpl(statement);
+		connection = UtilsBdd.connectBDD();
+		shopManager = new ShopManagerImpl(connection);
+		addressManager = new AddressManagerImpl(connection);
 		addressManager.createAddress("tests unit product", "42", "75000", "TestCity", "TestLand");
 		addressIdShop = addressManager.getAddressId("tests unit product", "42", "75000", "TestCity", "TestLand");
 		addressManager.createAddress("tests unit user", "42", "75000", "TestCity", "TestLand");
 		addressIdUser = addressManager.getAddressId("tests unit user", "42", "75000", "TestCity", "TestLand");
-		userManager = new UserManagerImpl(statement);
+		userManager = new UserManagerImpl(connection);
 		userManager.createUser("testunit@gmail.com", "0102030405", "test", "unit", UserTypeEnum.CLIENT, addressIdUser, "test1234");
 		user = userManager.getUser("testunit@gmail.com");
-		shopManager.createShop("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop);
+		shopManager.createShop("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop, null);
 		shopId = shopManager.getShopId("Test Unit", "Sell product unittest", ShopTypeEnum.CHINOIS.toString(), user.getId(), addressIdShop);
 		
 	}

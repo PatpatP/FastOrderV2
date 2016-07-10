@@ -25,6 +25,7 @@ import com.fastorder.model.Product;
 import com.fastorder.model.User;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
+import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.Statement;
 
 @WebServlet(
@@ -50,10 +51,10 @@ public class OrderServlet extends HttpServlet{
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		Statement statement = UtilsBdd.connectBDD();
-		userManager = new UserManagerImpl(statement);
-		shopManager = new ShopManagerImpl(statement);
-		orderManager = new OrderManagerImpl(statement);
+		Connection connection = UtilsBdd.connectBDD();
+		userManager = new UserManagerImpl(connection);
+		shopManager = new ShopManagerImpl(connection);
+		orderManager = new OrderManagerImpl(connection);
 		mailManager = new MailManagerImpl();
 		brackets = new HashMap<>();
 	}

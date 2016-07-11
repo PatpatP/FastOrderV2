@@ -33,7 +33,7 @@ public class MailingTests {
 	private String fileName = null;
 	
 	private final String username = "teamfastorder@gmail.com";
-	private final String password = "Fastorder1234";
+	private final String mdp = "Fastorder1234";
 	
 	@Before
 	public void setUp(){
@@ -87,7 +87,7 @@ public class MailingTests {
 		props.setProperty("mail.store.protocol", "imaps");
 			Session session = Session.getDefaultInstance(props, null);
 			Store store = session.getStore("imaps");
-			store.connect("imap.gmail.com",username, password);
+			store.connect("imap.gmail.com",username, mdp);
 			
 			Folder[] folders = store.getDefaultFolder().list("*");
 			for (javax.mail.Folder folder : folders) {

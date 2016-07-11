@@ -77,7 +77,10 @@
 						<label for="exampleInputEmail1">City</label> <input type="text"
 							class="form-control" name="city" placeholder="City">
 					</div>
-					
+					<div class="form-group">
+						<label for="exampleInputEmail1">Country</label> <input type="text"
+							class="form-control" name="country" placeholder="Country">
+					</div>
 				</div>
 				<div class="col-lg-11 col-md-11 col-sm-11">
 					<br>

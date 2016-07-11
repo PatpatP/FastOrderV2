@@ -8,20 +8,20 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class CryptageTests {
 
-	private String password = "Test";
-	private String correctPassword = "Test";
-	private String wrongPassword = "Test2";
+	private String mdp = "Test";
+	private String correctmdp = "Test";
+	private String wrongmdp = "Test2";
 	
 	@Test
 	public void cryptageTest(){
-		String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+		String hashPassword = BCrypt.hashpw(mdp, BCrypt.gensalt());
 		System.out.println(hashPassword);
 		
-		boolean samePass = BCrypt.checkpw(correctPassword, hashPassword);
+		boolean samePass = BCrypt.checkpw(correctmdp, hashPassword);
 		assertTrue(samePass);
 		
 		
-		boolean wrongPassAnswer = BCrypt.checkpw(wrongPassword, hashPassword);
+		boolean wrongPassAnswer = BCrypt.checkpw(wrongmdp, hashPassword);
 		assertFalse(wrongPassAnswer);
 	}
 	

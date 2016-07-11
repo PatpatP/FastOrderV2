@@ -29,11 +29,11 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		/* Connexion ï¿½ la base de donnï¿½es */
 		String url = "jdbc:mysql://localhost:3306/fastorder";
 		String user = "root";
-		String password = "";
+		String mdp = "";
 		Connection connexion = null;
 		
 		try {
-			connexion = (Connection) DriverManager.getConnection( url, user, password );
+			connexion = (Connection) DriverManager.getConnection( url, user, mdp );
 			logger.info("Connexion effectuée");
 			return connexion;
 		} catch (SQLException e) {
@@ -47,7 +47,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 			int res = preparedStatement.executeUpdate();
 			return res;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Echec - Ex�cution de la requete");
 		}
 		return 0;
 	}
@@ -57,7 +57,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		try {
 			resultat = preparedStatement.executeQuery();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Echec - Ex�cution de la requete select");
 		}
 		return resultat;
 	}

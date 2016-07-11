@@ -11,7 +11,7 @@ import org.apache.commons.mail.MultiPartEmail;
 public class Mailing {
 
 	private final String username = "teamfastorder@gmail.com";
-	private final String password = "Fastorder1234";
+	private final String mdp = "Fastorder1234";
 
 	public Mailing() {
 
@@ -47,7 +47,7 @@ public class Mailing {
 		MultiPartEmail email = new MultiPartEmail();
 		email.setHostName("smtp.googlemail.com");
 		email.setSmtpPort(587);
-		email.setAuthenticator(new DefaultAuthenticator(username, password));
+		email.setAuthenticator(new DefaultAuthenticator(username, mdp));
 		email.setSSL(true);
 		email.setFrom(username);
 		email.setSubject(obj);

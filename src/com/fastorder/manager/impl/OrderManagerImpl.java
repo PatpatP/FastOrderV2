@@ -69,8 +69,9 @@ public class OrderManagerImpl implements IOrderManager{
 				order = new Order(id,  estimatedTimeEnum, orderStatusEnum, created, totalPrice, idUser, shop);
 
 			}
+			logger.info("Succès - Récupération d'une commande via son id : "+id);
 		} catch (SQLException e1) {
-			e1.printStackTrace();
+			logger.error("Erreur - Récupération d'une commande via son id : "+id);
 		}
 		return order;
 	}
@@ -82,7 +83,6 @@ public class OrderManagerImpl implements IOrderManager{
 		if(products!=null){
 			nbProduct = products.size();
 		}
-		// On crÃ©er la commande
 		String queryOrder = "Insert into ordering (estimatedTime, status, totalPrice, user, shop) VALUES(?,?,?,?,?);";
 		PreparedStatement prepareStatementOrder;
 		PreparedStatement prepareStatementIdOrder;
@@ -146,9 +146,9 @@ public class OrderManagerImpl implements IOrderManager{
 			prepareStatement.setObject(1, OrderStatusEnum.READY, Types.VARCHAR); 
 			prepareStatement.setObject(2, idOrder, Types.INTEGER); 
 			UtilsBdd.executePreapredStatement(prepareStatement);
-
+			logger.info("Succès - Echec de la mise à jour du status d'une commande");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Echec de la mise à jour du status d'une commande, erreur suivante : "+e.getMessage());
 		}
 	}
 

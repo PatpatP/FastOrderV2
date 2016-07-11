@@ -37,8 +37,9 @@ public class AddressManagerImpl implements IAddressManager{
 			preparedStatement.setObject(4, city, Types.VARCHAR); 
 			preparedStatement.setObject(5, country, Types.VARCHAR); 
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("Succès - Création de l'adresse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Création de l'adresse, erreur suivant : "+e.getMessage());
 		}
 		if(res==1){
 			return true;
@@ -66,9 +67,9 @@ public class AddressManagerImpl implements IAddressManager{
 			while(resultat.next()){
 				addressId = resultat.getInt("id");
 			}
-			
+			logger.info("Succès - Récupération de l'id de l'adresse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Récupération de l'id de l'adresse, erreur suivant : "+e.getMessage());
 		}
 		return addressId;
 		
@@ -94,9 +95,9 @@ public class AddressManagerImpl implements IAddressManager{
 				
 				return new Address(id, street, number, zipCode, city, country);
 			}
-			
+			logger.info("Succès - Récupération de l'addresse via l'id");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Récupération de l'addresse via l'id, erreur suivant : "+e.getMessage());
 		}
 		return null;
 		
@@ -117,9 +118,9 @@ public class AddressManagerImpl implements IAddressManager{
 			preparedStatement.setObject(5, country, Types.VARCHAR); 
 			preparedStatement.setObject(6, id, Types.INTEGER); 
 			resultat = UtilsBdd.executePreapredStatement(preparedStatement);
-			
+			logger.info("Succès - Mise à jour de l'adresse");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Mise à jour de l'adresse, erreur suivant : "+e.getMessage());
 		}
 		if(resultat==1){
 			return true;
@@ -138,9 +139,9 @@ public class AddressManagerImpl implements IAddressManager{
 			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
 			preparedStatement.setObject(1, id, Types.INTEGER); 
 			resultat = UtilsBdd.executePreapredStatement(preparedStatement);
-			
+			logger.info("Succès - Suppression de l'adresse via son id");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Erreur - Suppression de l'adresse via son id, erreur générée : "+e.getMessage());
 		}
 		if(resultat==1){
 			return true;

@@ -35,7 +35,7 @@ public class UserManagerTests {
 	private String firstName = "test";
 	private String lastName = "unit";
 	private UserTypeEnum userType = UserTypeEnum.CLIENT;
-	private String password = "test1234";
+	private String mdp = "test1234";
 	
 	@Before
 	public void setUp(){
@@ -47,7 +47,7 @@ public class UserManagerTests {
 		firstName = "test";
 		lastName = "unit";
 		userType = UserTypeEnum.CLIENT;
-		password = "test1234";
+		mdp = "test1234";
 		
 		addressManagerImpl = new AddressManagerImpl(connection);
 		
@@ -99,7 +99,7 @@ public class UserManagerTests {
 		
 		int userBeforeInsert = countNbUsersInBase();
 		
-		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, password);
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
 		
 		int cptUsersAfterInsert = countNbUsersInBase();
 		assertTrue("Compare le nombre d'utilisateur avant et après", cptUsersAfterInsert==userBeforeInsert+1);
@@ -110,17 +110,17 @@ public class UserManagerTests {
 		assertEquals("test le nom", lastName, user.getLastName());
 		assertEquals("test le numéro de tel", phoneNumber, user.getPhoneNumber());
 		assertEquals("test le type d'utilisateur", userType, user.getUserType());
-		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(password, BCrypt.hashpw(password, BCrypt.gensalt())));
+		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(mdp, BCrypt.hashpw(mdp, BCrypt.gensalt())));
 	}
 	
 	@Test
 	public void updateUserTest(){
-		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, password);
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
 		User user = userManager.getUser(mail);
 		String newFirstName = "Change FirstName test";
 		String newLastName= "Change LastName test";
 		
-		userManager.updateUserData(user.getId(), mail, phoneNumber, newFirstName, newLastName, userType, addressId, password);
+		userManager.updateUserData(user.getId(), mail, phoneNumber, newFirstName, newLastName, userType, addressId, mdp);
 		
 		User userAfterUpdate = userManager.getUser(mail);
 		assertEquals("test le mail", mail, userAfterUpdate.getMail());
@@ -128,25 +128,25 @@ public class UserManagerTests {
 		assertEquals("test le nom", newLastName, userAfterUpdate.getLastName());
 		assertEquals("test le numéro de tel", phoneNumber, userAfterUpdate.getPhoneNumber());
 		assertEquals("test le type d'utilisateur", userType, userAfterUpdate.getUserType());
-		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(password, BCrypt.hashpw(password, BCrypt.gensalt())));
+		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(mdp, BCrypt.hashpw(mdp, BCrypt.gensalt())));
 		
 	}
 	
 	@Test
 	public void deleteUserTest(){
-		assertTrue("create user", userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, password));
+		assertTrue("create user", userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp));
 		assertTrue("delete user", userManager.deleteUser(mail));
 	}
 	
 	@Test
 	public void checkLoginTest(){
 		String user1Mail = "pol.patrick1411@gmail.com";
-		String user1Password = "test1234";
+		String user1Mdp = "test1234";
 		String user2Mail = "ghansumn@gmail.com";
-		String user2FakePassword = "fakePassword";
+		String user2FakeMdp = "fakePassword";
 		
-		Boolean checkLoginUser1 = userManager.checkLogin(user1Mail, user1Password);
-		Boolean checkLoginUser2 = userManager.checkLogin(user2Mail, user2FakePassword);
+		Boolean checkLoginUser1 = userManager.checkLogin(user1Mail, user1Mdp);
+		Boolean checkLoginUser2 = userManager.checkLogin(user2Mail, user2FakeMdp);
 		
 		assertTrue("Bon identifiant et mot de passe", checkLoginUser1);
 		assertFalse("Bon identifiant et mauvais mot de passe", checkLoginUser2);

@@ -16,6 +16,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.fastorder.enumeration.UserTypeEnum;
+import com.fastorder.exceptions.FailInputException;
 import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.manager.impl.MailManagerImpl;
 import com.fastorder.manager.impl.ShopManagerImpl;
@@ -115,7 +116,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateLastName(lastName);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -123,7 +124,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateFirstName(firstName);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -131,7 +132,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateMail(mail);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -139,7 +140,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validatePhoneNumber(phoneNumber);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -147,7 +148,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateStreetName(street);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -155,7 +156,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateStreetNumber(number);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -163,7 +164,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateZipCode(zipCode);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -171,7 +172,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateCountry(country);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -179,7 +180,7 @@ public class UserServlet extends HttpServlet{
 			try {
 				validateInputField.validateCity(city);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}

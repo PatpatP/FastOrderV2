@@ -27,7 +27,6 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 			$scope.bracket = JSON.parse($window.sessionStorage.bracket);
 			$scope.prixTotal = JSON.parse($window.sessionStorage.price);
 			$scope.size = JSON.parse($window.sessionStorage.size);
-			console.log("bracketStorage taille : ", $scope.size);
 		}else{
 			$scope.bracketStorage = [];
 		}
@@ -38,7 +37,6 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 	
 	$scope.getAdress = function(listadress){
 		$scope.lisAdress = listadress;
-		console.log("Liste Adress : ", listadress);
 	}
 	
 	$scope.setShops = function(listShop){
@@ -47,11 +45,9 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 	
 	$scope.setErrors = function(errors){
 		$scope.listErrors = errors;
-		console.log('Error : ', $scope.listErrors);
 	}
 	
 	$scope.setProducts = function(listProduct){
-		console.log("produits : ", listProduct);
 		$scope.products = listProduct;
 	}
 	
@@ -61,7 +57,7 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 		
 		if($scope.bracket.length > 0){
 			for(pos=0; pos<$scope.bracket.length;pos++){
-				if($scope.bracket[pos].id == id){
+				if($scope.bracket[pos].id === id){
 					indice = pos;
 					break;
 				}
@@ -71,7 +67,7 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 		$scope.bracketId[i]=id;
 		i += 1;
 		
-		if(indice != -1){
+		if(indice !== -1){
 			$scope.bracket[indice].quantity += 1;
 			$scope.size = $scope.size + 1;
 		}else{
@@ -90,14 +86,13 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 		$window.sessionStorage.setItem('size', JSON.stringify($scope.size));
 		$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
 		$scope.size = JSON.parse($window.sessionStorage.size);
-		console.log("bracketStorage : ",$scope.bracketStorage);
 		
 	}
 	
 	$scope.removeProduct = function(id){
 		var index;
 		for(pos=0; pos<$scope.bracket.length;pos++){
-			if($scope.bracket[pos].id == id){
+			if($scope.bracket[pos].id === id){
 				index = pos;
 				break;
 			}
@@ -122,7 +117,6 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 			$window.sessionStorage.setItem('size', JSON.stringify($scope.size));
 			$scope.bracketStorage = JSON.parse($window.sessionStorage.bracket);
 			$scope.size = JSON.parse($window.sessionStorage.size);
-			console.log("bracketStorage : ",$scope.bracketStorage);
 		}
 		
 	}
@@ -144,7 +138,6 @@ app.controller('myspaceCtrl', function ($scope, $http) {
 	
 	$scope.getShopType = function(listType){
 		$scope.shopType = listType;
-		console.log("listType : ", listType);
 	}
 	
 	$scope.setInfoUser = function(users){
@@ -153,7 +146,6 @@ app.controller('myspaceCtrl', function ($scope, $http) {
 	
 	$scope.setShops = function(shops){
 		$scope.listShop = shops;
-		console.log("listShop : ", $scope.listShop);
 	}
 	
 	$scope.showOrder = function(event){
@@ -162,17 +154,14 @@ app.controller('myspaceCtrl', function ($scope, $http) {
 	
 	$scope.manageShopProducts = function(listProduct){
 		$scope.listProducts = listProduct;
-		console.log('listProducts : ', listProduct);
 	}
 	
 	$scope.setUserOrders = function(listOrders){
 		$scope.userOrders = listOrders;
-		console.log('user orders : ', $scope.userOrders);
 	}
 	
 	$scope.setShopOrders = function(listOrders){
 		$scope.shopOrders = listOrders;
-		console.log('shop orders : ', $scope.shopOrders);
 	}
 	
 });

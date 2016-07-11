@@ -78,16 +78,16 @@ public class UserManagerImpl implements IUserManager{
 				String lastName = resultat.getString("lastName");
 				String userType = resultat.getString("userType");
 				int addressId = resultat.getInt("address");
-				String password = resultat.getString("password");
+				String mdp = resultat.getString("mdp");
 				Date created = resultat.getDate("created");
 
 				if(userType.equals("Client")){
-					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.CLIENT, addressId, password, created);
+					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.CLIENT, addressId, mdp, created);
 				} else if (userType.equals("Merchant")){
-					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, password, created);
+					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, mdp, created);
 				}
 			}
-			logger.info("Succès - Récupération de l'utilisateur avec le mail : "+mail);
+			logger.info("Succ�s - Récupération de l'utilisateur avec le mail : "+mail);
 		} catch (SQLException e) {
 			logger.error("Echec - Récupération de l'utilisateur avec le mail : "+mail);
 		}
@@ -113,13 +113,13 @@ public class UserManagerImpl implements IUserManager{
 				String lastName = resultat.getString("lastName");
 				String userType = resultat.getString("userType");
 				int addressId = resultat.getInt("address");
-				String password = resultat.getString("password");
+				String mdp = resultat.getString("mdp");
 				Date created = resultat.getDate("created");
 
 				if(userType.equals("Client")){
-					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.CLIENT, addressId, password, created);
+					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.CLIENT, addressId, mdp, created);
 				} else if (userType.equals("Merchant")){
-					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, password, created);
+					user = new User(id, mail, phoneNumber, firstName, lastName, UserTypeEnum.MERCHANT, addressId, mdp, created);
 				}
 			}
 			logger.info("Succès - Récupération de l'utilisateur avec l'id : "+id);
@@ -155,10 +155,10 @@ public class UserManagerImpl implements IUserManager{
 				Shop shop = new Shop(shopId, name, description, shopTypeEnum, userId, addressId);
 				
 				shops.add(shop);
-				logger.info("Succès - Ajout du magasin ayant pour id : "+shopId);
+				logger.info("Succ�s - Ajout du magasin ayant pour id : "+shopId);
 			}
 			
-			logger.info("Succès - Récupération des magasins de l'utilisateur ayant pour mail : "+mail);
+			logger.info("Succ�s - Récupération des magasins de l'utilisateur ayant pour mail : "+mail);
 
 		} catch (SQLException e) {
 			logger.error("Echec - Récupération des magasins de l'utilisateur ayant pour mail : "+mail);
@@ -169,11 +169,11 @@ public class UserManagerImpl implements IUserManager{
 
 	@Override
 	public boolean createUser(String mail, String phoneNumber, String firstName, String lastName, UserTypeEnum userType,
-			int address, String password) {
+			int address, String mdp) {
 		
-		String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+		String hashmdp = BCrypt.hashpw(mdp, BCrypt.gensalt());
 
-		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) VALUES(?,?,?,?,?,?,?);";
+		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, mdp) VALUES(?,?,?,?,?,?,?);";
 		
 		PreparedStatement preparedStatement;
 		int res=0;
@@ -185,7 +185,7 @@ public class UserManagerImpl implements IUserManager{
 			preparedStatement.setObject(4, lastName, Types.VARCHAR);
 			preparedStatement.setObject(5, userType, Types.VARCHAR);
 			preparedStatement.setObject(6, address, Types.INTEGER);
-			preparedStatement.setObject(7, hashPassword, Types.VARCHAR);
+			preparedStatement.setObject(7, hashmdp, Types.VARCHAR);
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
 			logger.info("Succès - Création d'un utilisateir");
 		} catch (SQLException e) {
@@ -201,11 +201,11 @@ public class UserManagerImpl implements IUserManager{
 
 	@Override
 	public boolean updateUserData(int userId, String mail, String phoneNumber, String firstName, String lastName,
-			UserTypeEnum userType, int address, String password) {
+			UserTypeEnum userType, int address, String mdp) {
 
-		String hashPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+		String hashPassword = BCrypt.hashpw(mdp, BCrypt.gensalt());
 		
-		String query = "UPDATE user SET mail=?, phoneNumber=?  , firstName=? , lastName=? , password=? WHERE id=?;";
+		String query = "UPDATE user SET mail=?, phoneNumber=?  , firstName=? , lastName=? , mdp=? WHERE id=?;";
 		PreparedStatement preparedStatement;
 		int res = 0;
 		
@@ -215,12 +215,12 @@ public class UserManagerImpl implements IUserManager{
 			preparedStatement.setObject(2, phoneNumber, Types.VARCHAR);
 			preparedStatement.setObject(3, firstName, Types.VARCHAR);
 			preparedStatement.setObject(4, lastName, Types.VARCHAR);
-			preparedStatement.setObject(5, hashPassword, Types.VARCHAR);
+			preparedStatement.setObject(5, mdp, Types.VARCHAR);
 			preparedStatement.setObject(6, userId, Types.INTEGER);
 			
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
 			
-			logger.info("Succès - Mise à jour de l'utilisateur portant l'id : "+userId);
+			logger.info("Succ�s - Mise à jour de l'utilisateur portant l'id : "+userId);
 		} catch (SQLException e) {
 			logger.error("Echec - Mise à jour de l'utilisateur portant l'id : "+userId);
 		}
@@ -255,24 +255,24 @@ public class UserManagerImpl implements IUserManager{
 	}
 
 	@Override
-	public boolean checkLogin(String mail, String password) {
+	public boolean checkLogin(String mail, String mdp) {
 
 		String query = "Select * from user where mail=?";
 		PreparedStatement preparedStatement;
-		String passwordExpected = "";
+		String mdpExpected = "";
 		try {
 			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
 			preparedStatement.setObject(1, mail, Types.VARCHAR);
 			
 			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while (resultat.next()){
-				passwordExpected = resultat.getString("password");
+				mdpExpected = resultat.getString("mdp");
 			}
 			logger.info("Succès - Récupération du mot de passe pour la vérification de l'authentification");
 		} catch (SQLException e) {
 			logger.error("Echec - Récupération du mot de passe pour la vérification de l'authentification");
 		}
-		return BCrypt.checkpw(password, passwordExpected);
+		return BCrypt.checkpw(mdp, mdpExpected);
 	}
 
 	@Override

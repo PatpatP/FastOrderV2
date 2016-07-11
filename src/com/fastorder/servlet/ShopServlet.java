@@ -21,6 +21,7 @@ import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
 
 import com.fastorder.enumeration.ShopTypeEnum;
+import com.fastorder.exceptions.FailInputException;
 import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.manager.impl.MailManagerImpl;
 import com.fastorder.manager.impl.ShopManagerImpl;
@@ -137,7 +138,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateName(name);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -145,7 +146,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateDescription(description);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -154,7 +155,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateStreetName(street);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -162,7 +163,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateStreetNumber(number);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -170,7 +171,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateZipCode(zipCode);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -178,7 +179,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateCountry(country);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -186,7 +187,7 @@ public class ShopServlet extends HttpServlet{
 			try {
 				validateInputField.validateCity(city);
 				isInputValide = true;
-			} catch (Exception e) {
+			} catch (FailInputException e) {
 				errors.add(e.getMessage());
 				isInputValide = false;
 			}
@@ -201,7 +202,7 @@ public class ShopServlet extends HttpServlet{
 				InputStream inputStream = null; // input stream of the upload file
 				String[] supportedContentTypes = {"image/jpeg", "image/png"};
 
-				if(name != null){
+				if(request.getParts() != null){
 					for (Part part : request.getParts()) {
 						String fileName = extractFileName(part);
 						String contentType = part.getContentType();
@@ -221,7 +222,7 @@ public class ShopServlet extends HttpServlet{
 				} catch (EmailException e) {
 					logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation d'un magasin : " + e.getMessage());
 				}
-				response.sendRedirect("myspace");
+				response.sendRedirect("myshops");
 			} else {
 				List<String> shopInfo = new ArrayList<String>();
 				shopInfo.add(ShopTypeEnum.CHINOIS.toString());
@@ -364,9 +365,9 @@ public class ShopServlet extends HttpServlet{
 						System.out.println(uri.toASCIIString());
 						java.awt.Desktop.getDesktop().browse(uri);
 					} catch (URISyntaxException ex) {
-						ex.printStackTrace();
+						logger.error("Erreur - URL d'affichage de la map erroné");
 					} catch (IOException ex) {
-						ex.printStackTrace();
+						logger.error("Erreur - Chargement de la map échoué");
 					}
 				} else {
 				}

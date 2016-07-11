@@ -121,8 +121,9 @@ public class ShopManagerImpl implements IShopManager{
 			preparedStatement.setObject(4, userId, Types.INTEGER);
 			preparedStatement.setObject(6, image, Types.BLOB); 
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("Succès - Création d'un magasin réussi");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("Echec - Création d'un magasin échoué");
 		} 
 
 		if(res==1){
@@ -190,6 +191,7 @@ public class ShopManagerImpl implements IShopManager{
 		PreparedStatement preparedStatement;
 		try {
 			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, shopId);
 			ResultSet resultat = UtilsBdd.selectPreapredStatement(preparedStatement);
 			while(resultat.next()){
 				Product product = null;

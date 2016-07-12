@@ -1,7 +1,8 @@
 package com.fastorder.manager.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
@@ -64,7 +65,6 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
 		assertEquals("coca", product.getName());
 		assertEquals("soda", product.getDescription());
-//		assertFalse(((float) 3.5)!=product.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}
@@ -78,7 +78,6 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
 		assertEquals("coca", product.getName());
 		assertEquals("soda", product.getDescription());
-//		assertFalse(((float) 3.5)!=product.getPrice());
 		
 		shopManager.updateProduct(idProduct, ProductTypeEnum.DRINK.toString(), "Coca Cola", "Boisson sans alcool", (float) 4.0, shopId);
 		
@@ -87,7 +86,6 @@ public class ProductTest {
 		assertEquals(ProductTypeEnum.DRINK, productAfterUpdate.getProductType());
 		assertEquals("Coca Cola", productAfterUpdate.getName());
 		assertEquals("Boisson sans alcool", productAfterUpdate.getDescription());
-//		assertFalse(((float) 4.0)!=productAfterUpdate.getPrice());
 		
 		shopManager.deleteProduct(idProduct);
 	}
@@ -103,12 +101,32 @@ public class ProductTest {
 	
 	@Test
 	public void getShopProductsTest(){
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		int idProduct1 = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "fanta", "soda", (float) 4, shopId);
+		int idProduct2 = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "fanta", "soda", (float) 4, shopId);
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "orangina", "soda", (float) 3, shopId);
+		int idProduct3 = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "orangina", "soda", (float) 3, shopId);
 		
+		List<Product> products = shopManager.getProducts(shopId);
+		assertTrue("Vérifie qu'il y a bien 3 produits", products.size()==3);
+		
+		shopManager.deleteProduct(idProduct1);
+		shopManager.deleteProduct(idProduct2);
+		shopManager.deleteProduct(idProduct3);
 	}
 	
 	@Test
 	public void getProductByIdTest(){
+		shopManager.createProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		int idProduct = shopManager.getProduct(ProductTypeEnum.DRINK.toString(), "coca", "soda", (float) 3.5, shopId);
+		Product product = shopManager.getProduct(idProduct);
 		
+		assertEquals(ProductTypeEnum.DRINK, product.getProductType());
+		assertEquals("coca", product.getName());
+		assertEquals("soda", product.getDescription());
+		
+		shopManager.deleteProduct(idProduct);
 	}
 
 

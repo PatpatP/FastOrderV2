@@ -3,6 +3,8 @@ package com.fastorder.manager.tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -89,8 +91,6 @@ public class ShopManagerTests {
 		String newShopDescription = "New Shop Description Test";
 		
 		shopManager.updateShop(idShop, newShopName, newShopDescription, shopType, userId, addressId);
-		//TODO revoir la méthode de MAJ d'un shop
-		
 		
 		Shop updatedShop = shopManager.getShop(idShop);
 
@@ -113,11 +113,31 @@ public class ShopManagerTests {
 	
 	@Test
 	public void getShopWithIdTest(){
+		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId, null);
+		int idShop = shopManager.getShopId(shopName, shopDescription, shopType, userId, addressId);
 		
+		Shop shop = shopManager.getShop(idShop);
+		
+		assertEquals("Vérification Shop Name", shopName, shop.getName());
+		assertEquals("Vérification shop Description", shopDescription, shop.getDescription());
+		assertEquals("Vérification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
+		
+		shopManager.deleteShop(idShop);
 	}
 	
 	@Test
 	public void getShopWithIdUserTest(){
+		shopManager.createShop(shopName, shopDescription, shopType, userId, addressId, null);
+		List<Shop> shops = userManager.getUserShops("test@gmail.com");
+		assertTrue("On v�rifie qu'il y a qu'un seul magasin", shops.size()==1);
 		
+		Shop shop = shops.get(0);
+		
+		assertEquals("Vérification Shop Name", shopName, shop.getName());
+		assertEquals("Vérification shop Description", shopDescription, shop.getDescription());
+		assertEquals("Vérification shop type", ShopTypeEnum.CHINOIS, shop.getShopType());
+		
+		int idShop = shopManager.getShopId(shopName, shopDescription, shopType, userId, addressId);
+		shopManager.deleteShop(idShop);
 	}
 }

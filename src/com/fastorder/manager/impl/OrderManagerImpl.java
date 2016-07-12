@@ -131,8 +131,25 @@ public class OrderManagerImpl implements IOrderManager{
 	}
 
 	@Override
-	public void delete(int id) {
-		// TODO Auto-generated method stub
+	public boolean delete(int id) {
+		String query = "DELETE FROM ordering where id=?";
+		PreparedStatement preparedStatement;
+		int res = 0;
+		try {
+			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+			preparedStatement.setObject(1, id, Types.INTEGER);
+			
+			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			logger.info("Succès - Suppression de la commande");
+		} catch (SQLException e) {
+			logger.error("Echec - Suppression de la commande");
+		}
+		
+		if(res==1){
+			return true;
+		} else {
+			return false;
+		}
 
 	}
 

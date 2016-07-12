@@ -1,91 +1,96 @@
 package com.fastorder.utils.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.fastorder.enumeration.UserTypeEnum;
+import com.fastorder.manager.impl.AddressManagerImpl;
+import com.fastorder.manager.impl.UserManagerImpl;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;
 
 public class BddTests {
 	
-	Statement statement;
+	private Connection connection;
+	private UserManagerImpl userManager;
+	private AddressManagerImpl addressManager;
 	
 	@Before
 	public void setUp(){
-		statement = UtilsBdd.connectBDD();
+		connection = UtilsBdd.connectBDD();
+		userManager = new UserManagerImpl(connection);
+		addressManager = new AddressManagerImpl(connection);
 	}
 	
 	@Test
 	public void testConnection(){
-		assertNotNull("The connection should not be null", statement);
+		assertNotNull("The connection should not be null", connection);
 	}
 	
 	@Test
-	public void testSelect() throws SQLException{
-		String query = "Select * from user where id="+0;
-		ResultSet result = UtilsBdd.selectQuery(statement, query);
-		while(result.next()){
-			assertEquals("pol.patrick1411@gmail.com",result.getString("mail"));
-			assertEquals("669468518",result.getString("phoneNumber"));
-			assertEquals("Patrick",result.getString("firstName"));
-			assertEquals("POL",result.getString("lastName"));
-			assertEquals("Merchant",result.getString("userType"));
-		}
-	}
-	
-	@Test
-	public void testInsert() throws SQLException{
-		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) "
-				+ "VALUES('testUnit@gmail.com','0102030405','test first name','test last name','Merchant','10','test1234');";
-		UtilsBdd.insertQuery(statement, query);
-		String querySelect = "Select * from user where mail='testUnit@gmail.com'";
-		ResultSet result = UtilsBdd.selectQuery(statement, querySelect);
-		while(result.next()){
-			assertEquals("testUnit@gmail.com",result.getString("mail"));
-			assertEquals("0102030405",result.getString("phoneNumber"));
-			assertEquals("test first name",result.getString("firstName"));
-			assertEquals("test last name",result.getString("lastName"));
-			assertEquals("Merchant",result.getString("userType"));
-		}
+	public void testUtilsBdd() throws SQLException{
 		
-		String queryDelete ="DELETE FROM USER WHERE mail='testUnit@gmail.com';";
-		UtilsBdd.deleteQuery(statement, queryDelete);
-	}
-	
-	@Test
-	public void testUpdate() throws SQLException{
-		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) "
-				+ "VALUES('testUnit@gmail.com','0102030405','test first name','test last name','Merchant','10','test1234');";
-		UtilsBdd.insertQuery(statement, query);
+		//Insertion d'un utilisateur
+		addressManager.createAddress("Street Test", "Number Test", "Zip Code Test", "City Test", "Country Test");
+		int addressId = addressManager.getAddressId("Street Test", "Number Test", "Zip Code Test", "City Test", "Country Test");
+		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, mdp) VALUES(?,?,?,?,?,?,?);";
+		String mail = "test@gmail.com";
+		String phoneNumber = "0102030405";
+		String firstName = "test";
+		String lastName = "test";
+		String userType = UserTypeEnum.CLIENT.toString();
+		String hashmdp = BCrypt.hashpw("test1234", BCrypt.gensalt());
 		
-		String updateQuery = "Update user SET firstName='new first name', lastName='new last name' WHERE mail='testUnit@gmail.com'";
-		UtilsBdd.updateQuery(statement, updateQuery);
-		String querySelect = "Select * from user where mail='testUnit@gmail.com'";
-		ResultSet result = UtilsBdd.selectQuery(statement, querySelect);
-		while(result.next()){
-			assertEquals("new first name",result.getString("firstName"));
-			assertEquals("new last name",result.getString("lastName"));
+		PreparedStatement preparedStatement;
+		
+		preparedStatement = (PreparedStatement) connection.prepareStatement(query);
+		preparedStatement.setObject(1, mail, Types.VARCHAR);
+		preparedStatement.setObject(2, phoneNumber, Types.VARCHAR);
+		preparedStatement.setObject(3, firstName, Types.VARCHAR);
+		preparedStatement.setObject(4, lastName, Types.VARCHAR);
+		preparedStatement.setObject(5, userType, Types.VARCHAR);
+		preparedStatement.setObject(6, addressId, Types.INTEGER);
+		preparedStatement.setObject(7, hashmdp, Types.VARCHAR);
+		
+		int res = UtilsBdd.executePreapredStatement(preparedStatement);
+		assertTrue("Vérifie que l'insertion a réussi", res==1);
+		
+		//Récupére l'utilisateur
+		String querySelect = "Select * from user where mail=?";
+		PreparedStatement preparedStatementSelect;
+		
+		preparedStatementSelect = (PreparedStatement) connection.prepareStatement(querySelect);
+		preparedStatementSelect.setObject(1, mail, Types.VARCHAR);
+		
+		ResultSet resultSelect = UtilsBdd.selectPreapredStatement(preparedStatementSelect);
+		while(resultSelect.next()){
+			assertTrue("Right mail", mail.equals(resultSelect.getString("mail")));
+			assertTrue("Right First Name", firstName.equals(resultSelect.getString("firstName")));
+			assertTrue("Right Last Name", lastName.equals(resultSelect.getString("lastName")));
+			assertTrue("Right phonenNumber", phoneNumber.equals(resultSelect.getString("phoneNumber")));
+			assertTrue("Right user type", userType.equals(resultSelect.getString("userType")));
 		}
 		
-		String queryDelete ="DELETE FROM USER WHERE mail='testUnit@gmail.com';";
-		UtilsBdd.deleteQuery(statement, queryDelete);
+		//Supprime l'utilisateur
+		String queryDelete = "DELETE FROM user where mail=?";
 		
+		PreparedStatement preparedStatementDelete;
+		
+		preparedStatementDelete = (PreparedStatement) connection.prepareStatement(queryDelete);
+		preparedStatementDelete.setObject(1, mail, Types.VARCHAR);
+		
+		int resDelete = UtilsBdd.executePreapredStatement(preparedStatement);
+		assertTrue("Vérifie que la suppression a été effectuée", resDelete==1);
 	}
 	
-	@Test
-	public void testDelete(){
-		String query = "Insert into user (mail, phoneNumber, firstName, lastName, userType, address, password) "
-				+ "VALUES('testUnit@gmail.com','0102030405','test first name','test last name','Merchant','10','test1234');";
-		UtilsBdd.insertQuery(statement, query);
-		String queryDelete ="DELETE FROM USER WHERE mail='testUnit@gmail.com';";
-		UtilsBdd.deleteQuery(statement, queryDelete);
-		
-	}
 }

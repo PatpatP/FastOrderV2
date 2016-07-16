@@ -10,8 +10,9 @@ public class Shop {
 	private ShopTypeEnum shopType;
 	private int userId;
 	private int addressId;
+	private byte[] byteImage;
 	
-	public Shop(int id, String name, String description, ShopTypeEnum shopType, int userId, int addressId) {
+	public Shop(int id, String name, String description, ShopTypeEnum shopType, int userId, int addressId, byte[] byteImage) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -19,8 +20,17 @@ public class Shop {
 		this.shopType = shopType;
 		this.userId = userId;
 		this.addressId = addressId;
+		this.byteImage = byteImage;
 	}
 	
+	public byte[] getByteImage() {
+		return byteImage;
+	}
+
+	public void setByteImage(byte[] byteImage) {
+		this.byteImage = byteImage;
+	}
+
 	public int getId() {
 		return id;
 	}

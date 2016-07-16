@@ -1,5 +1,7 @@
 package com.fastorder.manager.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -7,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
@@ -52,9 +56,25 @@ public class ShopManagerImpl implements IShopManager{
 				int idUser = resultat.getInt("user");
 				int idAddress = resultat.getInt("address");
 
+				InputStream in = resultat.getBinaryStream("image");
+				byte[] byteImage = null;
+				if(in!=null){
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					int bytePhoto;
+					try {
+						while((bytePhoto = in.read())>-1){
+							out.write(bytePhoto);
+						}
+						out.toByteArray();
+					} catch (IOException e) {
+						logger.error("Récupération de l'image échoué");
+					}
+					
+				}
+
 				ShopTypeEnum shopType = Utils.getShopType(shopTypeString);
 				
-				shop = new Shop(id, name, description, shopType, idUser, idAddress);
+				shop = new Shop(id, name, description, shopType, idUser, idAddress, byteImage);
 
 				shops.add(shop);
 			}
@@ -85,7 +105,7 @@ public class ShopManagerImpl implements IShopManager{
 				int idAddress = resultat.getInt("address");
 
 				ShopTypeEnum shopType = Utils.getShopType(shopTypeString);
-				shop = new Shop(idShop, name, description, shopType, idUser, idAddress);
+				shop = new Shop(idShop, name, description, shopType, idUser, idAddress, null);
 			}
 			logger.info("La magasin "+id+" a bien Ã©tÃ© rÃ©cupÃ©rÃ©");
 		} catch (SQLException e) {
@@ -111,6 +131,10 @@ public class ShopManagerImpl implements IShopManager{
 		System.out.println(query);
 		
 		PreparedStatement preparedStatement;
+		
+		
+		
+		
 		int res = 0;
 		try {
 			preparedStatement = (PreparedStatement) connection.prepareStatement(query);
@@ -121,6 +145,7 @@ public class ShopManagerImpl implements IShopManager{
 			preparedStatement.setObject(4, userId, Types.INTEGER);
 			preparedStatement.setObject(6, image, Types.BLOB); 
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
+			
 			logger.info("Succès - Création d'un magasin réussi");
 		} catch (SQLException e) {
 			logger.error("Echec - Création d'un magasin échoué");

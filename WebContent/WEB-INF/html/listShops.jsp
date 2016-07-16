@@ -29,7 +29,8 @@
 		    		
 			<div class="row blocShop" ng-repeat="res in shopsList | filter:filtre">
 			  <div class="col-lg-2 col-md-3 col-sm-4">
-			    <img src="http://www.restomontreal.ca/portal/sushi_mooshi/gallery/images/a_sushi_mooshi.jpg" width="170" height="140">
+<!-- 			    <img src="http://www.restomontreal.ca/portal/sushi_mooshi/gallery/images/a_sushi_mooshi.jpg" width="170" height="140"> -->
+			    <img src="{{res.image}}" width="170" height="140">
  		  </div>
 			   <div class="col-lg-10 col-md-9 col-sm-8">
 			  	<p class="noaccountText">

@@ -152,7 +152,8 @@ public class UserManagerImpl implements IUserManager{
 				int addressId = resultShop.getInt("address");
 				
 				ShopTypeEnum shopTypeEnum = Utils.getShopType(shopType);
-				Shop shop = new Shop(shopId, name, description, shopTypeEnum, userId, addressId);
+				//TODO
+				Shop shop = new Shop(shopId, name, description, shopTypeEnum, userId, addressId, null);
 				
 				shops.add(shop);
 				logger.info("Succès - Ajout du magasin ayant pour id : "+shopId);

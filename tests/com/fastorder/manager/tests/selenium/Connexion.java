@@ -25,14 +25,14 @@ public class Connexion {
 
 	@Test
 	public void testConnexionSelenium() throws Exception {
-		selenium.open("/home");
-		driver.findElement(By.linkText("Sign In")).click();
+		selenium.open("/login");
 		driver.findElement(By.name("mail")).clear();
 		driver.findElement(By.name("mail")).sendKeys("pol.patrick1411@gmail.com");
+		selenium.waitForPageToLoad("5000");
 		driver.findElement(By.name("password")).clear();
 		driver.findElement(By.name("password")).sendKeys("test1234");
+		selenium.waitForPageToLoad("5000");
 		driver.findElement(By.cssSelector("button.btn.btn-primary")).click();
-//		selenium.waitForPageToLoad("3000");
 
 	}
 

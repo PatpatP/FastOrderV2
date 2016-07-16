@@ -43,26 +43,26 @@
 						</select>
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">First Name</label> <input
+						 <input
 							type="text" class="form-control" name="firstName"
 							placeholder="First Name">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Last Name</label> <input
+						 <input
 							type="text" class="form-control" name="lastName"
 							placeholder="Last Name">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Mail</label> <input type="text"
+						<input type="text"
 							class="form-control" name="mail" placeholder="Mail">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Password</label> <input
+						<input
 							type="password" class="form-control" name="password"
 							placeholder="Password">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Phone Number</label> <input
+						<input
 							type="text" class="form-control" name="phoneNumber"
 							placeholder="Phone Number">
 					</div>
@@ -71,24 +71,24 @@
 					<div class="textInscription">Votre adresse</div>
 					<hr><br>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Street</label> <input type="text"
+						<label for="exampleInputEmail1">(*) Remplissez tous les champs</label> <input type="text"
 							class="form-control" name="street" placeholder="Street">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Number</label> <input type="text"
+						<input type="text"
 							class="form-control" name="number" placeholder="Number">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Zip Code</label> <input
+						<input
 							type="text" class="form-control" name="zipCode"
 							placeholder="Zip Code">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">City</label> <input type="text"
+						<input type="text"
 							class="form-control" name="city" placeholder="City">
 					</div>
 					<div class="form-group">
-						<label for="exampleInputEmail1">Country</label> <input type="text"
+						<input type="text"
 							class="form-control" name="country" placeholder="Country">
 					</div>
 				</div>
@@ -96,7 +96,7 @@
 					<br>
 					<br>
 					<button type="submit"
-						class="btn btn-danger col-lg-3 col-md-3">S'inscrire</button>
+						class="btn btnIndex col-lg-3 col-md-3">S'inscrire</button>
 				</div>
 			</form>
 		</div>

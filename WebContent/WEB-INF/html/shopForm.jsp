@@ -86,7 +86,7 @@
 					<br>
 					<br>
 					<button type="submit"
-						class="btn btn-danger col-lg-3 col-md-3">Ajouter magasin</button>
+						class="btn btnIndex col-lg-3 col-md-3">Ajouter magasin</button>
 				</div>
 			</form>
 		</div>

@@ -3,7 +3,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div id="navbar" class="navbar-collapse collapse">
-        <div class="logo col-lg-2 col-md-2 col-sm-3"><a href="home">Fast Order</a></div>
+        <div class="logo col-lg-2 col-md-2 col-sm-3"><a href="home"><img class="imgLogo" src="images/logo_fastorder.png"></a></div>
         <ul class="nav navbar-nav navbar-right">
         <li><a href="home" class="active">Home</a></li>
          <li><a href="shops">Shops</a></li>

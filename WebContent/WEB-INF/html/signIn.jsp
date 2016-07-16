@@ -24,14 +24,15 @@
 		%>
 	<p class="noAccountDiv"> Connectez-vous à votre compte </p>
 	<hr>
-	<div class="blocPshow">
-	<center><br>
-		<h2>Vous avez un restaurant ou magasin ?</h2>
-		<p>
-			Rejoignez FastOrder pour augmenter votre clientèle et attirer de nouveaux clients <br>
-			Découvrez les services et avantages pour les comptes de type restaurant
-		</p>
-	</center>
+	<div class="row">
+			<div class="col-lg-2 col-md-2 col-lg-offset-1 col-md-offset-1"><br><img src="images/logo_fastorder.png" height="200px"></div>
+		<div class="blocPshow col-lg-9 col-md-9">
+			<h2>Vous avez un restaurant ou magasin ?</h2>
+			<p>
+				Rejoignez FastOrder pour augmenter votre clientèle et attirer de nouveaux clients <br>
+				Découvrez les services et avantages pour les comptes de type restaurant
+			</p>
+		</div>
 	</div>
 	<%	if(request.getAttribute("failConnect") != null){ %>
 	<div class="alert alert-danger text-center" role="alert">${erreurs['connectionFail']}</div>
@@ -55,10 +56,10 @@
 					</div>
 					
 				</div>
-				<div class="col-lg-11">
+				<div class="col-lg-11 col-md-11">
 					<br>
 					<br>
-					<button type="submit" class="btn btn-primary">Connexion</button>
+					<button type="submit" class="btn btnIndex">Connexion</button>
 				</div>
 			</form>
 		 </div>
@@ -74,7 +75,7 @@
 		</p>
 		<br>
 		<br>
-		<a href="createAccount" class="btn btn-danger">Créer un compte</a>
+		<a href="createAccount" class="btn btnIndex col-lg-8 col-md-8">Créer un compte</a>
 	</div>
 	</div>
 	</div>

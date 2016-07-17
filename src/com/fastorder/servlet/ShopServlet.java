@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -38,7 +39,8 @@ import com.mysql.jdbc.Connection;
 @WebServlet(
 		name = "shop-servlet",
 		description = "Servlet handling shop function",
-		urlPatterns={"/shops", "/createShop", "/updateShop", "/deleteShop", "/createProduct", "/updateProduct", "/deleteProduct", "/showShopOnMap"}
+		urlPatterns={"/shops", "/createShop", "/updateShop", "/deleteShop",
+				"/createProduct", "/updateProduct", "/deleteProduct", "/showShopOnMap", "/getImageShop", "/getImageProduct"}
 		)
 
 @MultipartConfig(
@@ -91,6 +93,10 @@ public class ShopServlet extends HttpServlet{
 			this.shopsPage(request, response);
 		}  else if(uri.contains("/showShopOnMap")){
 			this.showShopOnMap(request, response);
+		} else if(uri.contains("/getImageShop")){
+			this.getShopImage(request, response);
+		} else if(uri.contains("/getImageProduct")){
+			this.getProductImage(request, response);
 		}
 	}
 
@@ -386,6 +392,25 @@ public class ShopServlet extends HttpServlet{
 		shopManager.deleteShop(Integer.parseInt(idShop));
 		response.sendRedirect("myspace");
 	}
+
+	private void getShopImage(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		//Récupérer l'id de l'image
+		
+		byte[] photo = null;
+		
+		response.setContentType("image/jpeg");
+		response.setContentLength(photo.length);
+		ServletOutputStream sos = response.getOutputStream();
+		sos.write(photo, 0, photo.length);
+		sos.flush();
+		sos.close();
+		
+	}
+	
+	private void getProductImage(HttpServletRequest request, HttpServletResponse response){
+		//Récupérer l'id du produit
+		
+	}
 	
 	private String extractFileName(Part part) {
 		String contentDisp = part.getHeader("content-disposition");
@@ -398,29 +423,4 @@ public class ShopServlet extends HttpServlet{
 		return "";
 	}
 	
-	/*
-	private void treatmentImage(HttpServletRequest request) throws IOException, ServletException{
-		String[] supportedContentTypes = {"image/jpeg", "image/png"};
-
-		String appPath = request.getServletContext().getRealPath("");
-		String savePath = appPath + File.separator + SAVE_DIR;
-
-		File fileSaveDir = new File(savePath);
-		if (!fileSaveDir.exists()) {
-			fileSaveDir.mkdir();
-		}
-
-		for (Part part : request.getParts()) {
-			String fileName = extractFileName(part);
-			String contentType = part.getContentType();
-
-			if(fileName == null || fileName.isEmpty()) continue;
-			if (contentType == null || contentType.isEmpty()) continue;
-			if (!Arrays.asList(supportedContentTypes).contains(contentType)) continue;
-
-			part.write(savePath + File.separator + fileName);
-		}
-	}
-
-	*/
 }

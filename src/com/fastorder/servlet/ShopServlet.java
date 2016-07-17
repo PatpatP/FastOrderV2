@@ -1,6 +1,7 @@
 package com.fastorder.servlet;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -62,6 +63,7 @@ public class ShopServlet extends HttpServlet{
 	private MailManagerImpl mailManager;
 
 	private static final String SAVE_DIR = "img_shop";
+	private static  String workspacePath;
 
 	@Override
 	public void init() throws ServletException {
@@ -72,6 +74,7 @@ public class ShopServlet extends HttpServlet{
 		shopManager = new ShopManagerImpl(connection);
 		mailManager = new MailManagerImpl();
 		validateInputField = new ValidateInputField();
+		workspacePath = this.getServletContext().getRealPath(File.separator);
 	}
 
 	@Override
@@ -206,20 +209,27 @@ public class ShopServlet extends HttpServlet{
 				int userId = user.getId();
 				
 				InputStream inputStream = null; // input stream of the upload file
-				String[] supportedContentTypes = {"image/jpeg", "image/png"};
+				String[] supportedContentTypes = {"image/jpeg", "image/png", "image/jpg"};
 
-				if(request.getParts() != null){
-					for (Part part : request.getParts()) {
-						String fileName = extractFileName(part);
-						String contentType = part.getContentType();
-						if(!fileName.isEmpty() && Arrays.asList(supportedContentTypes).contains(contentType)){
-							inputStream = part.getInputStream();
-							System.out.println("Name image : "+fileName);
-							System.out.println("Type image : "+contentType);
-						}
-						
-					}
-				}
+				String appPath = System.getenv("user.dir")+File.separator;
+		        String savePath = appPath + SAVE_DIR;
+		         
+		        File fileSaveDir = new File(savePath);
+		        if (!fileSaveDir.exists()) {
+		            fileSaveDir.mkdir();
+		        }
+		         
+		        for (Part part : request.getParts()) {
+		            String fileName = extractFileName(part);
+		            String contentType = part.getContentType();
+		            
+		            if(fileName == null || fileName.isEmpty()) continue;
+		            if (contentType == null || contentType.isEmpty()) continue;
+		            if (!Arrays.asList(supportedContentTypes).contains(contentType)) continue;
+		            
+		            part.write(savePath + File.separator + fileName);
+		            System.out.println(savePath + File.separator + fileName);
+		        }
 
 				 shopManager.createShop(name, description, shopType, userId, addressId, inputStream);
 				try {
@@ -371,9 +381,9 @@ public class ShopServlet extends HttpServlet{
 						System.out.println(uri.toASCIIString());
 						java.awt.Desktop.getDesktop().browse(uri);
 					} catch (URISyntaxException ex) {
-						logger.error("Erreur - URL d'affichage de la map erroné");
+						logger.error("Erreur - URL d'affichage de la map erronï¿½");
 					} catch (IOException ex) {
-						logger.error("Erreur - Chargement de la map échoué");
+						logger.error("Erreur - Chargement de la map ï¿½chouï¿½");
 					}
 				} else {
 				}
@@ -390,13 +400,16 @@ public class ShopServlet extends HttpServlet{
 		int addressId = shop.getAddressId();
 		addressManager.deleteAddress(addressId);
 		shopManager.deleteShop(Integer.parseInt(idShop));
-		response.sendRedirect("myspace");
+		response.sendRedirect("myshops");
 	}
 
 	private void getShopImage(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		//Récupérer l'id de l'image
+		//Rï¿½cupï¿½rer l'id de l'image
 		
-		byte[] photo = null;
+		String idShop = request.getParameter("shopId");
+		Shop shop = shopManager.getShop(Integer.parseInt(idShop));
+		
+		byte[] photo = shop.getByteImage();
 		
 		response.setContentType("image/jpeg");
 		response.setContentLength(photo.length);
@@ -405,10 +418,12 @@ public class ShopServlet extends HttpServlet{
 		sos.flush();
 		sos.close();
 		
+		response.sendRedirect("shops");
+		
 	}
 	
 	private void getProductImage(HttpServletRequest request, HttpServletResponse response){
-		//Récupérer l'id du produit
+		//Rï¿½cupï¿½rer l'id du produit
 		
 	}
 	

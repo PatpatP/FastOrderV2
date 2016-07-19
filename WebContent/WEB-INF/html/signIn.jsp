@@ -47,19 +47,19 @@
 				<div class="col-lg-12 col-md-12 col-sm-12">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Mail</label> 
-						<input type="text" class="form-control" name="mail" placeholder="Mail">
+						<input type="text" class="form-control" id="mail"  name="mail" placeholder="Mail">
 						<span class="erreur">${erreurs['mail']}</span>
 					</div>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Password</label> 
-						<input type="password" class="form-control" name="password" placeholder="Password">
+						<input type="password" class="form-control" id="password" name="password" placeholder="Password">
 					</div>
 					
 				</div>
 				<div class="col-lg-11 col-md-11">
 					<br>
 					<br>
-					<button type="submit" class="btn btnIndex">Connexion</button>
+					<button type="submit" id="btnConnect" class="btn btnIndex">Connexion</button>
 				</div>
 			</form>
 		 </div>

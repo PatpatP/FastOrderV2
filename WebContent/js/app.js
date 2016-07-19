@@ -41,6 +41,7 @@ app.controller('mainCtrl', function ($scope, $http, $window) {
 	
 	$scope.setShops = function(listShop){
 		$scope.shopsList = listShop;
+		console.log("Shop : ", listShop);
 	}
 	
 	$scope.setErrors = function(errors){

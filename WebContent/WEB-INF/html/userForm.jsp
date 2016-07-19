@@ -37,33 +37,33 @@
 				<hr><br>
 					<div class="form-group">
 						<label for="exampleInputEmail1">Type de compte</label> <select
-							class="form-control" name="userType">
+							class="form-control" id="userType" name="userType">
 							<option value="${client}">${client}</option>
 							<option value="${merchant}">${merchant}</option>
 						</select>
 					</div>
 					<div class="form-group">
 						 <input
-							type="text" class="form-control" name="firstName"
+							type="text" class="form-control" id="firstName" name="firstName"
 							placeholder="First Name">
 					</div>
 					<div class="form-group">
 						 <input
-							type="text" class="form-control" name="lastName"
+							type="text" class="form-control" id="lastName" name="lastName"
 							placeholder="Last Name">
 					</div>
 					<div class="form-group">
 						<input type="text"
-							class="form-control" name="mail" placeholder="Mail">
+							class="form-control" name="mail" id="mail" placeholder="Mail">
 					</div>
 					<div class="form-group">
 						<input
-							type="password" class="form-control" name="password"
+							type="password" class="form-control" id="password" name="password"
 							placeholder="Password">
 					</div>
 					<div class="form-group">
 						<input
-							type="text" class="form-control" name="phoneNumber"
+							type="text" class="form-control" id="phoneNumber" name="phoneNumber"
 							placeholder="Phone Number">
 					</div>
 				</div>
@@ -72,31 +72,31 @@
 					<hr><br>
 					<div class="form-group">
 						<label for="exampleInputEmail1">(*) Remplissez tous les champs</label> <input type="text"
-							class="form-control" name="street" placeholder="Street">
+							class="form-control" id="street" name="street" placeholder="Street">
 					</div>
 					<div class="form-group">
 						<input type="text"
-							class="form-control" name="number" placeholder="Number">
+							class="form-control" id="numberStreet" name="number" placeholder="Number">
 					</div>
 					<div class="form-group">
 						<input
-							type="text" class="form-control" name="zipCode"
+							type="text" class="form-control" id="zipCode" name="zipCode"
 							placeholder="Zip Code">
 					</div>
 					<div class="form-group">
 						<input type="text"
-							class="form-control" name="city" placeholder="City">
+							class="form-control" id="city" name="city" placeholder="City">
 					</div>
 					<div class="form-group">
 						<input type="text"
-							class="form-control" name="country" placeholder="Country">
+							class="form-control" id="country" name="country" placeholder="Country">
 					</div>
 				</div>
 				<div class="col-lg-11 col-md-11 col-sm-11">
 					<br>
 					<br>
 					<button type="submit"
-						class="btn btnIndex col-lg-3 col-md-3">S'inscrire</button>
+						class="btn btnIndex col-lg-3 col-md-3" id="btnInscription">S'inscrire</button>
 				</div>
 			</form>
 		</div>

@@ -15,7 +15,7 @@ public interface IShopManager {
 	public int getShopId(String name, String description, String shopType, int userId, int addressId);
 	public User getOwner(int idShop);
 	
-	public boolean createShop(String name, String description, String shopType, int userId, int addressId, InputStream image);
+	public boolean createShop(String name, String description, String shopType, int userId, int addressId, String image);
 	public boolean updateShop(int idShop, String name, String description, String shopType, int userId, int addressId);
 	public boolean deleteShop(int id);
 	

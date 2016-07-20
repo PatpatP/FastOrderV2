@@ -1,7 +1,9 @@
 package com.fastorder.servlet;
 
 import java.awt.Desktop;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -32,6 +34,7 @@ import com.fastorder.model.Address;
 import com.fastorder.model.Product;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
+import com.fastorder.utils.ConstUtils;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
@@ -211,16 +214,15 @@ public class ShopServlet extends HttpServlet{
 				InputStream inputStream = null; // input stream of the upload file
 				String[] supportedContentTypes = {"image/jpeg", "image/png", "image/jpg"};
 
-				String appPath = System.getenv("user.dir")+File.separator;
-		        String savePath = appPath + SAVE_DIR;
+		        String savePath = ConstUtils.IMAGE_PATH;
 		         
 		        File fileSaveDir = new File(savePath);
 		        if (!fileSaveDir.exists()) {
 		            fileSaveDir.mkdir();
 		        }
-		         
+		        String fileName=null; 
 		        for (Part part : request.getParts()) {
-		            String fileName = extractFileName(part);
+		            fileName = extractFileName(part);
 		            String contentType = part.getContentType();
 		            
 		            if(fileName == null || fileName.isEmpty()) continue;
@@ -228,10 +230,12 @@ public class ShopServlet extends HttpServlet{
 		            if (!Arrays.asList(supportedContentTypes).contains(contentType)) continue;
 		            
 		            part.write(savePath + File.separator + fileName);
+		            shopManager.createShop(name, description, shopType, userId, addressId, fileName);
 		            System.out.println(savePath + File.separator + fileName);
+		            
 		        }
 
-				 shopManager.createShop(name, description, shopType, userId, addressId, inputStream);
+				 
 				try {
 					mailManager.confirmCreateShop(mail);
 					logger.info("Mail pour la cr�ation d'un magasin envoy�");
@@ -404,21 +408,28 @@ public class ShopServlet extends HttpServlet{
 	}
 
 	private void getShopImage(HttpServletRequest request, HttpServletResponse response) throws IOException{
-		//R�cup�rer l'id de l'image
-		
 		String idShop = request.getParameter("shopId");
-		Shop shop = shopManager.getShop(Integer.parseInt(idShop));
 		
-		byte[] photo = shop.getByteImage();
+		shopManager.getShop(Integer.parseInt(idShop));
 		
-		response.setContentType("image/jpeg");
-		response.setContentLength(photo.length);
-		ServletOutputStream sos = response.getOutputStream();
-		sos.write(photo, 0, photo.length);
-		sos.flush();
-		sos.close();
+		File file = new File(ConstUtils.IMAGE_PATH);
+		FileInputStream fis = new FileInputStream(file);
 		
-		response.sendRedirect("shops");
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        byte[] buf = new byte[1024];
+        try {
+            for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                //Writes to this byte array output stream
+                bos.write(buf, 0, readNum); 
+                System.out.println("read " + readNum + " bytes,");
+            }
+        } catch (IOException ex) {
+        }
+ 
+        byte[] bytes = bos.toByteArray();
+		
+		
+		
 		
 	}
 	

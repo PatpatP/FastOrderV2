@@ -29,7 +29,7 @@ final static Logger logger = Logger.getLogger(UtilsBdd.class);
 		/* Connexion ï¿½ la base de donnï¿½es */
 		String url = "jdbc:mysql://localhost:3306/fastorder";
 		String user = "root";
-		String mdp = "root";
+		String mdp = "";
 		Connection connexion = null;
 		
 		try {

@@ -1,6 +1,7 @@
 package com.fastorder.manager.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Date;
@@ -23,6 +24,7 @@ import com.fastorder.model.Order;
 import com.fastorder.model.Product;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
+import com.fastorder.utils.ConstUtils;
 import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Connection;
@@ -56,25 +58,12 @@ public class ShopManagerImpl implements IShopManager{
 				int idUser = resultat.getInt("user");
 				int idAddress = resultat.getInt("address");
 
-				InputStream in = resultat.getBinaryStream("image");
-				byte[] byteImage = null;
-				if(in!=null){
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					int bytePhoto;
-					try {
-						while((bytePhoto = in.read())>-1){
-							out.write(bytePhoto);
-						}
-						out.toByteArray();
-					} catch (IOException e) {
-						logger.error("Récupération de l'image échoué");
-					}
-					
-				}
+				String imageName = resultat.getString("image");
+				String imagePath = ConstUtils.IMAGE_PATH+File.separator+imageName;
 
 				ShopTypeEnum shopType = Utils.getShopType(shopTypeString);
 				
-				shop = new Shop(id, name, description, shopType, idUser, idAddress, byteImage);
+				shop = new Shop(id, name, description, shopType, idUser, idAddress, imagePath);
 
 				shops.add(shop);
 			}
@@ -126,14 +115,11 @@ public class ShopManagerImpl implements IShopManager{
 	}
 
 	@Override
-	public boolean createShop(String name, String description, String shopType, int userId, int addressId, InputStream image) {
+	public boolean createShop(String name, String description, String shopType, int userId, int addressId, String fileName) {
 		String query = "Insert into shop (name, description, shopType, user, address, image) VALUES(?,?,?,?,?,?);";
 		System.out.println(query);
 		
 		PreparedStatement preparedStatement;
-		
-		
-		
 		
 		int res = 0;
 		try {
@@ -143,7 +129,7 @@ public class ShopManagerImpl implements IShopManager{
 			preparedStatement.setObject(2, description, Types.VARCHAR);
 			preparedStatement.setObject(3, shopType, Types.VARCHAR); 
 			preparedStatement.setObject(4, userId, Types.INTEGER);
-			preparedStatement.setObject(6, image, Types.BLOB); 
+			preparedStatement.setObject(6, fileName, Types.VARCHAR); 
 			res = UtilsBdd.executePreapredStatement(preparedStatement);
 			
 			logger.info("Succès - Création d'un magasin réussi");

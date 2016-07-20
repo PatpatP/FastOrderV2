@@ -3,6 +3,7 @@ package com.fastorder.manager.tests;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,6 +42,7 @@ public class OrderManagerTests {
 		orderManager = new OrderManagerImpl(connection);
 		userManager = new UserManagerImpl(connection);
 		shopManager = new ShopManagerImpl(connection);
+		addressManager = new AddressManagerImpl(connection);
 		
 		addressManager.createAddress("Test Street Merchant", "Test number Merchant", "Test Zip Code Merchant", "Test City Merchant", "Test Country Merchant");
 		int idAddressMerchant = addressManager.getAddressId("Test Street Merchant", "Test number Merchant", "Test Zip Code Merchant", "Test City Merchant", "Test Country Merchant");
@@ -68,6 +70,11 @@ public class OrderManagerTests {
 		//Création d'un panier 
 		productsOrder = new ArrayList<Product>();
 		productsOrder.add(product);
+	}
+	
+	@After
+	public void clean(){
+		
 	}
 	
 	@Test

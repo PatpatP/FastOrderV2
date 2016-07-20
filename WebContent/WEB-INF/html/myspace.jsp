@@ -21,24 +21,32 @@
 			<p class="noAccountDiv"> Espace personnel </p> 
 			<hr><br>
 			<div class="row">
-				<p class="stitleDiv"> Mes coordonnées </p>
-				<br>
-				<div class="col-lg-12 col-md-12 col-sm-12">
-					<div class="">
-						<label for="exampleInputEmail1">Type de compte</label> :  {{infoUser.userType}}
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<p class="stitleDiv"> Mes coordonnées </p>
+					<br>
+					<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="">
+							<label for="exampleInputEmail1">Type de compte</label> :  {{infoUser.userType}}
+						</div>
+						<div class="">
+							<label for="exampleInputEmail1">Nom</label> : {{infoUser.lastName}}
+						</div>
+						<div class="">
+							<label for="exampleInputEmail1">Prenom</label> : {{infoUser.firstName}}
+						</div>
+						<div class="">
+							<label for="exampleInputEmail1">E-Mail</label> : {{infoUser.mail}}
+						</div>
+						<div class="">
+							<label for="exampleInputEmail1">Téléphone</label> : {{infoUser.phoneNumber}}
+						</div>
 					</div>
-					<div class="">
-						<label for="exampleInputEmail1">Nom</label> : {{infoUser.lastName}}
-					</div>
-					<div class="">
-						<label for="exampleInputEmail1">Prenom</label> : {{infoUser.firstName}}
-					</div>
-					<div class="">
-						<label for="exampleInputEmail1">E-Mail</label> : {{infoUser.mail}}
-					</div>
-					<div class="">
-						<label for="exampleInputEmail1">Téléphone</label> : {{infoUser.phoneNumber}}
-					</div>
+				</div>
+				
+				<div class="col-lg-6 col-md-6 col-sm-6">
+					<p class="stitleDiv col-lg-12 col-md-12 col-sm-12"> Gérer mon compte </p><br><br><br>
+					<a href="#" class="btn btn-success col-lg-5  col-md-5 col-sm-10">Modifier Compte</a>
+					<a href="#" class="btn btn-warning col-lg-6  col-md-6 col-sm-10 col-lg-offset-1  col-md-offset-1">Supprimer Compte</a>
 				</div>
 			</div>
 			<hr><br>

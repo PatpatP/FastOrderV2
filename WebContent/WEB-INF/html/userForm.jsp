@@ -38,8 +38,8 @@
 					<div class="form-group">
 						<label for="exampleInputEmail1">Type de compte</label> <select
 							class="form-control" id="userType" name="userType">
-							<option value="${client}">${client}</option>
-							<option value="${merchant}">${merchant}</option>
+							<option id="client" value="${client}">${client}</option>
+							<option id="marchant" value="${merchant}">${merchant}</option>
 						</select>
 					</div>
 					<div class="form-group">

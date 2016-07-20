@@ -40,7 +40,7 @@
 					Avis : (124) <br>
 				</p><br>
 				<a href="showShopOnMap?idShop={{res.id}}" class="btn btn-success">Voir le restaurant</a>
-				<a href="order?idShop={{res.id}}" class="btn btn-warning">Commander</a>
+				<a href="order?idShop={{res.id}}" id="btnShop{{$index}}" class="btn btn-warning">Commander</a>
 			  </div><br>
 			</div>
 		</div>

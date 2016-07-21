@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -198,7 +197,6 @@ public class ShopServlet extends HttpServlet{
 				User user = userManager.getUser(mail);
 				int userId = user.getId();
 				
-				InputStream inputStream = null; // input stream of the upload file
 				String[] supportedContentTypes = {"image/jpeg", "image/png", "image/jpg"};
 
 		        String savePath = ConstUtils.IMAGE_PATH;

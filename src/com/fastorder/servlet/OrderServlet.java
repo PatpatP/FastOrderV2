@@ -159,7 +159,7 @@ public class OrderServlet extends HttpServlet{
 			}
 
 			orderManager.updateOrderToInProgress(Integer.parseInt(idOrder));
-			response.sendRedirect("myspace");
+			response.sendRedirect("myshops");
 		}
 	}
 

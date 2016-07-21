@@ -354,10 +354,64 @@ video {
 	height: 47.8px;
 	margin-top: 0%;
 }
+
 .btnIndex:hover, .btnIndex:focus {
 	background: #eee;
 	border: 1px solid #2ea3f2;
 	color: #2ea3f2;
 	margin-left: 1%;
 	
+}
+
+.blocCoordonneesGestion {
+	border: 2px solid #ccc;
+	background-color: #eee;
+	box-shadow: 0 0 4px gray; 
+	height: 230px; 
+}
+
+.blocCoords {
+	color: #fff;
+	background-image: url('../images/fastOrder_background.jpg');
+	height: 100%;
+	text-align: center;
+	padding-top: 1.2%;
+	box-shadow: 0 0 4px #ccc;
+}
+
+.blocPhotoUser {
+	border: 1px solid gray;
+    border-radius: 153px;
+    height: 191px;
+    left: 10%;
+    background-color: #fff;
+}
+
+.blocGestionBtn {
+	text-align: center;
+}
+
+.viewSearchHome {
+	border: 1px solid gray;
+	width: 60%;
+	margin-left: 20%;
+	background: #eee;
+	min-height: 50px;
+	text-align: left !important;
+	padding: 12px !important;
+	font-weight: bold;
+}
+
+.infoUser{
+	color: #a94442;
+    font-size: 15px;
+}
+
+.infoUser label{
+	margin-left: 2% !important;
+}
+
+#blocPub {
+    height: 236px !important;
+    box-shadow: 0 0 5px #bbb;
 }

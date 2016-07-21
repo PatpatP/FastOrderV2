@@ -188,7 +188,7 @@ public class UserServlet extends HttpServlet{
 			if(isInputValide){
 				boolean mailAlreadyExist = userManager.checkMailExist(mail);
 				if(mailAlreadyExist){
-					errors.add("L'adresse mail est déjà utilisée.");
+					errors.add("L'adresse mail est dï¿½jï¿½ utilisï¿½e.");
 
 					String errorsAsJson = Utils.convertJavaToJson(errors);
 					System.out.println(errorsAsJson);
@@ -214,9 +214,9 @@ public class UserServlet extends HttpServlet{
 					}
 					try {
 						mailManager.confirmSignUp(mail);
-						logger.info("Mail pour la création d'un compte utilisateur envoyé");
+						logger.info("Mail pour la crï¿½ation d'un compte utilisateur envoyï¿½");
 					} catch (EmailException e) {
-						logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un compte utilisateur : " + e.getMessage());
+						logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation d'un compte utilisateur : " + e.getMessage());
 					}
 					userManager.createUser(mail, phoneNumber, firstName, lastName, userTypeEnum, addressId, password);
 					request.setAttribute("msgcreated", "Your account was created, you can sign in");
@@ -294,6 +294,8 @@ public class UserServlet extends HttpServlet{
 		request.setAttribute("action", "home");
 
 		List<Shop> shops = shopManager.getShops();
+		String shopsToJson = Utils.convertJavaToJson(shops);
+
 
 		List<Address> shopsAddress = new ArrayList<Address>();
 		List<String> tabAddress = new ArrayList<String>();
@@ -309,7 +311,8 @@ public class UserServlet extends HttpServlet{
 
 		}
 		request.setAttribute("listShopAddress", tabAddress);
-		
+		request.setAttribute("listShop", shopsToJson);
+
 		request.getRequestDispatcher("/WEB-INF/html/home.jsp").forward(request, response);
 	}
 
@@ -328,7 +331,7 @@ public class UserServlet extends HttpServlet{
 			User user = userManager.getUser(mail);
 			String userAsJson = Utils.convertJavaToJson(user);
 
-			//Commande effectuée par l'utilisateur
+			//Commande effectuï¿½e par l'utilisateur
 			List<Order> myOrders = userManager.getUserOrders(user.getId());
 
 			List<List<String>> userOrders = new ArrayList<List<String>>();
@@ -365,7 +368,7 @@ public class UserServlet extends HttpServlet{
 			List<Shop> userShops = userManager.getUserShops(mail);
 			String userShopsString = Utils.convertJavaToJson(userShops);
 
-			//Commande reçu par le magasin
+			//Commande reï¿½u par le magasin
 			List<List<String>> shopOrders = new ArrayList<List<String>>();
 			List<Shop> usersShop = userManager.getUserShops(mail);
 			for (Shop shop : usersShop) {

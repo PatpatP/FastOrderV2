@@ -1,24 +1,45 @@
 var app = angular.module('fastOrder', []);
 
-app.controller('mainCtrl', function ($scope, $http, $window) {
+app.controller('mainCtrl', function ($scope, $http, $window, $q) {
 	$scope.filtre;
 	$scope.prixTotal=0;
-	$scope.shopsLists = [];
+	$scope.shopsList = [];
 	$scope.products = [];
 	$scope.bracket = [];
 	$scope.bracketId = [];
 	$scope.listErrors = [];
 	$scope.lisAdress = [];
 	$scope.size = 0;
+	$scope.searchHome = "";
+	$scope.bracketTmp = [];
+
+	$scope.prepareReset = function(params){
+		var deferred = $q.defer();
+		if(params!=null){
+			deferred.resolve(params);
+		}else{
+			deferred.reject('KO');
+		}
+		return deferred.promise;
+	}
 	
-	$scope.resetBracket = function(){
-		$scope.bracket = [];
-		$scope.bracketId = [];
-		$scope.size = 0;
-		$window.sessionStorage.removeItem('price');
-		$window.sessionStorage.removeItem('bracket');
-		$window.sessionStorage.removeItem('bracketId');
-		$window.sessionStorage.removeItem('size');
+	$scope.resetBracket = function(params){
+		var tmp = [];
+		var promise = $scope.prepareReset(params);
+		promise.then(function(data) {
+			tmp = data;
+			$scope.bracket = [];
+			$scope.bracketId = [];
+			$scope.size = 0;
+			$window.sessionStorage.removeItem('price');
+			$window.sessionStorage.removeItem('bracket');
+			$window.sessionStorage.removeItem('bracketId');
+			$window.sessionStorage.removeItem('size');
+			location.href="validateBracket?bracket=["+tmp+"]";
+			console.log(tmp);
+		}, function(err) {
+		   console.log("Erreur : ", err);
+		});
 	}
 	
 	$scope.getBracket = function(){
@@ -143,6 +164,7 @@ app.controller('myspaceCtrl', function ($scope, $http) {
 	
 	$scope.setInfoUser = function(users){
 		$scope.infoUser = users;
+		console.log(users);
 	}
 	
 	$scope.setShops = function(shops){

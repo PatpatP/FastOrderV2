@@ -1,17 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:directive.page import="com.fastorder.model.User" />
+<jsp:directive.page import="com.fastorder.model.Address" />
 <html ng-app="fastOrder">
 <head>
-<script type="text/javascript" src="js/angular.min.js"></script>
-<script type="text/javascript" src="js/app.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<script type="text/javascript" src="js/angular.min.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
 </head>
 <jsp:directive.include file="header.jsp" />
-<body ng-controller="mainCtrl" ng-init="getBracket()">
+<body ng-controller="mainCtrl" ng-init='setShops(${listShop });'>
 	<div id="globalDiv">
 		<video muted="" loop="" data-src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" poster="http://a.tfstatic.com/v-979/images/homepage/subheader_poster_0.jpg" 
 		src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" autoplay="autoplay"></video>
 		<div class="col-lg-12 col-md-12 col-sm-12 divSearchHome">
-	    	<input type="text" class="form-contol" placeholder=" Search for...">
+	    	<input type="text" class="form-contol" ng-model="searchHome" placeholder=" Search for...">
+	    	<div class="viewSearchHome" ng-if="searchHome !=''"><p ng-repeat="res in shopsList | filter:searchHome"><a href="order?idShop={{res.id}}">{{res.name}} ({{res.shopType}})</a></p></div>
 	    </div>
 	</div>
 	<div class="blocMap">

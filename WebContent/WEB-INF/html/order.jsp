@@ -55,7 +55,7 @@
 				 	<div class="footBracket">
 				 		<p class="col-lg-5 col-md-5 col-sm-5"> Prix total : </p> <p class="col-lg-5 col-md-5 col-sm-5" align="right">{{prixTotal}} &#128;</p>
 				 	</div>
-				 	<a class="btn btn-primary col-lg-12 col-md-12 col-sm-12" href="validateBracket?bracket={{bracketId}}" ng-if="bracket.length>0"> Valider panier</a>
+				 	<a class="btn btn-primary col-lg-12 col-md-12 col-sm-12"  ng-click="resetBracket(bracketId);" ng-if="bracket.length>0"> Valider panier</a>
 				 	<br><br>
 				</div>
 		 </dsiv>

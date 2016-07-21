@@ -20,34 +20,38 @@
 			
 			<p class="noAccountDiv"> Espace personnel </p> 
 			<hr><br>
-			<div class="row">
-				<div class="col-lg-6 col-md-6 col-sm-6">
-					<p class="stitleDiv"> Mes coordonnées </p>
-					<br>
-					<div class="col-lg-12 col-md-12 col-sm-12">
-						<div class="">
-							<label for="exampleInputEmail1">Type de compte</label> :  {{infoUser.userType}}
-						</div>
-						<div class="">
-							<label for="exampleInputEmail1">Nom</label> : {{infoUser.lastName}}
-						</div>
-						<div class="">
-							<label for="exampleInputEmail1">Prenom</label> : {{infoUser.firstName}}
-						</div>
-						<div class="">
-							<label for="exampleInputEmail1">E-Mail</label> : {{infoUser.mail}}
-						</div>
-						<div class="">
-							<label for="exampleInputEmail1">Téléphone</label> : {{infoUser.phoneNumber}}
-						</div>
+			<div class="row blocCoordonneesGestion">
+				<div class="col-lg-3 col-md-3 col-sm-3 blocCoords">
+					<div class="col-lg-10 col-md-10 col-sm-10 ">
+						<p> <img src="https://thumbs.dreamstime.com/z/personne-occasionnelle-de-portrait-masculin-d-avatar-d-ic-ne-de-profil-46846328.jpg" class="blocPhotoUser col-lg-12 col-md-12"> </p>
 					</div>
 				</div>
 				
-				<div class="col-lg-6 col-md-6 col-sm-6">
-					<p class="stitleDiv col-lg-12 col-md-12 col-sm-12"> Gérer mon compte </p><br><br><br>
-					<a href="#" class="btn btn-success col-lg-5  col-md-5 col-sm-10">Modifier Compte</a>
-					<a href="#" class="btn btn-warning col-lg-6  col-md-6 col-sm-10 col-lg-offset-1  col-md-offset-1">Supprimer Compte</a>
+				<div class="col-lg-9 col-md-9 col-sm-9 infoUser"><br>
+					<div class="">
+						<label for="exampleInputEmail1"> Compte de type : {{infoUser.userType}} </label> 
+					</div>
+					<div class="">
+						<label for="exampleInputEmail1"> {{infoUser.lastName}} </label> 
+					</div>
+					<div class="">
+						<label for="exampleInputEmail1"> {{infoUser.firstName}} </label> 
+					</div>
+					<div class="">
+						<label for="exampleInputEmail1"> {{infoUser.mail}} </label> 
+					</div>
+					<div class="">
+						<label for="exampleInputEmail1"> {{infoUser.phoneNumber}} </label> 
+					</div><br>
+					
+					<div class="col-lg-12 col-md-12 col-sm-12 blocGestionBtn">
+						<a href="updateAccount?idUser={{infoUser.id}}" class="btn btn-success col-lg-3  col-md-3 col-sm-3">Modifier Compte</a>
+						<a href="deleteAccount?idUser={{infoUser.id}}" class="btn btn-warning col-lg-3  col-md-3 col-sm-3 col-lg-offset-1  col-md-offset-1">Supprimer Compte</a>
+					</div>
 				</div>
+			
+				<!-- <p class="stitleDiv col-lg-8 col-md-8 col-sm-8"> Gérer mon compte </p><br><br><br>   -->
+			
 			</div>
 			<hr><br>
 			

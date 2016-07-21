@@ -24,8 +24,8 @@
 		%>
 	<p class="noAccountDiv"> Connectez-vous à votre compte </p>
 	<hr>
-	<div class="row">
-			<div class="col-lg-2 col-md-2 col-lg-offset-1 col-md-offset-1"><br><img src="images/logo_fastorder.png" height="200px"></div>
+	<div class="row" id="blocPub">
+		<div class="col-lg-2 col-md-2 col-lg-offset-1 col-md-offset-1"><br><img src="images/logo_fastorder.png" height="200px"></div>
 		<div class="blocPshow col-lg-9 col-md-9">
 			<h2>Vous avez un restaurant ou magasin ?</h2>
 			<p>

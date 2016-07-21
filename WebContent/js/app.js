@@ -36,9 +36,7 @@ app.controller('mainCtrl', function ($scope, $http, $window, $q) {
 			$window.sessionStorage.removeItem('bracketId');
 			$window.sessionStorage.removeItem('size');
 			location.href="validateBracket?bracket=["+tmp+"]";
-			console.log(tmp);
 		}, function(err) {
-		   console.log("Erreur : ", err);
 		});
 	}
 	
@@ -62,7 +60,6 @@ app.controller('mainCtrl', function ($scope, $http, $window, $q) {
 	
 	$scope.setShops = function(listShop){
 		$scope.shopsList = listShop;
-		console.log("Shop : ", listShop);
 	}
 	
 	$scope.setErrors = function(errors){
@@ -164,7 +161,6 @@ app.controller('myspaceCtrl', function ($scope, $http) {
 	
 	$scope.setInfoUser = function(users){
 		$scope.infoUser = users;
-		console.log(users);
 	}
 	
 	$scope.setShops = function(shops){

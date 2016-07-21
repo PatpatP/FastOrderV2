@@ -18,15 +18,15 @@ public class Connexion {
 	private WebDriver driver;
 
 	@Before
-	public void setUp() throws Exception {
-		driver = new ChromeDriver();
+	public void setUp(){
+		driver = new FirefoxDriver();
 		String baseUrl = "http://localhost:8080/FastOrderV2";
 		selenium = new WebDriverBackedSelenium(driver, baseUrl);
 	}
 
 
 	@Test
-	public void testConnexionSelenium() throws Exception {
+	public void testConnexionSelenium(){
 		selenium.open("/login");
 		driver.findElement(By.name("mail")).clear();
 		driver.findElement(By.name("mail")).sendKeys("pol.patrick1411@gmail.com");
@@ -37,7 +37,7 @@ public class Connexion {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown(){
 		selenium.stop();
 	}
 }

@@ -146,7 +146,7 @@
 					<td>{{product.description}}</td>
 					<td>{{product.productType}}</td>
 					<td>{{product.price}} &#128;</td>
-					<td><button class="btn btn-success"> Modifier </button></td>
+					<td><button class="btn btn-success"> Modifier </button></td> <!-- add link to popup product -->
 					<td><button class="btn btn-danger" ng-click="setIdProductToDelete(product.id)" data-toggle="modal" data-target="#deleteProduct">Supprimer </button></td>
 					
 				</tr>

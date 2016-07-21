@@ -11,8 +11,7 @@
       %>
       	 <li><a href="myspace" style="color:green;">${userName }</a></li>
          <li><a href="signOut" id="disconnect">Logout</a></li>
-         <li><a href="shops" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:green; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
-        
+         <li><a href="bracket" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:#fff; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
          
       <%
       }else if(request.getSession().getAttribute("userName")!=null && request.getSession().getAttribute("userType").equals(UserTypeEnum.MERCHANT.toString())){
@@ -20,7 +19,7 @@
         <li><a href="myshops" class="myshops">Mes Shops</a></li>
         <li><a href="myspace" style="color:green;">${userName }</a></li>
       	<li><a href="signOut" id="disconnect">Logout</a></li>
-		<li><a href="shops" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:green; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
+		<li><a href="bracket" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:#fff; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
         
       
       <%  
@@ -29,7 +28,7 @@
      
          <li><a href="login" id="login">Sign In</a></li>
          <li><a href="createAccount" id="signUp">Sign Up</a></li>
-         <li><a href="shops" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:green; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
+         <li><a href="shops" id="bracketHead"><span class="glyphicon glyphicon-shopping-cart" style="color:#fff; font-size:1.8em; margin-top:25%;"></span>({{size}})</a></li>
          
       <%
       }

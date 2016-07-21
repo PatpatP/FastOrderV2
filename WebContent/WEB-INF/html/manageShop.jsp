@@ -146,7 +146,7 @@
 					<td>{{product.description}}</td>
 					<td>{{product.productType}}</td>
 					<td>{{product.price}} &#128;</td>
-					<td><button class="btn btn-success"> Modifier </button></td> <!-- add link to popup product -->
+					<td><button class="btn btn-success" data-toggle="modal" data-target="#modifProduit"> Modifier </button></td>
 					<td><button class="btn btn-danger" ng-click="setIdProductToDelete(product.id)" data-toggle="modal" data-target="#deleteProduct">Supprimer </button></td>
 					
 				</tr>
@@ -172,6 +172,54 @@
 		  </div>
 		</div>
 		</div>
+	<!-- Fin de la popup -->
+	
+	<!-- Popup Modification produit -->
+		<div class="modal fade" id="modifProduit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content" style="margin-top: 12%">
+			      <div class="modal-header bg-primary">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Modification d'un produit</h4>
+			      </div>
+			      <div class="modal-body row">
+			        <form method="post" action="${testAction}">
+						<div class="col-lg-12 col-md-12 col-sm-12">
+						<div class="textInscription">Remplissez uniquement les champs à modifier</div>
+						<hr><br>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Type de produit</label> <select
+									class="form-control" name="typeProduit">
+									<c:forEach var="typeProduct" items="${productType }">
+										<option value="${typeProduct }">${typeProduct }</option>
+									</c:forEach>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Nom</label> <input type="text" class="form-control" name="name" placeholder="Name">
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Description</label> 
+								<input type="text" class="form-control" name="description" placeholder="Description">
+							</div>
+							<div class="form-group">
+								<input type="hidden" class="form-control" name="idShop" value="${idShop }">
+							</div>
+							<div class="form-group">
+								<label for="exampleInputEmail1">Prix</label> 
+								<input type="text" class="form-control" name="price" placeholder="price">
+							</div>
+						</div>
+				 	
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
+			        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+			      </div>
+			      </form>
+			    </div>
+			  </div>
+			</div>
 	<!-- Fin de la popup -->
 					
 	</div>

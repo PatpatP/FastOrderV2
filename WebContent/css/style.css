@@ -353,6 +353,7 @@ video {
 	color: #2ea3f2;
 	height: 47.8px;
 	margin-top: 0%;
+	
 }
 
 .btnIndex:hover, .btnIndex:focus {
@@ -418,4 +419,34 @@ video {
 
 #bracketHead {
 	margin-top: -21%;
+	background: #d71b23;
+    color: #fff;
+    
+}
+
+.imgPanier {
+	background: #fff;
+	border: 1px solid #ccc;
+    border-radius: 166px;
+    height: 290px;
+    background-image: url('../images/panier1.png');
+    background-repeat: no-repeat;
+    background-size: 73% 195px;
+    background-position: 31px 62px;
+    margin-bottom: 2%;
+}
+
+#blocPanierGeneral {
+	border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 2px 2px 5px gray;
+    background: #f7f6f6;
+}
+
+.containerBracketPage {
+    border-top: 0px solid gray;
+    min-height: 230px;
+    margin-left: 9% !important;
+    color: #d71b23;
+    margin-top: -4%;
 }

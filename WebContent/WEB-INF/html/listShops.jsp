@@ -44,9 +44,4 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		function testJson(obj){
-			console.log("OBJ : ", obj);
-		}
-	</script>
 	<jsp:directive.include file="footer.jsp" />

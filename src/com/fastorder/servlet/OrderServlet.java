@@ -31,7 +31,7 @@ import com.mysql.jdbc.Statement;
 @WebServlet(
 		name = "order-servlet",
 		description = "Servlet handling order function",
-		urlPatterns={"/order", "/validateBracket", "/updateOrder"}
+		urlPatterns={"/order", "/validateBracket", "/updateOrder", "/bracket"}
 		) 
 public class OrderServlet extends HttpServlet{
 
@@ -68,9 +68,16 @@ public class OrderServlet extends HttpServlet{
 			this.validateBracket(request, response);
 		}  else if(uri.contains("/updateOrder")){
 			this.updateOrderStatus(request, response);
+		} else if(uri.contains("/bracket")){
+			this.bracketPage(request, response);
 		}
 	}
 	
+	private void bracketPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("action", "bracket");
+		request.getRequestDispatcher("/WEB-INF/html/bracket.jsp").forward(request, response);
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doGet(request, response);
@@ -82,7 +89,7 @@ public class OrderServlet extends HttpServlet{
 		List<Product> products = shopManager.getProducts(Integer.parseInt(shopId));
 		String productsToJson = Utils.convertJavaToJson(products);
 
-		//Créer un panier pour l'utilisateur
+		//Crï¿½er un panier pour l'utilisateur
 		brackets.put(mail, new ArrayList<Product>());
 
 		List<Product> userBracket = brackets.get(mail);
@@ -123,10 +130,10 @@ public class OrderServlet extends HttpServlet{
 				try {
 					mailManager.confirmCreateOrder(mail, totalPrice);
 					mailManager.sendReceivedOrder(shopOwnerMail);
-					logger.info("Mail pour la création de la commande envoyé");
-					logger.info("Mail pour la réception de la commande envoyé");
+					logger.info("Mail pour la crï¿½ation de la commande envoyï¿½");
+					logger.info("Mail pour la rï¿½ception de la commande envoyï¿½");
 				} catch (EmailException e) {
-					logger.error("Une erreur est survenue lors de l'envoi du mail pour la création et la réception par le magasin de la commande : " + e.getMessage());
+					logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation et la rï¿½ception par le magasin de la commande : " + e.getMessage());
 				}
 				orderManager.create(brackProducts, EstimatedTimeEnum.FIFTY ,OrderStatusEnum.INPROGRESS, totalPrice, idUser, shopId);
 				request.setAttribute("action", "validateBracket");
@@ -146,9 +153,9 @@ public class OrderServlet extends HttpServlet{
 				int userId = order.getUserId();
 				User user = userManager.getUser(userId);
 				mailManager.confirmFinishOrder(user.getMail());
-				logger.info("Mail pour la mise à jour de la commande envoyé");
+				logger.info("Mail pour la mise ï¿½ jour de la commande envoyï¿½");
 			} catch (EmailException e) {
-				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise à jour de la commande : " + e.getMessage());
+				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise ï¿½ jour de la commande : " + e.getMessage());
 			}
 
 			orderManager.updateOrderToInProgress(Integer.parseInt(idOrder));

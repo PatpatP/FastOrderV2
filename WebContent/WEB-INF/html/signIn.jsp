@@ -3,13 +3,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:directive.page import="com.fastorder.model.User" />
 <jsp:directive.page import="com.fastorder.model.Address" />
-<html>
+<html ng-app="fastOrder">
 <jsp:directive.include file="header.jsp" />
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Connexion</title>
+<script type="text/javascript" src="js/angular.min.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
 </head>
-<body style="background: #eee">
+<body style="background: #eee" ng-controller="mainCtrl" ng-init='setProducts(${shopsProducts }); getBracket();'>
 	<div id="globalDiv2">
 	<div class="container contenu">
 	<jsp:directive.include file="navBar.jsp" />

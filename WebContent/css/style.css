@@ -102,7 +102,7 @@ video {
     line-height: .95;
     font-family: AleoBold,Tahoma,Arial,Helvetica,clean,sans-serif;
     font-weight: bold;
-    color: gray !important;
+    color: #a94442 !important;
     margin-bottom: 5%;
     margin-top:2%;
 }
@@ -414,4 +414,8 @@ video {
 #blocPub {
     height: 236px !important;
     box-shadow: 0 0 5px #bbb;
+}
+
+#bracketHead {
+	margin-top: -21%;
 }

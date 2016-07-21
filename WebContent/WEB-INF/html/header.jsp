@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FastOrder</title>
-    <script src="https://maps.googleapis.com/maps/api/js"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxD0MUY5_2CC10Isx5LEQtI4piO6AxGHk"
     	type="text/javascript"></script>
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">

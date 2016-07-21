@@ -10,7 +10,7 @@
 	<script type="text/javascript" src="js/app.js"></script>
 </head>
 <jsp:directive.include file="header.jsp" />
-<body ng-controller="mainCtrl" ng-init='setShops(${listShop });'>
+<body ng-controller="mainCtrl" ng-init='setShops(${listShop }); getBracket();'>
 	<div id="globalDiv">
 		<video muted="" loop="" data-src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" poster="http://a.tfstatic.com/v-979/images/homepage/subheader_poster_0.jpg" 
 		src="http://v.tfstatic.com/homepage/subheader_video_0.mp4" autoplay="autoplay"></video>

@@ -155,7 +155,7 @@
 	</div>
 	<br><br><br><br>
 	
-	<!-- Popup création produit -->
+	<!-- Popup suppression produit -->
 		<div class="modal fade" id="deleteProduct" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content" style="margin-top: 12%">

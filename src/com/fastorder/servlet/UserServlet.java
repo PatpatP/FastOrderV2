@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.mail.EmailException;
 import org.apache.log4j.Logger;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import com.fastorder.enumeration.UserTypeEnum;
 import com.fastorder.exceptions.FailInputException;
@@ -29,12 +30,11 @@ import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.fastorder.utils.ValidateInputField;
 import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.Statement;
 
 @WebServlet(
 		name = "user-servlet",
 		description = "Servlet handling user login",
-		urlPatterns={"/login", "/createAccount", "/home", "/signOut", "/myspace", "/myshops"}
+		urlPatterns={"/login", "/createAccount", "/home", "/signOut", "/myspace", "/myshops", "/updateAccount", "/deleteAccount", "/error404"}
 		)
 
 public class UserServlet extends HttpServlet{
@@ -84,7 +84,19 @@ public class UserServlet extends HttpServlet{
 			this.myspace(request, response);
 		} else if(uri.contains("/myshops")){
 			this.myshops(request, response);
+		} else if(uri.contains("updateAccount")){
+			this.updateUserData(request, response);
+		} else if(uri.contains("deleteAccount")){
+			this.deleteUser(request, response);
+		} else {
+			this.page404(request, response);
 		}
+	}
+
+	private void page404(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("action", "Error 404");
+		request.getRequestDispatcher("/WEB-INF/html/404.jsp").forward(request, response);
+		return;
 	}
 
 	/**
@@ -109,7 +121,13 @@ public class UserServlet extends HttpServlet{
 		final String city = request.getParameter("city");
 		final String country = request.getParameter("country");
 
-		if(street!=null && number!=null && zipCode!=null && city!=null && country!=null && mail!=null && phoneNumber!=null && firstName!=null && lastName!=null && password!=null){
+		if(street== null && number==null && zipCode==null && city==null && country==null && mail==null && phoneNumber==null && firstName==null && lastName==null && password==null){
+			request.setAttribute("action", "createAccount");
+			request.setAttribute("client", "Client");
+			request.setAttribute("merchant", "Merchant");
+			request.getRequestDispatcher("/WEB-INF/html/userForm.jsp").forward(request, response);
+
+		} else if(street!="" && number!="" && zipCode!="" && city!="" && country!="" && mail!="" && phoneNumber!="" && firstName!="" && lastName!="" && password!=""){
 			List<String> errors = new ArrayList<String>();
 			boolean isInputValide = false;
 
@@ -188,7 +206,7 @@ public class UserServlet extends HttpServlet{
 			if(isInputValide){
 				boolean mailAlreadyExist = userManager.checkMailExist(mail);
 				if(mailAlreadyExist){
-					errors.add("L'adresse mail est dï¿½jï¿½ utilisï¿½e.");
+					errors.add("L'adresse mail est déjà utilisée.");
 
 					String errorsAsJson = Utils.convertJavaToJson(errors);
 					System.out.println(errorsAsJson);
@@ -214,9 +232,9 @@ public class UserServlet extends HttpServlet{
 					}
 					try {
 						mailManager.confirmSignUp(mail);
-						logger.info("Mail pour la crï¿½ation d'un compte utilisateur envoyï¿½");
+						logger.info("Mail pour la création d'un compte utilisateur envoyé");
 					} catch (EmailException e) {
-						logger.error("Une erreur est survenue lors de l'envoi du mail pour la crï¿½ation d'un compte utilisateur : " + e.getMessage());
+						logger.error("Une erreur est survenue lors de l'envoi du mail pour la création d'un compte utilisateur : " + e.getMessage());
 					}
 					userManager.createUser(mail, phoneNumber, firstName, lastName, userTypeEnum, addressId, password);
 					request.setAttribute("msgcreated", "Your account was created, you can sign in");
@@ -234,12 +252,13 @@ public class UserServlet extends HttpServlet{
 				request.getRequestDispatcher("/WEB-INF/html/userForm.jsp").forward(request, response);
 				return;
 			}
+		} else {
+			request.setAttribute("error", "Veuillez remplir les champs");
+			request.setAttribute("action", "createAccount");
+			request.setAttribute("client", "Client");
+			request.setAttribute("merchant", "Merchant");
+			request.getRequestDispatcher("/WEB-INF/html/userForm.jsp").forward(request, response);
 		}
-
-		request.setAttribute("action", "createAccount");
-		request.setAttribute("client", "Client");
-		request.setAttribute("merchant", "Merchant");
-		request.getRequestDispatcher("/WEB-INF/html/userForm.jsp").forward(request, response);
 	}
 
 	private void loginUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -329,7 +348,9 @@ public class UserServlet extends HttpServlet{
 
 		if(mail!=null){
 			User user = userManager.getUser(mail);
+			Address address = addressManager.getAddresssById(user.getAddressId());
 			String userAsJson = Utils.convertJavaToJson(user);
+			String addressAsJson = Utils.convertJavaToJson(address);
 
 			//Commande effectuï¿½e par l'utilisateur
 			List<Order> myOrders = userManager.getUserOrders(user.getId());
@@ -352,7 +373,9 @@ public class UserServlet extends HttpServlet{
 			System.out.println(userOrdersAsJson);
 
 			request.setAttribute("action", "myspace");
+			request.getSession().setAttribute("userType", user.getUserType().toString());
 			request.setAttribute("user", userAsJson);
+			request.setAttribute("userAddress", addressAsJson);
 			request.setAttribute("myOrders", userOrdersAsJson);
 
 			request.getRequestDispatcher("/WEB-INF/html/myspace.jsp").forward(request, response);
@@ -397,5 +420,140 @@ public class UserServlet extends HttpServlet{
 			request.getRequestDispatcher("/WEB-INF/html/myShops.jsp").forward(request, response);
 		}
 
+	}
+
+	private void updateUserData(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		final String oldMail = (String) request.getSession().getAttribute("mail");
+		User user = userManager.getUser(oldMail);
+		Address userAdress = addressManager.getAddresssById(user.getAddressId());
+		String message = null;
+
+		final String mail = request.getParameter("mail");
+		final String phoneNumber = request.getParameter("phoneNumber");
+		final String firstName = request.getParameter("firstName");
+		final String lastName = request.getParameter("lastName");
+		final String userType = request.getParameter("userType");
+		final String mdp = request.getParameter("password");
+
+		// Paramï¿½tres de l'objet Address
+		final String street = request.getParameter("street");
+		final String number = request.getParameter("number");
+		final String zipCode = request.getParameter("zipCode");
+		final String city = request.getParameter("city");
+		final String country = request.getParameter("country");
+
+		String newMail = null;
+		String newPhoneNumber = null;
+		String newFirstName = null;
+		String newLastName = null;
+		String newMdp = null;
+
+		String newStreet = null;
+		String newNumber = null;
+		String newZipCode = null;
+		String newCity = null;
+		String newCountry = null;
+
+		if(street== null && number==null && zipCode==null && city==null && country==null && mail==null && phoneNumber==null && firstName==null && lastName==null && mdp==null){
+			request.setAttribute("action", "updateAccount");
+			request.setAttribute("client", "Client");
+			request.setAttribute("merchant", "Merchant");
+			request.getRequestDispatcher("/WEB-INF/html/updateUserForm.jsp").forward(request, response);
+
+		} else {
+			if(mail!=""){
+				newMail = mail;
+			} else {
+				newMail = user.getMail();
+			}
+
+			if(phoneNumber!=""){
+				newPhoneNumber = phoneNumber;
+			} else {
+				newPhoneNumber = user.getPhoneNumber();
+			}
+
+			if(firstName!=""){
+				newFirstName = firstName;
+			} else {
+				newFirstName = user.getFirstName();
+			}
+
+			if(lastName!=""){
+				newLastName = lastName;
+			} else {
+				newLastName = user.getLastName();
+			}
+
+			if(mdp!=""){
+				newMdp = BCrypt.hashpw(mdp, BCrypt.gensalt());
+			} else {
+				newMdp = user.getPassword();
+			}
+
+			if(street!=""){
+				newStreet = street;
+			} else {
+				newStreet = userAdress.getStreet();
+			}
+
+			if(number!=""){
+				newNumber = number;
+			} else {
+				newNumber = userAdress.getNumber();
+			}
+
+			if(zipCode!=""){
+				newZipCode = zipCode;
+			} else {
+				newZipCode = userAdress.getZipCode();
+			}
+
+			if(city!=""){
+				newCity = city;
+			} else {
+				newCity = userAdress.getCity();
+			}
+
+			if(country!=""){
+				newCountry = country;
+			} else {
+				newCountry = userAdress.getCountry();
+			}
+
+			UserTypeEnum userTypeEnum = null;
+			if(userType!=null){
+				if(userType.equals("Client")){
+					userTypeEnum = UserTypeEnum.CLIENT;
+				} else if( userType.equals("Merchant")){
+					userTypeEnum = UserTypeEnum.MERCHANT;
+				}
+			}
+
+			boolean isAddressUpdated = addressManager.updateAddress(user.getAddressId(), newStreet, newNumber, newZipCode, newCity, newCountry);
+			boolean isUserUpdated = userManager.updateUserData(user.getId(), newMail, newPhoneNumber, newFirstName, newLastName, userTypeEnum, user.getAddressId(), newMdp);
+
+			if(isAddressUpdated && isUserUpdated){
+				message = "Vos informations ont été mise à jour";
+			} else {
+				message = "Echec lors de la mise à jour de vos informations";
+			}
+			request.setAttribute("message", message);
+			response.sendRedirect("myspace");
+		}
+
+	}
+
+	private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		final String mail = (String) request.getSession().getAttribute("mail");
+
+		boolean isDeleted = userManager.deleteUser(mail);
+
+		if(isDeleted){
+			request.getSession().removeAttribute("userName");
+			response.sendRedirect("home");
+		} else {
+			response.sendRedirect("myspace");
+		}
 	}
 }

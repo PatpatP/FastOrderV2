@@ -54,7 +54,7 @@
 				        <h3>{{shop.name}}</h3>
 				        <p>{{shop.description}}</p>
 				        <br>
-				        <p><a href="updateShop?idShop={{shop.id}}" class="btn btn-primary" role="button">G&eacute;rer</a> <a href="deleteShop?idShop={{shop.id}}" class="btn btn-danger col-lg-offset-5 col-md-offset-5" role="button">Supprimer</a></p>
+				        <p><a href="manageShop?idShop={{shop.id}}" class="btn btn-primary" role="button">G&eacute;rer</a> <a href="deleteShop?idShop={{shop.id}}" class="btn btn-danger col-lg-offset-5 col-md-offset-5" role="button">Supprimer</a></p>
 				      </div>
 				    </div>
 				  </div>

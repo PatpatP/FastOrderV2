@@ -1,6 +1,6 @@
 package com.fastorder.utils.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,6 @@ import java.util.Properties;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeMessage;
@@ -17,11 +16,9 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.MultiPartEmail;
-import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.utils.Mailing;
 
 public class MailingTests {

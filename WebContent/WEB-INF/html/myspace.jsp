@@ -18,6 +18,14 @@
 			<jsp:directive.include file="navBar.jsp" />
 			<br/><br/><br/><br/><br/>
 			
+			<% if(request.getAttribute("message") != null){ %>
+			<div class="alert alert-danger" role="alert">
+				<ul>
+						<li>${message }</li>
+				</ul>
+			</div>
+			<% } %>
+			
 			<p class="noAccountDiv"> Espace personnel </p> 
 			<hr><br>
 			<div class="row blocCoordonneesGestion">
@@ -45,7 +53,7 @@
 					</div><br>
 					
 					<div class="col-lg-12 col-md-12 col-sm-12 blocGestionBtn">
-						<a href="updateAccount?idUser={{infoUser.id}}" class="btn btn-success col-lg-3  col-md-3 col-sm-3">Modifier Compte</a>
+						<a href="updateAccount" class="btn btn-success col-lg-3  col-md-3 col-sm-3">Modifier Compte</a>
 						<a href="deleteAccount?idUser={{infoUser.id}}" class="btn btn-warning col-lg-3  col-md-3 col-sm-3 col-lg-offset-1  col-md-offset-1">Supprimer Compte</a>
 					</div>
 				</div>

@@ -62,22 +62,32 @@ public class UserManagerTests {
 	
 	@Test
 	public void getUserByMailTest(){
-		User user = userManager.getUser("pol.patrick1411@gmail.com");
-		assertEquals("test le mail", "pol.patrick1411@gmail.com", user.getMail());
-		assertEquals("test le prénom", "POL", user.getFirstName());
-		assertEquals("test le nom", "Patrick", user.getLastName());
-		assertEquals("test le numéro de tel", "0102030405", user.getPhoneNumber());
-		assertEquals("test le type d'utilisateur", "Merchant", user.getUserType().toString());
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
+		User user = userManager.getUser(mail);
+		
+		assertEquals("test le mail", mail, user.getMail());
+		assertEquals("test le prénom", firstName, user.getFirstName());
+		assertEquals("test le nom", lastName, user.getLastName());
+		assertEquals("test le numéro de tel", phoneNumber, user.getPhoneNumber());
+		assertEquals("test le type d'utilisateur", userType, user.getUserType());
+		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(mdp, BCrypt.hashpw(mdp, BCrypt.gensalt())));
+		
+		userManager.deleteUser(mail);
 	}
 	
 	@Test
 	public void getUserByIdTest(){
-		User user = userManager.getUser("pol.patrick1411@gmail.com");
-		assertEquals("test le mail", "pol.patrick1411@gmail.com", user.getMail());
-		assertEquals("test le prénom", "POL", user.getFirstName());
-		assertEquals("test le nom", "Patrick", user.getLastName());
-		assertEquals("test le numéro de tel", "0102030405", user.getPhoneNumber());
-		assertEquals("test le type d'utilisateur", "Merchant", user.getUserType().toString());
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
+		User user = userManager.getUser(mail);
+		
+		User userbyId = userManager.getUser(user.getId());
+
+		assertEquals("test le mail", mail, userbyId.getMail());
+		assertEquals("test le prénom", firstName, userbyId.getFirstName());
+		assertEquals("test le nom", lastName, userbyId.getLastName());
+		assertEquals("test le numéro de tel", phoneNumber, userbyId.getPhoneNumber());
+		assertEquals("test le type d'utilisateur", userType, userbyId.getUserType());
+		assertTrue("Le mot de passe a bien été crypté", BCrypt.checkpw(mdp, BCrypt.hashpw(mdp, BCrypt.gensalt())));
 	}
 	
 	@Test
@@ -140,13 +150,13 @@ public class UserManagerTests {
 	
 	@Test
 	public void checkLoginTest(){
-		String user1Mail = "pol.patrick1411@gmail.com";
-		String user1Mdp = "test1234";
-		String user2Mail = "ghansumn@gmail.com";
-		String user2FakeMdp = "fakePassword";
 		
-		Boolean checkLoginUser1 = userManager.checkLogin(user1Mail, user1Mdp);
-		Boolean checkLoginUser2 = userManager.checkLogin(user2Mail, user2FakeMdp);
+
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
+		User user = userManager.getUser(mail);
+		
+		Boolean checkLoginUser1 = userManager.checkLogin(user.getMail(), mdp);
+		Boolean checkLoginUser2 = userManager.checkLogin(user.getMail(), "WrongMdp");
 		
 		assertTrue("Bon identifiant et mot de passe", checkLoginUser1);
 		assertFalse("Bon identifiant et mauvais mot de passe", checkLoginUser2);
@@ -154,14 +164,13 @@ public class UserManagerTests {
 	
 	@Test
 	public void checkMailExistTest(){
-		String mail = "pol.patrick1411@gmail.com";
-		String mail2 = "testUnit@gmail.com";
+		userManager.createUser(mail, phoneNumber, firstName, lastName, userType, addressId, mdp);
 		
 		Boolean existingMail = userManager.checkMailExist(mail);
-		Boolean notExistringMail = userManager.checkMailExist(mail2);
+		Boolean notExistingMail = userManager.checkMailExist("notExistingMail@gmail.com");
 		
 		assertTrue("Le mail existe", existingMail);
-		assertFalse("Le mail n'existe pas", notExistringMail);
+		assertFalse("Le mail n'existe pas", notExistingMail);
 	}
 	
 	private int countNbUsersInBase() throws SQLException{

@@ -3,14 +3,12 @@ package com.fastorder.manager;
 import java.util.List;
 
 import com.fastorder.enumeration.UserTypeEnum;
-import com.fastorder.model.Address;
 import com.fastorder.model.Order;
 import com.fastorder.model.Shop;
 import com.fastorder.model.User;
 
 public interface IUserManager {
 	
-	public List<User> getUsers();
 	public User getUser(String mail);
 	public User getUser(int id);
 	public List<Shop> getUserShops(String mail);

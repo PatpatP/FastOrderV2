@@ -44,7 +44,7 @@ import com.mysql.jdbc.Connection;
 		name = "shop-servlet",
 		description = "Servlet handling shop function",
 		urlPatterns={"/shops", "/createShop", "/updateShop", "/deleteShop",
-				"/createProduct", "/updateProduct", "/deleteProduct", "/showShopOnMap", "/getImageShop", "/getImageProduct"}
+				"/createProduct", "/updateProduct", "/deleteProduct", "/showShopOnMap", "/getImageShop", "/getImageProduct", "/manageShop"}
 		)
 
 @MultipartConfig(
@@ -66,7 +66,6 @@ public class ShopServlet extends HttpServlet{
 	private MailManagerImpl mailManager;
 
 	private static final String SAVE_DIR = "img_shop";
-	private static  String workspacePath;
 
 	@Override
 	public void init() throws ServletException {
@@ -77,7 +76,6 @@ public class ShopServlet extends HttpServlet{
 		shopManager = new ShopManagerImpl(connection);
 		mailManager = new MailManagerImpl();
 		validateInputField = new ValidateInputField();
-		workspacePath = this.getServletContext().getRealPath(File.separator);
 	}
 
 	@Override
@@ -85,8 +83,8 @@ public class ShopServlet extends HttpServlet{
 		final String uri = request.getRequestURI();
 		if(uri.contains("/createShop")){
 			this.createShop(request, response);
-		} else if(uri.contains("/updateShop")){
-			this.updateShop(request, response);
+		} else if(uri.contains("/manageShop")){
+			this.manageShop(request, response);
 		} else if(uri.contains("/deleteShop")){
 			this.deleteShop(request, response);
 		} else if(uri.contains("/createProduct")){
@@ -127,18 +125,7 @@ public class ShopServlet extends HttpServlet{
 		final String country = request.getParameter("country");
 		
 		// Exemple de code à mettre dans : shopManager.createShop() 
-      /*  
-        String sql = "INSERT INTO shop (name, type, photo) values (?, ?, ?)";
-        PreparedStatement statement = connexion.prepareStatement(sql); // Dans Utils il faudra retourner la variable 'connexion' et non pas 'statement'
-        statement.setString(1, name);
-        statement.setString(2, type);
-         
-        if (inputStream != null) {
-            // fetches input stream of the upload file for the blob column
-            statement.setBlob(3, inputStream);
-        }
-        
-		*/
+      
 		
 		if(name!=null && description!=null && shopType!=null && street!=null && number!=null && zipCode!=null && city!=null && country!=null){
 
@@ -271,7 +258,7 @@ public class ShopServlet extends HttpServlet{
 		final String idProduct = request.getParameter("idProduct");
 		final String idShop = request.getParameter("idShop");
 		shopManager.deleteProduct(Integer.parseInt(idProduct));
-		response.sendRedirect("updateShop?idShop="+idShop);
+		response.sendRedirect("manageShop?idShop="+idShop);
 	}
 
 	private void shopsPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
@@ -286,7 +273,7 @@ public class ShopServlet extends HttpServlet{
 		request.getRequestDispatcher("/WEB-INF/html/listShops.jsp").forward(request, response);
 	}
 
-	private void updateShop(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	private void manageShop(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		final String idShop = request.getParameter("idShop");
 
 		if(idShop != null){
@@ -306,14 +293,14 @@ public class ShopServlet extends HttpServlet{
 
 			List<String> productTypes = Utils.initProductType();
 
-			request.setAttribute("action", "updateShop");
+			request.setAttribute("action", "manageShop");
 			request.setAttribute("idShop", idShop);
 			request.setAttribute("actionAddProduct", "createProduct");
 			request.setAttribute("products", shopProductAsJson);
 			request.setAttribute("shopType", shopTypeAsJson);
 			request.setAttribute("shopInfo", shopAsJson);
 			request.setAttribute("productType", productTypes);
-			request.getRequestDispatcher("/WEB-INF/html/updateShop.jsp").forward(request, response);
+			request.getRequestDispatcher("/WEB-INF/html/manageShop.jsp").forward(request, response);
 		}
 	}
 
@@ -336,7 +323,7 @@ public class ShopServlet extends HttpServlet{
 			}
 
 			request.setAttribute("action", "createProduct");
-			response.sendRedirect("updateShop?idShop="+idShop);
+			response.sendRedirect("manageShop?idShop="+idShop);
 		}
 	}
 
@@ -360,7 +347,7 @@ public class ShopServlet extends HttpServlet{
 			}
 
 			request.setAttribute("action", "createProduct");
-			response.sendRedirect("updateShop?idShop="+idShop);
+			response.sendRedirect("manageShop?idShop="+idShop);
 		}
 	}
 
@@ -427,6 +414,7 @@ public class ShopServlet extends HttpServlet{
         }
  
         byte[] bytes = bos.toByteArray();
+        fis.close();
 		
 		
 		

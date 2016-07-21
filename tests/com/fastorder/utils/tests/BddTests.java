@@ -1,6 +1,7 @@
 package com.fastorder.utils.tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,11 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import com.fastorder.enumeration.UserTypeEnum;
 import com.fastorder.manager.impl.AddressManagerImpl;
 import com.fastorder.manager.impl.UserManagerImpl;
-import com.fastorder.utils.Utils;
 import com.fastorder.utils.UtilsBdd;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 
 public class BddTests {
 	

@@ -10,6 +10,7 @@ public enum NotifCategoryEnum {
 		this.notifCategoryName = notifCategoryName;
 	}
 	
+	@Override
 	public String toString(){
 		return notifCategoryName;
 	}

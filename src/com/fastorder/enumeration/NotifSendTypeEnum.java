@@ -11,6 +11,7 @@ public enum NotifSendTypeEnum {
 		this.sendTypeName = sendTypeName;
 	}
 	
+	@Override
 	public String toString(){
 		return sendTypeName;
 	}

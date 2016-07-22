@@ -37,7 +37,7 @@
      					 %>
 						<button class="btn btn-success" ng-click='addToBracket(res.id, res.name, res.price)'> Ajouter au panier</button>
 						<% } else { %>
-						<a href="createAccount" class="btn btn-success" role="button"'> Ajouter au panier</a>
+						<a href="login" class="btn btn-success" role="button"'> Ajouter au panier</a>
 						<% } %>
 					  </div>
 					</div>

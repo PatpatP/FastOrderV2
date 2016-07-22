@@ -220,7 +220,7 @@
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-			       	<a href="updateProduct?" class="btn btn-warning">Modifier </a>
+			       	<button type="submit" class="btn btn-warning">Modifier </a>
 			       </div>
 			      </form>
 			    </div>

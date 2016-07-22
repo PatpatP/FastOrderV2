@@ -349,8 +349,8 @@ public class UserServlet extends HttpServlet{
 		if(mail!=null){
 			User user = userManager.getUser(mail);
 			Address address = addressManager.getAddresssById(user.getAddressId());
+			String addressAsString = address.toString();
 			String userAsJson = Utils.convertJavaToJson(user);
-			String addressAsJson = Utils.convertJavaToJson(address);
 
 			//Commande effectu�e par l'utilisateur
 			List<Order> myOrders = userManager.getUserOrders(user.getId());
@@ -371,11 +371,13 @@ public class UserServlet extends HttpServlet{
 
 			String userOrdersAsJson = Utils.convertJavaToJson(userOrders);
 			System.out.println(userOrdersAsJson);
+			
+			System.out.println(addressAsString);
 
 			request.setAttribute("action", "myspace");
 			request.getSession().setAttribute("userType", user.getUserType().toString());
 			request.setAttribute("user", userAsJson);
-			request.setAttribute("userAddress", addressAsJson);
+			request.setAttribute("userAddress", addressAsString);
 			request.setAttribute("myOrders", userOrdersAsJson);
 
 			request.getRequestDispatcher("/WEB-INF/html/myspace.jsp").forward(request, response);

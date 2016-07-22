@@ -50,12 +50,15 @@
 					</div>
 					<div class="">
 						<label for="exampleInputEmail1"> {{infoUser.phoneNumber}} </label> 
+					</div>
+					<div class="">
+						<label for="exampleInputEmail1"> ${userAddress } </label>
 					</div><br>
 					
 					<div class="col-lg-12 col-md-12 col-sm-12 blocGestionBtn">
 						<a href="updateAccount" class="btn btn-success col-lg-3  col-md-3 col-sm-3">Modifier Compte</a>
 						<a href="deleteAccount?idUser={{infoUser.id}}" class="btn btn-warning col-lg-3  col-md-3 col-sm-3 col-lg-offset-1  col-md-offset-1">Supprimer Compte</a>
-					</div>
+					</div><br>
 				</div>
 			
 				<!-- <p class="stitleDiv col-lg-8 col-md-8 col-sm-8"> Gérer mon compte </p><br><br><br>   -->

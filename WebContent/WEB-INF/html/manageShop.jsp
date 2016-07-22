@@ -146,7 +146,7 @@
 					<td>{{product.description}}</td>
 					<td>{{product.productType}}</td>
 					<td>{{product.price}} &#128;</td>
-					<td><button class="btn btn-success" data-toggle="modal" data-target="#modifProduit"> Modifier </button></td>
+					<td><button class="btn btn-success" ng-click="setIdProductToDelete(product.id)" data-toggle="modal" data-target="#modifProduit"> Modifier </button></td>
 					<td><button class="btn btn-danger" ng-click="setIdProductToDelete(product.id)" data-toggle="modal" data-target="#deleteProduct">Supprimer </button></td>
 					
 				</tr>
@@ -183,7 +183,7 @@
 			        <h4 class="modal-title" id="myModalLabel">Modification d'un produit</h4>
 			      </div>
 			      <div class="modal-body row">
-			        <form method="post" action="${testAction}">
+			        <form method="post" action="${actionUpdateProduct}">
 						<div class="col-lg-12 col-md-12 col-sm-12">
 						<div class="textInscription">Remplissez uniquement les champs à modifier</div>
 						<hr><br>
@@ -209,13 +209,19 @@
 								<label for="exampleInputEmail1">Prix</label> 
 								<input type="text" class="form-control" name="price" placeholder="price">
 							</div>
+							<div class="form-group">
+								<input type="hidden" class="form-control" name="idProduct" value="{{idProductToDelete}}">
+							</div>
+							<div class="form-group">
+								<input type="hidden" class="form-control" name="idShop" value="${idShop }">
+							</div>
 						</div>
 				 	
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">Fermer</button>
-			        <button type="submit" class="btn btn-primary">Sauvegarder</button>
-			      </div>
+			       	<a href="updateProduct?" class="btn btn-warning">Modifier </a>
+			       </div>
 			      </form>
 			    </div>
 			  </div>

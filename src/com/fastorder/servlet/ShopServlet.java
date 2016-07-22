@@ -100,6 +100,8 @@ public class ShopServlet extends HttpServlet{
 			this.getShopImage(request, response);
 		} else if(uri.contains("/getImageProduct")){
 			this.getProductImage(request, response);
+		} else if(uri.contains("/updateShop")){
+			this.updateShop(request, response);
 		}
 	}
 
@@ -294,6 +296,7 @@ public class ShopServlet extends HttpServlet{
 			request.setAttribute("action", "manageShop");
 			request.setAttribute("idShop", idShop);
 			request.setAttribute("actionAddProduct", "createProduct");
+			request.setAttribute("actionUpdateProduct", "updateProduct");
 			request.setAttribute("products", shopProductAsJson);
 			request.setAttribute("shopType", shopTypeAsJson);
 			request.setAttribute("shopInfo", shopAsJson);
@@ -327,6 +330,7 @@ public class ShopServlet extends HttpServlet{
 
 	private void updateProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final String idProduct = request.getParameter("idProduct");
+		System.out.println("Produit a modif " + idProduct);
 		final String idShop = request.getParameter("idShop");
 		final String mail = (String) request.getSession().getAttribute("mail");
 		final String productType = request.getParameter("typeProduit");
@@ -334,7 +338,7 @@ public class ShopServlet extends HttpServlet{
 		final String description = request.getParameter("description");
 		final String price = request.getParameter("price");
 
-		if(productType!=null && name!=null && description!=null && price!=null){
+//		if(productType!=null && name!=null && description!=null && price!=null){
 			shopManager.updateProduct(Integer.parseInt(idProduct), productType, name, description, Float.parseFloat(price), Integer.parseInt(idShop));
 
 			try {
@@ -344,9 +348,9 @@ public class ShopServlet extends HttpServlet{
 				logger.error("Une erreur est survenue lors de l'envoi du mail pour la mise � jour d'un produit : " + e.getMessage());
 			}
 
-			request.setAttribute("action", "createProduct");
+			request.setAttribute("action", "updateProduct");
 			response.sendRedirect("manageShop?idShop="+idShop);
-		}
+//		}
 	}
 
 	private void showShopOnMap(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -390,6 +394,10 @@ public class ShopServlet extends HttpServlet{
 		addressManager.deleteAddress(addressId);
 		shopManager.deleteShop(Integer.parseInt(idShop));
 		response.sendRedirect("myshops");
+	}
+	
+	private void updateShop(HttpServletRequest request, HttpServletResponse response) {
+		
 	}
 
 	private void getShopImage(HttpServletRequest request, HttpServletResponse response) throws IOException{
